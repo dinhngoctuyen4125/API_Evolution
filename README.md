@@ -1,6 +1,6 @@
 # Crawl version từ PyPI và ghép commit GitHub
 
-Lấy version của 8 thư viện trên PyPI, sau đó ghép Git tag và commit SHA tương ứng.
+Lấy version của 8 thư viện trên PyPI, sau đó ghép Git tag và commit SHA tương ứng. Dự án cũng lưu 145 cặp API migration được thu thập thủ công.
 
 ## Setup
 
@@ -39,7 +39,14 @@ Kết quả được lưu vào `data/pypi_versions_with_github.json`.
 - `data/pypi_versions.json`: version từ PyPI.
 - `data/pypi_versions_with_github.json`: version đã ghép Git tag và commit.
 - `data/pypi_versions_with_github_diy.json`: bản chỉnh thủ công các ngoại lệ bên dưới.
+- `data/api_mapping_pairs.json`: 145 cặp API migration thu thập thủ công.
 - `data/sample_step_1.json`: dữ liệu mẫu.
+
+## API migration mappings
+
+`data/api_mapping_pairs.json` có 145 bản ghi, mỗi bản ghi gồm `id`, `library`, `deprecated_api` và `replacement_api`. Hai tên API là cặp đầu vào để phân tích migration; file chưa chứa version áp dụng, trạng thái API theo từng version hoặc danh sách API đã mở rộng cho mỗi mapping.
+
+Số cặp theo thư viện: NumPy 3, pandas 10, PyTorch 21, SciPy 18, seaborn 3, scikit-learn 4, TensorFlow 57 và Transformers 29. Trường `library` dùng `sklearn` cho scikit-learn, trong khi dữ liệu version PyPI/GitHub dùng `scikit-learn`; cần quy đổi hai nhãn khi nối dữ liệu.
 
 ## Ngoại lệ xử lý thủ công
 
