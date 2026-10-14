@@ -331,25 +331,25 @@
   },
   {
     "id": 56,
-    "library": "sklearn",
+    "library": "scikit-learn",
     "deprecated_api": "sklearn.datasets.fetch_mldata",
     "replacement_api": "sklearn.datasets.fetch_openml"
   },
   {
     "id": 57,
-    "library": "sklearn",
+    "library": "scikit-learn",
     "deprecated_api": "sklearn.metrics.jaccard_similarity_score",
     "replacement_api": "sklearn.metrics.jaccard_score"
   },
   {
     "id": 58,
-    "library": "sklearn",
+    "library": "scikit-learn",
     "deprecated_api": "sklearn.mixture.GMM",
     "replacement_api": "sklearn.mixture.GaussianMixture"
   },
   {
     "id": 59,
-    "library": "sklearn",
+    "library": "scikit-learn",
     "deprecated_api": "sklearn.preprocessing.Imputer",
     "replacement_api": "sklearn.impute.SimpleImputer"
   },
