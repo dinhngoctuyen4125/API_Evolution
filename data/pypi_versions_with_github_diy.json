@@ -1,6 +1,20 @@
 [
   {
     "library": "numpy",
+    "version": "0.9.6",
+    "tag": "v0.9.6",
+    "commit_sha": "d99b776ffb2a6d5718bfdb7f17b46c06a3dc84fc",
+    "source_url": "https://github.com/numpy/numpy/tree/d99b776ffb2a6d5718bfdb7f17b46c06a3dc84fc"
+  },
+  {
+    "library": "numpy",
+    "version": "0.9.8",
+    "tag": "v0.9.8",
+    "commit_sha": "9da998fd005e4d4774cd7f0152490a5bf8c35c99",
+    "source_url": "https://github.com/numpy/numpy/tree/9da998fd005e4d4774cd7f0152490a5bf8c35c99"
+  },
+  {
+    "library": "numpy",
     "version": "1.0",
     "tag": "v1.0",
     "commit_sha": "3301a33d6b8daa647ff744b1e6302705de5d67ba",
@@ -8,10 +22,52 @@
   },
   {
     "library": "numpy",
+    "version": "1.0.3",
+    "tag": "v1.0.3",
+    "commit_sha": "2be238df5e6682083c448264e52d2d8df0055e9c",
+    "source_url": "https://github.com/numpy/numpy/tree/2be238df5e6682083c448264e52d2d8df0055e9c"
+  },
+  {
+    "library": "numpy",
+    "version": "1.0.4",
+    "tag": "v1.0.4",
+    "commit_sha": "cd8db12913c9bd7323b77a03a8fa11667634b1a9",
+    "source_url": "https://github.com/numpy/numpy/tree/cd8db12913c9bd7323b77a03a8fa11667634b1a9"
+  },
+  {
+    "library": "numpy",
+    "version": "1.1.1",
+    "tag": "v1.1.1",
+    "commit_sha": "6727624e1c42177c0a60a1baf9e46c41ccbdcf20",
+    "source_url": "https://github.com/numpy/numpy/tree/6727624e1c42177c0a60a1baf9e46c41ccbdcf20"
+  },
+  {
+    "library": "numpy",
+    "version": "1.2.0",
+    "tag": "v1.2.0",
+    "commit_sha": "f5596a9d809fbba266aad1702fd048f1de32d1f0",
+    "source_url": "https://github.com/numpy/numpy/tree/f5596a9d809fbba266aad1702fd048f1de32d1f0"
+  },
+  {
+    "library": "numpy",
+    "version": "1.2.1",
+    "tag": "v1.2.1",
+    "commit_sha": "d4f826b4bafeea0e4a16b2cb3954b2155483e91a",
+    "source_url": "https://github.com/numpy/numpy/tree/d4f826b4bafeea0e4a16b2cb3954b2155483e91a"
+  },
+  {
+    "library": "numpy",
     "version": "1.3.0",
     "tag": "v1.3.0",
     "commit_sha": "c3e0147d49286c0cb1b65a95d42f5eb4a4779129",
     "source_url": "https://github.com/numpy/numpy/tree/c3e0147d49286c0cb1b65a95d42f5eb4a4779129"
+  },
+  {
+    "library": "numpy",
+    "version": "1.4.0",
+    "tag": "v1.4.0",
+    "commit_sha": "4b42c8f6b81d87f35ed8dcf4430224992cf2d296",
+    "source_url": "https://github.com/numpy/numpy/tree/4b42c8f6b81d87f35ed8dcf4430224992cf2d296"
   },
   {
     "library": "numpy",
@@ -869,6 +925,13 @@
   },
   {
     "library": "numpy",
+    "version": "2.4.0",
+    "tag": "v2.4.0",
+    "commit_sha": "c5ab79c14c98bfda1e60770ffa23a6130f8267b7",
+    "source_url": "https://github.com/numpy/numpy/tree/c5ab79c14c98bfda1e60770ffa23a6130f8267b7"
+  },
+  {
+    "library": "numpy",
     "version": "2.4.1",
     "tag": "v2.4.1",
     "commit_sha": "d24bb7f48d3b0e3471c68f1309c130d0b65ee72a",
@@ -1713,6 +1776,13 @@
     "tag": "v3.0.3",
     "commit_sha": "72f2fea91530b5abb3cf2100cb22d84e504695c0",
     "source_url": "https://github.com/pandas-dev/pandas/tree/72f2fea91530b5abb3cf2100cb22d84e504695c0"
+  },
+  {
+    "library": "pandas",
+    "version": "3.0.4",
+    "tag": "v3.0.4",
+    "commit_sha": "8188eb1d65d6250c9916e54a0fa417d46af3296a",
+    "source_url": "https://github.com/pandas-dev/pandas/tree/8188eb1d65d6250c9916e54a0fa417d46af3296a"
   },
   {
     "library": "pandas",
@@ -2794,6 +2864,41 @@
   },
   {
     "library": "scipy",
+    "version": "0.4.4",
+    "tag": "v0.4.4",
+    "commit_sha": "07b1fda7bac85f23d99533c0f3fce5a256e90cac",
+    "source_url": "https://github.com/scipy/scipy/tree/07b1fda7bac85f23d99533c0f3fce5a256e90cac"
+  },
+  {
+    "library": "scipy",
+    "version": "0.5.2",
+    "tag": "v0.5.2",
+    "commit_sha": "d0c82520ae9337b4dd25599e52593f655b55c308",
+    "source_url": "https://github.com/scipy/scipy/tree/d0c82520ae9337b4dd25599e52593f655b55c308"
+  },
+  {
+    "library": "scipy",
+    "version": "0.6.0",
+    "tag": "v0.6.0",
+    "commit_sha": "30174bd2812627b4535bb8f3da05a28d1702c91b",
+    "source_url": "https://github.com/scipy/scipy/tree/30174bd2812627b4535bb8f3da05a28d1702c91b"
+  },
+  {
+    "library": "scipy",
+    "version": "0.7.0",
+    "tag": "v0.7.0",
+    "commit_sha": "f6aa9042a45e1b553b056f45cbc7dabe7aa34159",
+    "source_url": "https://github.com/scipy/scipy/tree/f6aa9042a45e1b553b056f45cbc7dabe7aa34159"
+  },
+  {
+    "library": "scipy",
+    "version": "0.7.2",
+    "tag": "v0.7.2",
+    "commit_sha": "ef32daef5fc38963339c7f064d24a94fb892ef19",
+    "source_url": "https://github.com/scipy/scipy/tree/ef32daef5fc38963339c7f064d24a94fb892ef19"
+  },
+  {
+    "library": "scipy",
     "version": "0.8.0",
     "tag": "v0.8.0",
     "commit_sha": "6f97786be33ee8e14249a05c8b1d8a523267f750",
@@ -3190,6 +3295,13 @@
     "tag": "v1.10.1",
     "commit_sha": "c1ed5ece8ffbf05356a22a8106affcd11bd3aee0",
     "source_url": "https://github.com/scipy/scipy/tree/c1ed5ece8ffbf05356a22a8106affcd11bd3aee0"
+  },
+  {
+    "library": "scipy",
+    "version": "1.11.0",
+    "tag": "v1.11.0",
+    "commit_sha": "2e16ec5bc62b7b7db21b37b838fc771c7d232006",
+    "source_url": "https://github.com/scipy/scipy/tree/2e16ec5bc62b7b7db21b37b838fc771c7d232006"
   },
   {
     "library": "scipy",
@@ -4460,6 +4572,13 @@
   },
   {
     "library": "transformers",
+    "version": "4.14.0",
+    "tag": "v4.14.0",
+    "commit_sha": "960d8cb41d245b04e4c62279a17b065f1796ec92",
+    "source_url": "https://github.com/huggingface/transformers/tree/960d8cb41d245b04e4c62279a17b065f1796ec92"
+  },
+  {
+    "library": "transformers",
     "version": "4.14.1",
     "tag": "v4.14.1",
     "commit_sha": "19e5ed736611227b004c6f55679ce3536db3c28d",
@@ -5069,6 +5188,13 @@
   },
   {
     "library": "transformers",
+    "version": "4.46.0",
+    "tag": "v4.46.0",
+    "commit_sha": "c2820c94916e34baf4486accae74760972183a2f",
+    "source_url": "https://github.com/huggingface/transformers/tree/c2820c94916e34baf4486accae74760972183a2f"
+  },
+  {
+    "library": "transformers",
     "version": "4.46.1",
     "tag": "v4.46.1",
     "commit_sha": "bc598c00db37d1fbb1551723873d37e238c3ede7",
@@ -5195,6 +5321,13 @@
   },
   {
     "library": "transformers",
+    "version": "4.52.0",
+    "tag": "v4.52.0",
+    "commit_sha": "113424bcd53b92600f77d82f48add0a60fb41556",
+    "source_url": "https://github.com/huggingface/transformers/tree/113424bcd53b92600f77d82f48add0a60fb41556"
+  },
+  {
+    "library": "transformers",
     "version": "4.52.1",
     "tag": "v4.52.1",
     "commit_sha": "945727948c1143a10ac6f7d811aa58bb0d126b5b",
@@ -5318,6 +5451,13 @@
     "tag": "v4.56.2",
     "commit_sha": "cd74917ffc3e8f84e4a886052c5ab32b7ac623cc",
     "source_url": "https://github.com/huggingface/transformers/tree/cd74917ffc3e8f84e4a886052c5ab32b7ac623cc"
+  },
+  {
+    "library": "transformers",
+    "version": "4.57.0",
+    "tag": "v4.57.0",
+    "commit_sha": "8ac2b916b042b1f78b75c9eb941c0f5d2cdd8e10",
+    "source_url": "https://github.com/huggingface/transformers/tree/8ac2b916b042b1f78b75c9eb941c0f5d2cdd8e10"
   },
   {
     "library": "transformers",
@@ -5479,6 +5619,13 @@
     "tag": "v5.9.0",
     "commit_sha": "0a2757da521a7a49b8143d9e0c938f08747d682e",
     "source_url": "https://github.com/huggingface/transformers/tree/0a2757da521a7a49b8143d9e0c938f08747d682e"
+  },
+  {
+    "library": "transformers",
+    "version": "5.10.0",
+    "tag": "v5.10.0",
+    "commit_sha": "dd211984bd751c0c7a2a0b9d74e01000359a77dd",
+    "source_url": "https://github.com/huggingface/transformers/tree/dd211984bd751c0c7a2a0b9d74e01000359a77dd"
   },
   {
     "library": "transformers",
