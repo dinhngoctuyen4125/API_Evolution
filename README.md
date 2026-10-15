@@ -79,7 +79,7 @@ python crawl_release_notes.py --library transformers --refresh
 python crawl_release_notes.py --library pandas --library pytorch --library scipy --library scikit-learn --library seaborn --library tensorflow --library transformers
 ```
 
-**Output:** `data/release_notes.json` giữ các trường đầu vào và thêm `release_url` (URL trên web), `release_path` (đường dẫn tương đối tới HTML trên máy). Chỉ những bản có trang được chấp nhận và HTML đã lưu mới có trong JSON. Ví dụ `cache/numpy/docs/1.5.0/release_notes.html`; thư mục `cache/<library>/source/<version>/` dành cho mã nguồn tải về sau. HTML không được nhúng vào JSON. `data/release_notes.json` và toàn bộ `cache/` được Git ignore. Khi chạy lại với JSON dùng đường dẫn cũ, script chuyển HTML đã lưu sang cấu trúc mới nếu file còn tồn tại.
+**Output:** `data/release_notes.json` giữ các trường đầu vào và thêm `release_url` (URL trên web), `release_path` (đường dẫn tương đối tới HTML trên máy). Chỉ những bản có trang được chấp nhận và HTML đã lưu mới có trong JSON. Ví dụ `cache/numpy/docs/1.5.0/release_notes.html`. Crawler chỉ lưu HTML trong `docs/`, không tạo thư mục `source/`. HTML không được nhúng vào JSON. `data/release_notes.json` và toàn bộ `cache/` được Git ignore. Khi chạy lại với JSON dùng đường dẫn cũ, script chuyển HTML đã lưu sang cấu trúc mới nếu file còn tồn tại.
 
 Khi chạy lại, script đọc JSON hiện có, giữ bản ghi của các thư viện khác, bỏ qua bản đã có URL và file cache, rồi bổ sung bản còn thiếu. File JSON được ghi lại sau mỗi lần tải thành công. `--refresh` tải lại các bản được chọn; `--output` cho phép chọn file kết quả khác.
 

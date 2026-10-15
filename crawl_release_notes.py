@@ -341,8 +341,6 @@ def save_html(path: Path, content: str, *, replace_existing=False):
         if not replace_existing:
             raise ValueError(f"Cached HTML differs from existing release note: {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
-    library_dir = path.parent.parent.parent
-    (library_dir / "source" / path.parent.name).mkdir(parents=True, exist_ok=True)
     temp_path = path.with_name(path.name + ".tmp")
     try:
         temp_path.write_text(content, encoding="utf-8")
