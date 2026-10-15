@@ -1,3 +1,4 @@
 /data/**/*.json
 !/data/**/*_diy.json
 !/data/api_mapping_pairs.json
+/cache/

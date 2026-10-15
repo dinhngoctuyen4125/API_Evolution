@@ -36,7 +36,7 @@ Kết quả được lưu vào `data/pypi_versions_with_github.json`.
 
 ## Crawl release notes
 
-`crawl_release_notes.py` đọc `library` và `version` từ bản đã kiểm tra thủ công `data/pypi_versions_with_github_diy.json`; các trường `tag`, `commit_sha`, `source_url` trong file đầu vào không được dùng để lấy release notes. Hiện `LIBRARIES = ["numpy"]`; chạy toàn bộ version NumPy bằng:
+`crawl_release_notes.py` đọc bản đã kiểm tra thủ công `data/pypi_versions_with_github_diy.json` và giữ nguyên các trường `library`, `version`, `tag`, `commit_sha`, `source_url` (URL source code trên GitHub). Hiện `LIBRARIES = ["numpy"]`; chạy toàn bộ version NumPy bằng:
 
 ```powershell
 python crawl_release_notes.py
@@ -48,7 +48,13 @@ python crawl_release_notes.py
 python crawl_release_notes.py --version 1.25.0
 ```
 
-Kết quả là mảng JSON trong `data/release_notes.json`. Mỗi phần tử có `library`, `version`, `document_type` (`release_note`), `source_url` và `content` (toàn bộ HTML gốc đã giải mã của trang). Crawler thử trang tài liệu theo nhánh `major.minor`, rồi `stable`, sau cùng là `devdocs` cho các release notes mới chưa có trong bản tài liệu ổn định; version không có trang được ghi ra stderr và bỏ qua. Khi dùng `--version`, crawler cập nhật bản ghi tương ứng và giữ các bản ghi khác trong file kết quả. Có thể dùng `--output` để chọn file khác.
+Kết quả `data/release_notes.json` chỉ gồm các version đã có release notes, giữ nguyên các trường từ bản dữ liệu đầu vào rồi thêm `release_url` (đường dẫn release notes trên web) cùng `release_path` (đường dẫn HTML trong máy tính, tính từ thư mục dự án). Ví dụ `cache/numpy/1.5.0/docs/release_notes.html`; thư mục `cache/numpy/1.5.0/source/` dành cho source code tải về sau này. HTML không được nhúng vào JSON. Version chưa có release notes không được ghi vào file kết quả. Crawler thử trang tài liệu theo nhánh `major.minor`, rồi `stable`, sau cùng là `devdocs`; bản đã có trong cache được dùng lại. Khi dùng `--version`, crawler chỉ tải version được chọn và giữ các bản ghi release notes khác đã có trong JSON. Mỗi lần tải thành công, crawler cập nhật JSON để lần chạy bị ngắt vẫn giữ được tiến độ. Nếu trang trên web thay đổi, bản HTML mới đã được kiểm tra tiêu đề sẽ cập nhật file cache. Dùng `--refresh` để tải lại và `--output` để chọn file kết quả khác.
+
+Để chuyển file `data/release_notes.json` cũ đang chứa HTML trong trường `content` sang cấu trúc mới mà không gọi mạng:
+
+```powershell
+python crawl_release_notes.py --migrate-only
+```
 
 Để mở rộng sang thư viện khác, thêm tên vào `LIBRARIES` và hàm tạo URL tương ứng vào `URL_BUILDERS` trong `crawl_release_notes.py`, vì mỗi thư viện có cấu trúc trang tài liệu riêng.
 
@@ -58,7 +64,8 @@ Kết quả là mảng JSON trong `data/release_notes.json`. Mỗi phần tử c
 - `data/pypi_versions_with_github.json`: version đã ghép Git tag và commit.
 - `data/pypi_versions_with_github_diy.json`: bản chỉnh thủ công các ngoại lệ bên dưới.
 - `data/api_mapping_pairs.json`: 145 cặp API migration thu thập thủ công.
-- `data/release_notes.json`: HTML release notes sau khi chạy crawler; được Git ignore vì có thể rất lớn.
+- `data/release_notes.json`: các version có release notes từ bản dữ liệu đã kiểm tra thủ công, bổ sung `release_url` và `release_path`; được Git ignore.
+- `cache/<library>/<version>/docs/release_notes.html`: HTML release notes; `source/` dành cho source code tải về sau này. Toàn bộ `cache/` được Git ignore.
 - `data/sample_step_1.json`: dữ liệu mẫu.
 
 ## API migration mappings
