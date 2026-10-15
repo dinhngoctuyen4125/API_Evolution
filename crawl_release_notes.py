@@ -31,6 +31,8 @@ GITHUB_REPOS = {
     "tensorflow": "tensorflow/tensorflow",
     "transformers": "huggingface/transformers",
 }
+NUMPY_151_RELEASE_URL = "https://docs.scipy.org/doc/numpy-1.5.x/release.html"
+NUMPY_151_FRAGMENT = "#numpy-1-5-1-release-notes"
 
 
 def numpy_release_note_urls(version: str):
@@ -39,11 +41,14 @@ def numpy_release_note_urls(version: str):
         return ()
     series = ".".join(parts[:2])
     filename = f"{version}-notes.html"
-    return (
+    urls = (
         f"https://numpy.org/doc/{series}/release/{filename}",
         f"https://numpy.org/doc/stable/release/{filename}",
         f"https://numpy.org/devdocs/release/{filename}",
     )
+    if version == "1.5.1":
+        urls += (NUMPY_151_RELEASE_URL,)
+    return urls
 
 
 def pandas_release_note_urls(version: str):
@@ -199,10 +204,15 @@ def is_numpy_release_note(html: str, version: str):
     if len(parts) == 3 and parts[-1] == "0":
         # Some NumPy x.y.0 pages use "NumPy x.y Release Notes" as their title.
         accepted_versions.append(".".join(parts[:2]))
-    return any(
+    title_matches = any(
         re.search(rf"\bNumPy\s+{re.escape(candidate)}\s+Release Notes\b", title, re.I)
         for candidate in accepted_versions
     )
+    heading_matches = any(
+        re.fullmatch(rf"NumPy\s+{re.escape(candidate)}\s+Release Notes", heading, re.I)
+        for candidate in accepted_versions for heading in parser.headings
+    )
+    return title_matches or heading_matches
 
 
 def is_release_note(html: str, library: str, version: str, *, github_tag=None):
@@ -274,6 +284,8 @@ def find_release_note(record):
             heading = scikit_learn_release_heading(heading_parser, version)
             if heading and heading[2] and heading[2].startswith("#"):
                 release_url += heading[2]
+        if library == "numpy" and version == "1.5.1" and release_url == NUMPY_151_RELEASE_URL:
+            release_url += NUMPY_151_FRAGMENT
         return content, release_url
     tag = record.get("tag")
     if library in GITHUB_REPOS and isinstance(tag, str) and tag:
@@ -311,6 +323,10 @@ def load_versions():
 
 
 def cache_path(library: str, version: str):
+    return CACHE_DIR / library / "docs" / version / "release_notes.html"
+
+
+def legacy_cache_path(library: str, version: str):
     return CACHE_DIR / library / version / "docs" / "release_notes.html"
 
 
@@ -325,7 +341,8 @@ def save_html(path: Path, content: str, *, replace_existing=False):
         if not replace_existing:
             raise ValueError(f"Cached HTML differs from existing release note: {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.parent.parent.joinpath("source").mkdir(exist_ok=True)
+    library_dir = path.parent.parent.parent
+    (library_dir / "source" / path.parent.name).mkdir(parents=True, exist_ok=True)
     temp_path = path.with_name(path.name + ".tmp")
     try:
         temp_path.write_text(content, encoding="utf-8")
@@ -369,8 +386,16 @@ def merge_existing(records, existing):
         else:
             release_url = old.get("release_url")
             old_path = old.get("release_path")
-            if old_path and old_path != relative_path(path):
+            legacy_path = legacy_cache_path(*key)
+            if old_path and old_path not in (relative_path(path), relative_path(legacy_path)):
                 raise ValueError(f"Unexpected release_path for {key}: {old_path}")
+            if old_path == relative_path(legacy_path) and legacy_path.is_file():
+                if path.is_file():
+                    if path.read_bytes() != legacy_path.read_bytes():
+                        raise ValueError(f"Cached HTML differs between old and new paths for {key}")
+                else:
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    legacy_path.replace(path)
         if release_url is not None and not isinstance(release_url, str):
             raise ValueError(f"Invalid release URL for {key}")
         if release_url and path.is_file():

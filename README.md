@@ -79,18 +79,18 @@ python crawl_release_notes.py --library transformers --refresh
 python crawl_release_notes.py --library pandas --library pytorch --library scipy --library scikit-learn --library seaborn --library tensorflow --library transformers
 ```
 
-**Output:** `data/release_notes.json` giữ các trường đầu vào và thêm `release_url` (URL trên web), `release_path` (đường dẫn tương đối tới HTML trên máy). Chỉ những bản có trang được chấp nhận và HTML đã lưu mới có trong JSON. Ví dụ `cache/numpy/1.5.0/docs/release_notes.html`; thư mục `cache/<library>/<version>/source/` dành cho mã nguồn tải về sau. HTML không được nhúng vào JSON. `data/release_notes.json` và toàn bộ `cache/` được Git ignore.
+**Output:** `data/release_notes.json` giữ các trường đầu vào và thêm `release_url` (URL trên web), `release_path` (đường dẫn tương đối tới HTML trên máy). Chỉ những bản có trang được chấp nhận và HTML đã lưu mới có trong JSON. Ví dụ `cache/numpy/docs/1.5.0/release_notes.html`; thư mục `cache/<library>/source/<version>/` dành cho mã nguồn tải về sau. HTML không được nhúng vào JSON. `data/release_notes.json` và toàn bộ `cache/` được Git ignore. Khi chạy lại với JSON dùng đường dẫn cũ, script chuyển HTML đã lưu sang cấu trúc mới nếu file còn tồn tại.
 
 Khi chạy lại, script đọc JSON hiện có, giữ bản ghi của các thư viện khác, bỏ qua bản đã có URL và file cache, rồi bổ sung bản còn thiếu. File JSON được ghi lại sau mỗi lần tải thành công. `--refresh` tải lại các bản được chọn; `--output` cho phép chọn file kết quả khác.
 
 **Ngoại lệ / xử lý tay:**
 
-- NumPy, pandas, SciPy và seaborn được tìm trong tài liệu chính thức. Một số trang NumPy ghi bản `X.Y.0` là `X.Y` trong tiêu đề (ví dụ `1.24.0`); crawler chấp nhận cách ghi này. Với SciPy 0.x, crawler còn thử SourceForge: [0.13.3 có ghi chú](https://sourceforge.net/projects/scipy/files/scipy/0.13.3/), còn [thư mục 0.6.0](https://sourceforge.net/projects/scipy/files/scipy/0.6.0/) chỉ có file tải và README chung nên chưa được tính là release notes.
+- NumPy, pandas, SciPy và seaborn được tìm trong tài liệu chính thức. Một số trang NumPy ghi bản `X.Y.0` là `X.Y` trong tiêu đề (ví dụ `1.24.0`); crawler chấp nhận cách ghi này. Với NumPy `1.5.1`, crawler thử thêm [trang release notes của NumPy 1.5.x](https://docs.scipy.org/doc/numpy-1.5.x/release.html#numpy-1-5-1-release-notes), xác nhận tiêu đề mục `NumPy 1.5.1 Release Notes` và lưu URL trỏ đúng mục. Với SciPy 0.x, crawler còn thử SourceForge: [0.13.3 có ghi chú](https://sourceforge.net/projects/scipy/files/scipy/0.13.3/), còn [thư mục 0.6.0](https://sourceforge.net/projects/scipy/files/scipy/0.6.0/) chỉ có file tải và README chung nên chưa được tính là release notes.
 - Với scikit-learn, mục `Version X.Y` có thể ứng với bản `X.Y.0`; các bản vá cần mục version riêng. `release_url` trỏ tới đúng mục trong trang. Riêng bản `0.22.2`, [mục `0.22.2.post1`](https://scikit-learn.org/0.22/whats_new/v0.22.html#version-0-22-2-post1) ghi rõ hai bản dùng chung các thay đổi, còn post-release chỉ sửa cách đóng gói source distribution. Crawler không tự gán tên khác version, nên trường hợp này cần làm tay theo mẫu bên dưới.
 - PyTorch và TensorFlow dùng GitHub Release có phần mô tả. Khi tài liệu không có, pandas, SciPy, scikit-learn và seaborn cũng thử GitHub Release có phần mô tả.
 - Với Transformers, URL `/releases/tag/<tag>` đúng tag trong kho `huggingface/transformers` được giữ làm minh chứng ngay cả khi phần mô tả rỗng. Điều đó áp dụng cho `2.1.0`, `4.1.0`, `4.4.1`, `4.33.0`, `4.52.0`, `5.10.0`; `release_url` không nhất thiết chứa ghi chú chi tiết. Trang `/tree` đơn thuần không được dùng thay trang `/releases/tag`.
 
-Để bổ sung thủ công scikit-learn `0.22.2`, trước tiên tải toàn bộ HTML của trang vào `cache/scikit-learn/0.22.2/docs/release_notes.html`, rồi thêm bản ghi sau vào `data/release_notes.json`:
+Để bổ sung thủ công scikit-learn `0.22.2`, trước tiên tải toàn bộ HTML của trang vào `cache/scikit-learn/docs/0.22.2/release_notes.html`, rồi thêm bản ghi sau vào `data/release_notes.json`:
 
 ```json
 {
@@ -100,7 +100,7 @@ Khi chạy lại, script đọc JSON hiện có, giữ bản ghi của các thư
   "commit_sha": "4b7331eeb746b3facb4d70e1760c58ebe8b47f2e",
   "source_url": "https://github.com/scikit-learn/scikit-learn/tree/4b7331eeb746b3facb4d70e1760c58ebe8b47f2e",
   "release_url": "https://scikit-learn.org/0.22/whats_new/v0.22.html#version-0-22-2-post1",
-  "release_path": "cache/scikit-learn/0.22.2/docs/release_notes.html"
+  "release_path": "cache/scikit-learn/docs/0.22.2/release_notes.html"
 }
 ```
 
