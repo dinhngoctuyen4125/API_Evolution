@@ -1,6 +1,7 @@
 """Collect raw HTML release notes for curated PyPI/GitHub versions."""
 
 import argparse
+import html as html_module
 import json
 import os
 import re
@@ -38,6 +39,14 @@ EMPTY_GITHUB_RELEASE_BODY_OK = {"numpy", "scipy", "scikit-learn", "seaborn", "tr
 NUMPY_141_RELEASE_URL = "https://mail-index.netbsd.org/pkgsrc-bugs/2010/04/24/msg037707.html"
 NUMPY_151_RELEASE_URL = "https://docs.scipy.org/doc/numpy-1.5.x/release.html"
 NUMPY_151_FRAGMENT = "#numpy-1-5-1-release-notes"
+NUMPY_EARLY_ANNOUNCEMENTS = {
+    "0.9.6": "https://www.thecodingforums.com/threads/ann-numpy-0-9-6-released.355458/",
+    "0.9.8": "https://www.thecodingforums.com/threads/ann-numpy-0-9-8-released.357796/",
+    "1.0": "https://www.thecodingforums.com/threads/ann-numpy-1-0-release.395727/",
+}
+NUMPY_193_RST_URL = "https://raw.githubusercontent.com/numpy/numpy/v1.9.3/doc/release/1.9.3-notes.rst"
+PANDAS_EARLY_VERSIONS = {"0.3.0", "0.4.0", "0.4.1", "0.4.2", "0.4.3"}
+PANDAS_EARLY_RST_URL = "https://raw.githubusercontent.com/pandas-dev/pandas/v0.5.0/RELEASE.rst"
 
 
 def numpy_release_note_urls(version: str):
@@ -284,8 +293,88 @@ def fetch_html(url: str):
     raise RuntimeError(f"Could not fetch {url}")
 
 
+def fetch_text(url: str):
+    request = Request(url, headers={"User-Agent": "api-evolution-release-notes/1.0"})
+    for attempt in range(3):
+        try:
+            with urlopen(request, timeout=30) as response:
+                if response.headers.get_content_type() != "text/plain":
+                    raise RuntimeError(f"Expected plain text at {url}")
+                charset = response.headers.get_content_charset() or "utf-8"
+                return response.read().decode(charset)
+        except HTTPError as exc:
+            if exc.code in (404, 410):
+                return None
+            if exc.code not in RETRYABLE_STATUS or attempt == 2:
+                raise RuntimeError(f"HTTP {exc.code} while fetching {url}") from exc
+        except (URLError, TimeoutError) as exc:
+            if attempt == 2:
+                raise RuntimeError(f"Could not fetch {url}: {exc}") from exc
+        time.sleep(2**attempt)
+    raise RuntimeError(f"Could not fetch {url}")
+
+
+def plain_text_html(title: str, content: str, source_url: str):
+    return ("<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\">"
+            f"<title>{html_module.escape(title)}</title></head><body><main>"
+            f"<h1>{html_module.escape(title)}</h1>"
+            f"<p>Source: <a href=\"{html_module.escape(source_url, quote=True)}\">"
+            f"{html_module.escape(source_url)}</a></p>"
+            f"<pre>{html_module.escape(content)}</pre></main></body></html>")
+
+
+def pandas_early_section(release_text: str, version: str):
+    headings = list(re.finditer(r"(?m)^pandas (\d+\.\d+(?:\.\d+)?)\r?\n=+\s*$", release_text))
+    label = "0.4" if version == "0.4.0" else version
+    for index, match in enumerate(headings):
+        if match.group(1) == label:
+            end = headings[index + 1].start() if index + 1 < len(headings) else len(release_text)
+            section = release_text[match.start():end].strip()
+            if len(section) < 100:
+                raise RuntimeError(f"pandas {version} has an unexpectedly short release note")
+            return section, release_text.count("\n", 0, match.start()) + 1
+    return None
+
+
+def find_early_release_note(library: str, version: str):
+    if library == "numpy" and version in NUMPY_EARLY_ANNOUNCEMENTS:
+        source_url = NUMPY_EARLY_ANNOUNCEMENTS[version]
+        # The forum rejects direct automated requests; its public text reader
+        # retains the original URL and the author's announcement.
+        content = fetch_text(f"https://r.jina.ai/{source_url}")
+        if content is None:
+            return None
+        expected = (f"NumPy {version} is a bug-fix and optimization release"
+                    if version != "1.0" else "announce the release of NumPy 1.0")
+        if not re.search(rf"(?m)^Title: .*\bNumPy {re.escape(version)} release(?:d)?\s*$", content, re.I) or expected not in content:
+            raise RuntimeError(f"Archived NumPy {version} announcement did not match its version")
+        return plain_text_html(f"NumPy {version} release announcement", content, source_url), source_url
+    if library == "numpy" and version == "1.9.3":
+        content = fetch_text(NUMPY_193_RST_URL)
+        if content is None:
+            return None
+        if not content.startswith("NumPy 1.9.3 Release Notes\n") or "Issues fixed" not in content:
+            raise RuntimeError("NumPy 1.9.3 release notes did not match the version")
+        source_url = "https://github.com/numpy/numpy/blob/v1.9.3/doc/release/1.9.3-notes.rst"
+        return plain_text_html("NumPy 1.9.3 Release Notes", content, source_url), source_url
+    if library == "pandas" and version in PANDAS_EARLY_VERSIONS:
+        release_text = fetch_text(PANDAS_EARLY_RST_URL)
+        if release_text is None:
+            return None
+        found = pandas_early_section(release_text, version)
+        if found is None:
+            raise RuntimeError(f"pandas {version} is absent from upstream RELEASE.rst")
+        section, line = found
+        source_url = f"https://github.com/pandas-dev/pandas/blob/v0.5.0/RELEASE.rst#L{line}"
+        return plain_text_html(f"pandas {version} Release Notes", section, source_url), source_url
+    return None
+
+
 def find_release_note(record):
     library, version = record["library"], record["version"]
+    early_note = find_early_release_note(library, version)
+    if early_note is not None:
+        return early_note
     for url in URL_BUILDERS[library](version):
         fetched = fetch_html(url)
         if fetched is None:
