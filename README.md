@@ -1,5 +1,20 @@
 # API Evolution
 
+## Cấu trúc thư mục
+
+```text
+API_Evolution/
+├── crawl_pypi_versions.py       # Bước 1: lấy version
+├── enrich_pypi_versions.py      # Bước 2: ghép Git tag và commit SHA
+├── crawl_release_notes.py       # Bước 3: tải release notes
+├── crawl_source.py              # Bước 4: tải và chuyển version source
+├── data/                        # JSON kết quả; *_diy.json là bản chỉnh tay
+├── cache/{library}/
+│   ├── docs/{version}/release_notes.html
+│   └── source/                  # Một Git repository cho mỗi thư viện
+└── requirements.txt
+```
+
 ## Chuẩn bị môi trường
 
 ```powershell
