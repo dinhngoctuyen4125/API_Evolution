@@ -33,9 +33,6 @@ GITHUB_REPOS = {
     "tensorflow": "tensorflow/tensorflow",
     "transformers": "huggingface/transformers",
 }
-# A matching GitHub Release page is sufficient for these libraries even when
-# GitHub provides no release description for older tags.
-EMPTY_GITHUB_RELEASE_BODY_OK = {"numpy", "scipy", "scikit-learn", "seaborn", "transformers"}
 NUMPY_141_RELEASE_URL = "https://mail-index.netbsd.org/pkgsrc-bugs/2010/04/24/msg037707.html"
 NUMPY_151_RELEASE_URL = "https://docs.scipy.org/doc/numpy-1.5.x/release.html"
 NUMPY_151_FRAGMENT = "#numpy-1-5-1-release-notes"
@@ -116,8 +113,8 @@ def no_documentation_urls(version: str):
 
 
 # GitHub release pages are used when versioned documentation is unavailable.
-# For libraries in EMPTY_GITHUB_RELEASE_BODY_OK, a matching /releases/tag/<tag>
-# page is sufficient even when its body is empty. Bare source trees are excluded.
+# A matching /releases/tag/<tag> page must include a release description.
+# Bare source trees and releases with no description are excluded.
 URL_BUILDERS = {
     "numpy": numpy_release_note_urls,
     "pandas": pandas_release_note_urls,
@@ -250,8 +247,8 @@ def is_release_note(html: str, library: str, version: str, *, github_tag=None):
         return bool(
             re.search(r"^Release\s+", title, re.I)
             and "GitHub" in title
-            and (library not in EMPTY_GITHUB_RELEASE_BODY_OK or GITHUB_REPOS[library] in title)
-            and (library in EMPTY_GITHUB_RELEASE_BODY_OK or "".join(parser.release_body_parts).strip())
+            and GITHUB_REPOS[library] in title
+            and "".join(parser.release_body_parts).strip()
         )
     if library == "pandas":
         return bool(re.search(rf"(?:What.s new in|Version)\s+{version_pattern(version)}", title, re.I))
