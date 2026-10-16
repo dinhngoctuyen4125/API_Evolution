@@ -181,6 +181,9 @@ def scikit_learn_release_labels(version: str):
     if version.count(".") == 2 and version.endswith(".0"):
         # The first release in a series can be headed "Version x.y".
         labels.append(version.rsplit(".", 1)[0])
+    if version == "0.22.2":
+        # 0.22.2.post1 only fixes source packaging; its notes also cover 0.22.2.
+        labels.append("0.22.2.post1")
     return labels
 
 

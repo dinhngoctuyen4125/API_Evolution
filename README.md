@@ -1,7 +1,5 @@
 # API Evolution
 
-Dự án thu thập version của 8 thư viện Python trên PyPI, ghép với Git tag và commit, rồi lưu trang release notes tương ứng. Danh sách cặp API migration được thu thập thủ công để dùng ở các bước phân tích tiếp theo.
-
 ## Chuẩn bị môi trường
 
 ```powershell
@@ -10,11 +8,9 @@ conda activate api_crawl
 pip install -r requirements.txt
 ```
 
-Chạy các lệnh dưới đây từ thư mục gốc của dự án, theo thứ tự các bước. Hai file kết quả của bước 1 và 2 được tạo khi chạy script; bản đã chỉnh tay ở bước 3 được lưu riêng.
-
 ## Bước 1 — Lấy version từ PyPI
 
-**Mô tả:** `crawl_pypi_versions.py` đọc lịch sử phát hành của NumPy, pandas, PyTorch (`torch` trên PyPI), TensorFlow, SciPy, scikit-learn, seaborn và Transformers. Script lấy các tên version chỉ gồm số và dấu chấm, như `X.Y`, `X.Y.Z`, rồi sắp xếp tăng dần theo từng thư viện.
+**Mô tả:** đọc lịch sử phát hành của 8 thư viện trên PyPI. Script lấy các tên version chỉ gồm số và dấu chấm, như `X.Y`, `X.Y.Z`, rồi sắp xếp tăng dần theo từng thư viện.
 
 **Chạy:**
 
@@ -24,11 +20,9 @@ python crawl_pypi_versions.py
 
 **Output:** `data/pypi_versions.json`, mỗi bản ghi có `library` và `version`. File kết quả này được Git ignore.
 
-**Ngoại lệ / xử lý tay:** Version bị yanked hoặc không có file phân phối vẫn được giữ nếu tên đúng dạng số. Các tên chứa `rc`, `b`, `dev`, `post` hoặc phần khác ngoài dạng số bị loại; bước này không cần chỉnh tay.
-
 ## Bước 2 — Ghép Git tag và commit SHA
 
-**Mô tả:** `enrich_pypi_versions.py` đọc output bước 1, tìm Git tag tương ứng trong repository của từng thư viện và lấy commit SHA. Script cũng xét tag khác cách viết nhưng tương đương về số version, chẳng hạn `0.3` và `v0.3.0`.
+**Mô tả:** đọc output bước 1, tìm Git tag tương ứng trong repository của từng thư viện và lấy commit SHA. Script cũng xét tag khác cách viết nhưng tương đương về số version, chẳng hạn `0.3` và `v0.3.0`.
 
 **Chạy:**
 
@@ -38,27 +32,11 @@ python enrich_pypi_versions.py
 
 **Output:** `data/pypi_versions_with_github.json`, giữ `library`, `version` và thêm `tag`, `commit_sha`, `source_url`. `source_url` trỏ tới cây mã nguồn theo commit SHA. File kết quả này được Git ignore.
 
-**Ngoại lệ / xử lý tay:** Khi không ghép được tag hoặc có nhiều tag tương đương nhưng khác commit, ba trường bổ sung là `null`; các trường hợp cần xem lại được xử lý ở bước 3. Nếu GitHub API báo giới hạn lượt gọi, đặt `$env:GITHUB_TOKEN = "<GitHub token của bạn>"` rồi chạy lại lệnh trên.
-
-## Bước 3 — Chốt danh sách version đã kiểm tra
-
-**Mô tả:** Rà soát output bước 2 và lưu bản đã kiểm tra riêng để crawler release notes dùng làm đầu vào. Chỉ khởi tạo file bằng lệnh dưới đây nếu file chỉnh tay chưa tồn tại; sau đó sửa các ngoại lệ trong editor.
-
-**Chạy:**
-
-```powershell
-if (-not (Test-Path data/pypi_versions_with_github_diy.json)) {
-    Copy-Item data/pypi_versions_with_github.json data/pypi_versions_with_github_diy.json
-}
-```
-
-**Output:** `data/pypi_versions_with_github_diy.json`, hiện có 821 bản ghi với `library`, `version`, `tag`, `commit_sha`, `source_url`. File này được theo dõi bởi Git; chạy lại bước 2 không ghi đè bản chỉnh tay. `data/sample_step_1.json` là dữ liệu mẫu của giai đoạn này.
-
 **Ngoại lệ / xử lý tay:** Bản hiện tại đã loại `pandas` `0.1` và `0.2` vì không có tag tương ứng trong repository hiện tại; loại `transformers` `0.1` vì là package trùng tên, không thuộc Hugging Face; loại `transformers` `4.25.0` vì không tìm thấy tag và source code tương ứng trên GitHub. Với `transformers` `5.10.4`, PyPI ghi `5.10.4` nhưng [GitHub dùng tag `v5.10.3`](https://github.com/huggingface/transformers/releases/tag/v5.10.3), nên bản chỉnh tay dùng tag, SHA và URL mã nguồn của `v5.10.3`.
 
-## Bước 4 — Lấy trang release notes
+## Bước 3 — Lấy trang release notes
 
-**Mô tả:** `crawl_release_notes.py` đọc bản chỉnh tay ở bước 3, tìm trang tài liệu hoặc trang GitHub theo từng version và lưu toàn bộ HTML vào cache. Mặc định script xử lý cả 8 thư viện.
+**Mô tả:** đọc bản chỉnh tay ở bước 2, tìm trang tài liệu hoặc trang GitHub theo từng version và lưu toàn bộ HTML vào cache. Mặc định script xử lý cả 8 thư viện.
 
 **Chạy:**
 
@@ -86,23 +64,9 @@ Khi chạy lại, script đọc JSON hiện có, giữ bản ghi của các thư
 **Ngoại lệ / xử lý tay:**
 
 - NumPy, pandas, SciPy và seaborn được tìm trong tài liệu chính thức. Một số trang NumPy ghi bản `X.Y.0` là `X.Y` trong tiêu đề (ví dụ `1.24.0`); crawler chấp nhận cách ghi này. Với NumPy `1.5.1`, crawler thử thêm [trang release notes của NumPy 1.5.x](https://docs.scipy.org/doc/numpy-1.5.x/release.html#numpy-1-5-1-release-notes), xác nhận tiêu đề mục `NumPy 1.5.1 Release Notes` và lưu URL trỏ đúng mục. Với SciPy 0.x, crawler còn thử SourceForge: [0.13.3 có ghi chú](https://sourceforge.net/projects/scipy/files/scipy/0.13.3/), còn [thư mục 0.6.0](https://sourceforge.net/projects/scipy/files/scipy/0.6.0/) chỉ có file tải và README chung nên chưa được tính là release notes.
-- Với scikit-learn, mục `Version X.Y` có thể ứng với bản `X.Y.0`; các bản vá cần mục version riêng. `release_url` trỏ tới đúng mục trong trang. Riêng bản `0.22.2`, [mục `0.22.2.post1`](https://scikit-learn.org/0.22/whats_new/v0.22.html#version-0-22-2-post1) ghi rõ hai bản dùng chung các thay đổi, còn post-release chỉ sửa cách đóng gói source distribution. Crawler không tự gán tên khác version, nên trường hợp này cần làm tay theo mẫu bên dưới.
+- Với scikit-learn, mục `Version X.Y` có thể ứng với bản `X.Y.0`; các bản vá cần mục version riêng. `release_url` trỏ tới đúng mục trong trang. Riêng bản `0.22.2`, crawler chấp nhận [mục `0.22.2.post1`](https://scikit-learn.org/0.22/whats_new/v0.22.html#version-0-22-2-post1), vì tài liệu ghi rõ hai bản dùng chung các thay đổi, còn post-release chỉ sửa cách đóng gói source distribution.
 - PyTorch và TensorFlow dùng GitHub Release có phần mô tả. Khi tài liệu không có, pandas, SciPy, scikit-learn và seaborn cũng thử GitHub Release có phần mô tả.
 - Với Transformers, URL `/releases/tag/<tag>` đúng tag trong kho `huggingface/transformers` được giữ làm minh chứng ngay cả khi phần mô tả rỗng. Điều đó áp dụng cho `2.1.0`, `4.1.0`, `4.4.1`, `4.33.0`, `4.52.0`, `5.10.0`; `release_url` không nhất thiết chứa ghi chú chi tiết. Trang `/tree` đơn thuần không được dùng thay trang `/releases/tag`.
-
-Để bổ sung thủ công scikit-learn `0.22.2`, trước tiên tải toàn bộ HTML của trang vào `cache/scikit-learn/docs/0.22.2/release_notes.html`, rồi thêm bản ghi sau vào `data/release_notes.json`:
-
-```json
-{
-  "library": "scikit-learn",
-  "version": "0.22.2",
-  "tag": "0.22.2",
-  "commit_sha": "4b7331eeb746b3facb4d70e1760c58ebe8b47f2e",
-  "source_url": "https://github.com/scikit-learn/scikit-learn/tree/4b7331eeb746b3facb4d70e1760c58ebe8b47f2e",
-  "release_url": "https://scikit-learn.org/0.22/whats_new/v0.22.html#version-0-22-2-post1",
-  "release_path": "cache/scikit-learn/docs/0.22.2/release_notes.html"
-}
-```
 
 Nếu đang dùng file JSON cũ có HTML trong trường `content`, chuyển sang cấu trúc cache mà không gọi mạng bằng:
 
