@@ -1,0 +1,278 @@
+
+{
+    "mapping_id": 3,
+    "library": "numpy",
+    "seed": {
+        "deprecated_api": "numpy.product",
+        "replacement_api": "numpy.prod"
+    },
+    "milestones": [
+        {
+            "version": "1.0.0",
+            "compared_to_version": null,
+            "api_states": [
+                {
+                    "name": "numpy.prod",
+                    "status": "active",
+                    "signature": "numpy.prod(a, axis=None, dtype=None, out=None)",
+                    "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None)"
+                },
+                {
+                    "name": "numpy.product",
+                    "status": "active",
+                    "signature": "numpy.product(x, axis=None, dtype=None, out=None)",
+                    "effective_signature": "numpy.product(x, axis=None, dtype=None, out=None)"
+                }
+            ],
+            "changes": []
+        },
+        {
+            "version": "1.0.4",
+            "compared_to_version": "1.0.0",
+            "api_states": [
+                {
+                    "name": "numpy.prod",
+                    "status": "active",
+                    "signature": "numpy.prod(a, axis=None, dtype=None, out=None)",
+                    "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None)"
+                },
+                {
+                    "name": "numpy.product",
+                    "status": "active",
+                    "signature": "numpy.product(a, axis=None, dtype=None, out=None)",
+                    "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None)"
+                }
+            ],
+            "changes": [
+                {
+                    "api": "numpy.product",
+                    "type": "parameter_rename",
+                    "parameter": "x",
+                    "old_value": "x",
+                    "new_value": "a"
+                }
+            ]
+        },
+        {
+            "version": "1.7.0",
+            "compared_to_version": "1.0.4",
+            "api_states": [
+                {
+                    "name": "numpy.prod",
+                    "status": "active",
+                    "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=False)",
+                    "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=False)"
+                },
+                {
+                    "name": "numpy.product",
+                    "status": "active",
+                    "signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=False)",
+                    "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=False)"
+                }
+            ],
+            "changes": [
+                {
+                    "api": "numpy.prod",
+                    "type": "parameter_added",
+                    "parameter": "keepdims",
+                    "old_value": null,
+                    "new_value": "False"
+                },
+                {
+                    "api": "numpy.product",
+                    "type": "parameter_added",
+                    "parameter": "keepdims",
+                    "old_value": null,
+                    "new_value": "False"
+                }
+            ]
+        },
+        {
+            "version": "1.11.2",
+            "compared_to_version": "1.7.0",
+            "api_states": [
+                {
+                    "name": "numpy.prod",
+                    "status": "active",
+                    "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue)",
+                    "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue)"
+                },
+                {
+                    "name": "numpy.product",
+                    "status": "active",
+                    "signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=_NoValue)",
+                    "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=_NoValue)"
+                }
+            ],
+            "changes": [
+                {
+                    "api": "numpy.prod",
+                    "type": "default_changed",
+                    "parameter": "keepdims",
+                    "old_value": "False",
+                    "new_value": "_NoValue"
+                },
+                {
+                    "api": "numpy.product",
+                    "type": "default_changed",
+                    "parameter": "keepdims",
+                    "old_value": "False",
+                    "new_value": "_NoValue"
+                }
+            ]
+        },
+        {
+            "version": "1.15.0",
+            "compared_to_version": "1.11.2",
+            "api_states": [
+                {
+                    "name": "numpy.prod",
+                    "status": "active",
+                    "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue)",
+                    "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue)"
+                },
+                {
+                    "name": "numpy.product",
+                    "status": "active",
+                    "signature": "numpy.product(*args, **kwargs)",
+                    "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue)"
+                }
+            ],
+            "changes": [
+                {
+                    "api": "numpy.prod",
+                    "type": "parameter_added",
+                    "parameter": "initial",
+                    "old_value": null,
+                    "new_value": "_NoValue"
+                },
+                {
+                    "api": "numpy.product",
+                    "type": "parameter_added",
+                    "parameter": "initial",
+                    "old_value": null,
+                    "new_value": "_NoValue"
+                },
+                {
+                    "api": "numpy.product",
+                    "type": "wrapper_changed",
+                    "old_value": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=_NoValue)",
+                    "new_value": "numpy.product(*args, **kwargs)",
+                    "delegates_to": "numpy.prod"
+                }
+            ]
+        },
+        {
+            "version": "1.16.0",
+            "compared_to_version": "1.15.0",
+            "api_states": [
+                {
+                    "name": "numpy.prod",
+                    "status": "active",
+                    "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue)",
+                    "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue)"
+                },
+                {
+                    "name": "numpy.product",
+                    "status": "active",
+                    "signature": "numpy.product(*args, **kwargs)",
+                    "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue)"
+                }
+            ],
+            "changes": [
+                {
+                    "api": "numpy.prod",
+                    "type": "implementation_changed",
+                    "description": "Changed the internal dispatch mechanism"
+                }
+            ]
+        },
+        {
+            "version": "1.17.0",
+            "compared_to_version": "1.16.0",
+            "api_states": [
+                {
+                    "name": "numpy.prod",
+                    "status": "active",
+                    "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue, where=_NoValue)",
+                    "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue, where=_NoValue)"
+                },
+                {
+                    "name": "numpy.product",
+                    "status": "active",
+                    "signature": "numpy.product(*args, **kwargs)",
+                    "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue, where=_NoValue)"
+                }
+            ],
+            "changes": [
+                {
+                    "api": "numpy.prod",
+                    "type": "parameter_added",
+                    "parameter": "where",
+                    "old_value": null,
+                    "new_value": "_NoValue"
+                },
+                {
+                    "api": "numpy.product",
+                    "type": "parameter_added",
+                    "parameter": "where",
+                    "old_value": null,
+                    "new_value": "_NoValue",
+                    "via_wrapper": true
+                }
+            ]
+        },
+        {
+            "version": "1.25.0",
+            "compared_to_version": "1.17.0",
+            "api_states": [
+                {
+                    "name": "numpy.prod",
+                    "status": "active",
+                    "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue, where=_NoValue)",
+                    "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue, where=_NoValue)"
+                },
+                {
+                    "name": "numpy.product",
+                    "status": "deprecated",
+                    "signature": "numpy.product(*args, **kwargs)",
+                    "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue, where=_NoValue)"
+                }
+            ],
+            "changes": [
+                {
+                    "api": "numpy.product",
+                    "type": "deprecated",
+                    "replacement_api": "numpy.prod",
+                    "source": "https://numpy.org/doc/1.25/release/1.25.0-notes.html"
+                }
+            ]
+        },
+        {
+            "version": "2.0.0",
+            "compared_to_version": "1.26.4",
+            "api_states": [
+                {
+                    "name": "numpy.prod",
+                    "status": "active",
+                    "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue, where=_NoValue)",
+                    "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=_NoValue, initial=_NoValue, where=_NoValue)"
+                },
+                {
+                    "name": "numpy.product",
+                    "status": "removed",
+                    "signature": null,
+                    "effective_signature": null
+                }
+            ],
+            "changes": [
+                {
+                    "api": "numpy.product",
+                    "type": "removed",
+                    "replacement_api": "numpy.prod",
+                    "source": "https://numpy.org/doc/2.0/numpy_2_0_migration_guide.html"
+                }
+            ]
+        }
+    ]
+}
