@@ -23,6 +23,7 @@ LIBRARIES = [
 ]
 RETRYABLE_STATUS = {429, 500, 502, 503, 504}
 GITHUB_REPOS = {
+    "numpy": "numpy/numpy",
     "pandas": "pandas-dev/pandas",
     "pytorch": "pytorch/pytorch",
     "scipy": "scipy/scipy",
@@ -33,7 +34,8 @@ GITHUB_REPOS = {
 }
 # A matching GitHub Release page is sufficient for these libraries even when
 # GitHub provides no release description for older tags.
-EMPTY_GITHUB_RELEASE_BODY_OK = {"scipy", "transformers"}
+EMPTY_GITHUB_RELEASE_BODY_OK = {"numpy", "scipy", "scikit-learn", "seaborn", "transformers"}
+NUMPY_141_RELEASE_URL = "https://mail-index.netbsd.org/pkgsrc-bugs/2010/04/24/msg037707.html"
 NUMPY_151_RELEASE_URL = "https://docs.scipy.org/doc/numpy-1.5.x/release.html"
 NUMPY_151_FRAGMENT = "#numpy-1-5-1-release-notes"
 
@@ -49,6 +51,8 @@ def numpy_release_note_urls(version: str):
         f"https://numpy.org/doc/stable/release/{filename}",
         f"https://numpy.org/devdocs/release/{filename}",
     )
+    if version == "1.4.1":
+        urls += (NUMPY_141_RELEASE_URL,)
     if version == "1.5.1":
         urls += (NUMPY_151_RELEASE_URL,)
     return urls
@@ -103,8 +107,8 @@ def no_documentation_urls(version: str):
 
 
 # GitHub release pages are used when versioned documentation is unavailable.
-# For SciPy and Transformers, a matching /releases/tag/<tag> page is sufficient
-# evidence even when its release-note body is empty. Bare source trees are excluded.
+# For libraries in EMPTY_GITHUB_RELEASE_BODY_OK, a matching /releases/tag/<tag>
+# page is sufficient even when its body is empty. Bare source trees are excluded.
 URL_BUILDERS = {
     "numpy": numpy_release_note_urls,
     "pandas": pandas_release_note_urls,
@@ -218,11 +222,17 @@ def is_numpy_release_note(html: str, version: str):
         re.fullmatch(rf"NumPy\s+{re.escape(candidate)}\s+Release Notes", heading, re.I)
         for candidate in accepted_versions for heading in parser.headings
     )
-    return title_matches or heading_matches
+    archived_mail_note = bool(
+        version == "1.4.1"
+        and title == "pkg/43204: [math/py-numpy] Update to 1.4.1"
+        and re.search(r"(?m)^NumPy 1\.4\.1 Release Notes\s*$", html)
+        and re.search(r"(?m)^Bugs fixed\s*$", html)
+    )
+    return title_matches or heading_matches or archived_mail_note
 
 
 def is_release_note(html: str, library: str, version: str, *, github_tag=None):
-    if library == "numpy":
+    if library == "numpy" and github_tag is None:
         return is_numpy_release_note(html, version)
     parser = TitleParser()
     parser.feed(html)
