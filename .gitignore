@@ -1,5 +1,6 @@
 /__pycache__/
 /tests/
+/.github/
 
 /data/**/*.json
 !/data/**/*_diy.json
