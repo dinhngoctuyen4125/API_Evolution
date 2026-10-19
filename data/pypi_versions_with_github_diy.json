@@ -5752,5 +5752,12 @@
     "tag": "v5.20.0",
     "commit_sha": "48e4bcd72362ff4887651112dbfa8227211a393a",
     "source_url": "https://github.com/huggingface/transformers/tree/48e4bcd72362ff4887651112dbfa8227211a393a"
+  },
+  {
+    "library": "transformers",
+    "version": "5.20.1",
+    "tag": "v5.20.1",
+    "commit_sha": "0ea877911a11499053df677befd4b35b172ff502",
+    "source_url": "https://github.com/huggingface/transformers/tree/0ea877911a11499053df677befd4b35b172ff502"
   }
 ]
