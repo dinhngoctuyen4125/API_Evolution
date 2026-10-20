@@ -76,20 +76,14 @@ def module_statements(body, conditional=False):
 def literal_exports(tree):
     if tree is None:
         return None
-    statements = list(module_statements(tree.body))
-    if any(
-        isinstance(item, ast.AugAssign) and isinstance(item.target, ast.Name)
-        and item.target.id == "__all__"
-        or isinstance(item, ast.Expr) and isinstance(item.value, ast.Call)
-        and dotted(item.value.func) in {"__all__.append", "__all__.extend", "__all__.remove"}
-        for item, _ in statements
-    ):
-        return None
-    for item, _ in statements:
+    exports = None
+    for item, conditional in module_statements(tree.body):
         if isinstance(item, (ast.Assign, ast.AnnAssign)):
             targets = item.targets if isinstance(item, ast.Assign) else [item.target]
             if any(isinstance(target, ast.Name) and target.id == "__all__"
                    for target in targets):
+                if conditional:
+                    return None
                 try:
                     value = ast.literal_eval(item.value)
                 except (ValueError, TypeError, SyntaxError):
@@ -97,8 +91,39 @@ def literal_exports(tree):
                 if isinstance(value, (list, tuple, set)) and all(
                     isinstance(name, str) for name in value
                 ):
-                    return set(value)
-    return None
+                    exports = set(value)
+                else:
+                    return None
+        elif isinstance(item, ast.AugAssign) and isinstance(item.target, ast.Name) \
+                and item.target.id == "__all__":
+            if conditional or exports is None or not isinstance(item.op, ast.Add):
+                return None
+            try:
+                values = ast.literal_eval(item.value)
+            except (ValueError, TypeError, SyntaxError):
+                return None
+            if not isinstance(values, (list, tuple, set)) or not all(isinstance(v, str) for v in values):
+                return None
+            exports.update(values)
+        elif isinstance(item, ast.Expr) and isinstance(item.value, ast.Call) \
+                and dotted(item.value.func) in {"__all__.append", "__all__.extend", "__all__.remove"}:
+            if conditional or exports is None or len(item.value.args) != 1 or item.value.keywords:
+                return None
+            try:
+                value = ast.literal_eval(item.value.args[0])
+            except (ValueError, TypeError, SyntaxError):
+                return None
+            method = dotted(item.value.func)
+            if method == "__all__.extend" and isinstance(value, (list, tuple, set)) \
+                    and all(isinstance(v, str) for v in value):
+                exports.update(value)
+            elif method == "__all__.append" and isinstance(value, str):
+                exports.add(value)
+            elif method == "__all__.remove" and isinstance(value, str) and value in exports:
+                exports.remove(value)
+            else:
+                return None
+    return exports
 
 
 def signature(node):
@@ -157,6 +182,81 @@ def delegated_call(node):
     return None
 
 
+def forwarding_wrapper_target(node):
+    """Recognize an unchanged *args/**kwargs pass-through to a local function."""
+    if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        return None
+    args = node.args
+    if args.posonlyargs or args.args or args.kwonlyargs or not args.vararg or not args.kwarg:
+        return None
+    body = node.body[1:] if node.body and isinstance(node.body[0], ast.Expr) \
+        and isinstance(node.body[0].value, ast.Constant) \
+        and isinstance(node.body[0].value.value, str) else node.body
+    if not body or not all(
+        isinstance(item, ast.Expr) and isinstance(item.value, ast.Call)
+        and dotted(item.value.func) in {"warn", "warnings.warn"}
+        for item in body[:-1]
+    ):
+        return None
+    last = body[-1]
+    if not isinstance(last, ast.Return) or not isinstance(last.value, ast.Call):
+        return None
+    call = last.value
+    if not isinstance(call.func, ast.Name) or call.func.id == node.name:
+        return None
+    if len(call.args) != 1 or not isinstance(call.args[0], ast.Starred) \
+            or not isinstance(call.args[0].value, ast.Name) \
+            or call.args[0].value.id != args.vararg.arg:
+        return None
+    if len(call.keywords) != 1 or call.keywords[0].arg is not None \
+            or not isinstance(call.keywords[0].value, ast.Name) \
+            or call.keywords[0].value.id != args.kwarg.arg:
+        return None
+    return call.func.id
+
+
+def excludes_name(test, parameter, name):
+    """Return True only when an if-condition is provably false for name."""
+    if not isinstance(test, ast.Compare) or len(test.ops) != 1 or len(test.comparators) != 1:
+        return False
+    left, right = test.left, test.comparators[0]
+    if isinstance(left, ast.Name) and left.id == parameter and isinstance(right, ast.Constant) \
+            and isinstance(right.value, str):
+        if isinstance(test.ops[0], ast.Eq):
+            return name != right.value
+        if isinstance(test.ops[0], ast.NotEq):
+            return name == right.value
+    return False
+
+
+def getattr_excludes_name(node, name):
+    """Prove a module __getattr__ cannot return this name; otherwise stay unknown."""
+    if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) or not node.args.args:
+        return False
+    final = node.body[-1] if node.body else None
+    if not isinstance(final, ast.Raise) or not isinstance(final.exc, ast.Call) \
+            or dotted(final.exc.func) != "AttributeError":
+        return False
+    parameter = node.args.args[0].arg
+
+    def can_return(nodes):
+        for item in nodes:
+            if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
+                continue
+            if isinstance(item, (ast.Return, ast.Yield, ast.YieldFrom)):
+                return True
+            if isinstance(item, ast.If):
+                if not excludes_name(item.test, parameter, name) and can_return(item.body):
+                    return True
+                if can_return(item.orelse):
+                    return True
+            elif can_return(ast.iter_child_nodes(item)):
+                return True
+        return False
+
+    return not can_return(node.body)
+
+
 @dataclass
 class Resolution:
     status: str
@@ -197,6 +297,12 @@ class SourceReader:
                    or path.endswith(f"/{stem}.py")]
         return matches[0] if len(matches) == 1 else None
 
+    def exact_module_file(self, sha, module):
+        stem = module.replace(".", "/")
+        files = self.paths(sha)
+        return next((candidate for candidate in (f"{stem}/__init__.py", f"{stem}.py")
+                     if candidate in files), None)
+
     def parse(self, sha, path):
         key = (sha, path)
         if key not in self.parsed:
@@ -210,9 +316,15 @@ class SourceReader:
         self.parsed.move_to_end(key)
         return self.parsed[key]
 
-    def relative_module(self, current, path, statement):
+    def relative_module(self, sha, current, path, statement):
         if statement.level == 0:
-            return statement.module or ""
+            imported = statement.module or ""
+            if self.exact_module_file(sha, imported):
+                return imported
+            # Python 2 packages commonly used implicit intra-package imports.
+            package = current if path.endswith("/__init__.py") else current.rpartition(".")[0]
+            local = f"{package}.{imported}" if package and imported else imported
+            return local if self.exact_module_file(sha, local) else imported
         package = current if path.endswith("/__init__.py") else current.rpartition(".")[0]
         parts = package.split(".") if package else []
         if statement.level > len(parts):
@@ -254,7 +366,7 @@ class SourceReader:
         uncertain = False
         for item, conditional in statements:
             if isinstance(item, ast.ImportFrom):
-                imported = self.relative_module(module, path, item)
+                imported = self.relative_module(sha, module, path, item)
                 if imported is None:
                     uncertain = True
                     continue
@@ -284,17 +396,33 @@ class SourceReader:
             elif isinstance(item, ast.Import):
                 for alias in item.names:
                     if (alias.asname or alias.name.split(".")[0]) == name:
+                        imported = alias.name
+                        if not self.exact_module_file(sha, imported):
+                            package = module if path.endswith("/__init__.py") else module.rpartition(".")[0]
+                            local = f"{package}.{imported}" if package else imported
+                            if self.exact_module_file(sha, local):
+                                imported = local
                         return Resolution("present", "conditional_import" if conditional else None,
                                           path=path, node=item,
-                                          tree=tree, module=alias.name)
+                                          tree=tree, module=imported)
 
         if self.module_file(sha, f"{module}.{name}"):
             return Resolution("present", path=path, tree=tree, module=f"{module}.{name}")
-        if any(isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef))
-               and item.name == "__getattr__" for item, _ in statements):
+        getters = [item for item, _ in statements
+                   if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef))
+                   and item.name == "__getattr__"]
+        dynamic_loader = any(
+            isinstance(item, ast.Expr) and isinstance(item.value, ast.Call)
+            and dotted(item.value.func) == "pkgload"
+            for item, _ in statements
+        )
+        if getters and not all(getattr_excludes_name(item, name) for item in getters):
             uncertain = True
+        uncertain |= dynamic_loader
         return Resolution("unknown" if uncertain else "absent",
-                          "dynamic_or_unresolved_export" if uncertain else None, path=path)
+                          "dynamic_package_loader" if dynamic_loader else
+                          "dynamic_or_unresolved_export" if uncertain else
+                          "getattr_excludes_name" if getters else None, path=path)
 
     def resolve_api(self, sha, api):
         parts = api.split(".")
@@ -369,6 +497,15 @@ class SourceReader:
             return self.states[key]
         resolved = self.resolve_api(sha, api)
         node = resolved.node
+        wrapper_target = forwarding_wrapper_target(node)
+        effective = signature(node)
+        effective_status = "direct" if effective is not None else "unavailable"
+        effective_resolution = resolved
+        if wrapper_target and resolved.module:
+            target = self.resolve_name(sha, resolved.module, wrapper_target)
+            effective = signature(target.node) if target.status == "present" else None
+            effective_status = "forwarded" if effective is not None else "unresolved_forwarding"
+            effective_resolution = target if effective is not None else resolved
         warning = warning_calls(node) if node is not None else None
         warning_line = getattr(node, "lineno", None) if warning else None
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and resolved.tree:
@@ -387,6 +524,12 @@ class SourceReader:
             "line_start": getattr(node, "lineno", None),
             "line_end": getattr(node, "end_lineno", None),
             "declared_parameters": signature(node),
+            "effective_parameters": effective,
+            "effective_signature_status": effective_status,
+            "effective_source_path": effective_resolution.path,
+            "effective_line_start": getattr(effective_resolution.node, "lineno", None),
+            "effective_line_end": getattr(effective_resolution.node, "end_lineno", None),
+            "wrapper_target": wrapper_target,
             "alias_target": resolved.alias_target,
             "delegates_to": delegated_call(node),
             "deprecation_warning_path": warning,
@@ -437,11 +580,14 @@ def compare_states(before, after):
                  "after": new_status, "verification_status": verification}], None
     if old_status == "absent":
         return [], None
-    changes = compare_parameters(before["declared_parameters"], after["declared_parameters"])
+    changes = compare_parameters(before["effective_parameters"], after["effective_parameters"])
     for field, kind in (("alias_target", "alias_target_changed"),
                         ("delegates_to", "delegation_changed"),
+                        ("wrapper_target", "wrapper_forwarding_changed"),
                         ("deprecation_warning_path", "warning_path_changed")):
         if before[field] != after[field]:
+            if field == "delegates_to" and None in (before[field], after[field]):
+                continue
             if field == "deprecation_warning_path":
                 kind = "warning_path_added" if after[field] else "warning_path_removed"
             changes.append({"kind": kind, "before": before[field], "after": after[field]})
@@ -456,34 +602,94 @@ def compare_states(before, after):
         else:
             change.setdefault("verification_status", "verified")
         change["api"] = api
-    return changes, None
+    reason = "effective_signature_unresolved" if "unresolved_forwarding" in (
+        before["effective_signature_status"], after["effective_signature_status"]
+    ) else None
+    return changes, reason
 
 
-def evidence(library, sha, state):
-    path = state["source_path"]
+def evidence(library, sha, state, forwarded=False):
+    path = state["effective_source_path"] if forwarded else state["source_path"]
     if not path:
         return None
-    line = state["line_start"]
+    line = state["effective_line_start"] if forwarded else state["line_start"]
     url = f"https://github.com/{REPOSITORIES[library]}/blob/{sha}/{path}"
     if line:
         url += f"#L{line}"
     return {"kind": "source", "commit_sha": sha, "source_path": path,
-            "line_start": line, "line_end": state["line_end"],
+            "role": "forwarded_target" if forwarded else "public_symbol",
+            "line_start": line, "line_end": state["effective_line_end"] if forwarded else state["line_end"],
             "warning_line_start": state["warning_line_start"], "url": url}
 
 
-def diff_evidence(repo, old_sha, new_sha, paths):
+def diff_evidence(repo, old_sha, new_sha, states, changes):
+    regions = defaultdict(lambda: {"old": [], "new": []})
+    changed_apis = {change["api"] for change in changes}
+    for api in changed_apis:
+        for side, state in zip(("old", "new"), states[api]):
+            for prefix in ("", "effective_"):
+                path = state.get(f"{prefix}source_path")
+                start = state.get(f"{prefix}line_start")
+                end = state.get(f"{prefix}line_end")
+                if path and start:
+                    regions[path][side].append((start, end or start))
+            if state["source_path"] and state["warning_line_start"]:
+                line = state["warning_line_start"]
+                regions[state["source_path"]][side].append((line, line))
+    paths = set(regions)
     if not paths:
         return None
-    result = git(repo, "diff", "--no-ext-diff", "--unified=0", old_sha, new_sha,
+    result = git(repo, "diff", "--no-ext-diff", "--find-renames", "--unified=0", old_sha, new_sha,
                  "--", *sorted(paths))
     if not result.stdout:
+        return None
+    hunk_pattern = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@")
+    old_path = new_path = None
+    selected = []
+    current = None
+
+    def intersects(path, side, start, count):
+        for low, high in regions.get(path, {}).get(side, []):
+            if count == 0 and low - 1 <= start <= high:
+                return True
+            if count and start <= high and start + count - 1 >= low:
+                return True
+        return False
+
+    def finish():
+        if current and current["relevant"]:
+            excerpt = "\n".join(current["lines"])
+            selected.append({"old_path": old_path, "new_path": new_path,
+                             "header": current["header"], "excerpt": excerpt[:2000],
+                             "excerpt_truncated": len(excerpt) > 2000})
+
+    for line in result.stdout.splitlines():
+        if line.startswith("diff --git "):
+            finish()
+            current = None
+            old_path = new_path = None
+        elif line.startswith("--- "):
+            old_path = line[6:] if line.startswith("--- a/") else None
+        elif line.startswith("+++ "):
+            new_path = line[6:] if line.startswith("+++ b/") else None
+        elif line.startswith("@@ "):
+            finish()
+            match = hunk_pattern.match(line)
+            relevant = bool(match) and (
+                intersects(old_path, "old", int(match.group(1)), int(match.group(2) or 1)) or
+                intersects(new_path, "new", int(match.group(3)), int(match.group(4) or 1))
+            )
+            current = {"header": line, "relevant": relevant, "lines": [line]}
+        elif current:
+            current["lines"].append(line)
+    finish()
+    if not selected:
         return None
     return {"kind": "git_diff", "from_commit_sha": old_sha,
             "to_commit_sha": new_sha, "source_paths": sorted(paths),
             "diff_sha256": hashlib.sha256(result.stdout.encode("utf-8")).hexdigest(),
-            "hunk_headers": [line for line in result.stdout.splitlines()
-                             if line.startswith("@@ ")][:40]}
+            "hunk_headers": [item["header"] for item in selected],
+            "relevant_hunks": selected}
 
 
 def validate_version(repo, library, record):
@@ -504,9 +710,14 @@ def validate_version(repo, library, record):
     return "tag_matches_commit" if result.stdout.strip().lower() == sha.lower() else "tag_mismatch"
 
 
-def scan_pair(pair, versions, reader, version_status):
+def scan_pair(pair, versions, reader, version_status, progress=None, progress_every=10):
     candidates, unresolved = [], []
-    for old, new in zip(versions, versions[1:]):
+    total = max(0, len(versions) - 1)
+    for index, (old, new) in enumerate(zip(versions, versions[1:]), start=1):
+        if progress and progress_every and (
+            index == 1 or index % progress_every == 0 or index == total
+        ):
+            progress(f"  interval {index}/{total}: {old['version']} -> {new['version']}")
         old_sha, new_sha = old["commit_sha"], new["commit_sha"]
         base = {"mapping_id": pair["id"], "library": pair["library"],
                 "deprecated_api": pair["deprecated_api"],
@@ -545,13 +756,13 @@ def scan_pair(pair, versions, reader, version_status):
                 if not any(change["api"] == api for change in changes):
                     continue
                 for sha, state in ((old_sha, before), (new_sha, after)):
-                    item = evidence(pair["library"], sha, state)
-                    if item and item not in source_evidence:
-                        source_evidence.append(item)
+                    for forwarded in (False, True) if state["wrapper_target"] else (False,):
+                        item = evidence(pair["library"], sha, state, forwarded)
+                        if item and item not in source_evidence:
+                            source_evidence.append(item)
             for index, item in enumerate(source_evidence, start=1):
                 item["id"] = f"src-{pair['id']}-{old['version']}-{new['version']}-{index}"
-            changed_paths = {item["source_path"] for item in source_evidence}
-            diff_item = diff_evidence(reader.repo, old_sha, new_sha, changed_paths)
+            diff_item = diff_evidence(reader.repo, old_sha, new_sha, states, changes)
             if diff_item:
                 diff_item["id"] = f"diff-{pair['id']}-{old['version']}-{new['version']}"
                 source_evidence.append(diff_item)
@@ -560,7 +771,9 @@ def scan_pair(pair, versions, reader, version_status):
                 change["evidence_refs"] = [item["id"] for item in source_evidence
                                            if item.get("kind") == "git_diff" or item["source_path"] in {
                                                states[change["api"]][0]["source_path"],
-                                               states[change["api"]][1]["source_path"]}]
+                                               states[change["api"]][1]["source_path"],
+                                               states[change["api"]][0]["effective_source_path"],
+                                               states[change["api"]][1]["effective_source_path"]}]
             candidates.append({**base, "artifact_source_match_status": "not_verified",
                                "tag_status": list(statuses),
                                "api_states_before": {api: state[0] for api, state in states.items()},
@@ -599,7 +812,11 @@ def main(argv=None):
     parser.add_argument("--to-version", help="Last version to scan (inclusive)")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--unresolved-output", type=Path, default=DEFAULT_UNRESOLVED)
+    parser.add_argument("--progress-every", type=int, default=10,
+                        help="Show progress every N version intervals (0 disables interval logs)")
     args = parser.parse_args(argv)
+    if args.progress_every < 0:
+        parser.error("--progress-every must be nonnegative")
     pairs, grouped = load_inputs()
     if args.mapping_id is not None:
         pairs = [pair for pair in pairs if pair["id"] == args.mapping_id]
@@ -623,6 +840,11 @@ def main(argv=None):
             if args.to_version not in names:
                 parser.error(f"{library}: unknown or earlier to-version {args.to_version}")
             versions = versions[:names.index(args.to_version) + 1]
+        def report(message):
+            print(message, file=sys.stderr, flush=True)
+
+        report(f"{library}: {len(selected)} pairs, {len(versions)} versions "
+               f"({max(0, len(versions) - 1)} intervals per pair)")
         repo = ROOT / "cache" / library / "source"
         if not repo.is_dir():
             for pair in selected:
@@ -637,14 +859,21 @@ def main(argv=None):
                                    "reason": "source_repository_invalid", "detail": str(exc)})
             continue
         reader = SourceReader(repo, library)
-        version_status = {item["version"]: validate_version(repo, library, item)
-                          for item in versions}
+        version_status = {}
+        report(f"{library}: validating version metadata and Git tags...")
+        for index, item in enumerate(versions, start=1):
+            if index == 1 or index % 20 == 0 or index == len(versions):
+                report(f"  validation {index}/{len(versions)}: {item['version']}")
+            version_status[item["version"]] = validate_version(repo, library, item)
         for pair in selected:
-            found, missing = scan_pair(pair, versions, reader, version_status)
+            report(f"{library} #{pair['id']}: tracing "
+                   f"{pair['deprecated_api']} -> {pair['replacement_api']}...")
+            found, missing = scan_pair(pair, versions, reader, version_status,
+                                       progress=report, progress_every=args.progress_every)
             candidates.extend(found)
             unresolved.extend(missing)
-            print(f"{library} #{pair['id']}: {len(found)} changes, "
-                  f"{len(missing)} unresolved intervals", file=sys.stderr)
+            report(f"{library} #{pair['id']}: {len(found)} changes, "
+                   f"{len(missing)} unresolved intervals")
     write_json(args.output, candidates)
     write_json(args.unresolved_output, unresolved)
     print(f"Saved {len(candidates)} change records to {args.output}")

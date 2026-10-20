@@ -124,7 +124,12 @@ python trace_source_changes.py --mapping-id 3 --from-version 1.24.4 --to-version
 
 # Toàn bộ các pair của một thư viện.
 python trace_source_changes.py --library pandas
+
+# In tiến độ sau mỗi khoảng version (mặc định sau mỗi 10 khoảng).
+python trace_source_changes.py --library numpy --progress-every 1
 ```
+
+**Tiến độ:** script in ngay số pair/version, tiến độ kiểm tra tag và version đang so sánh ra terminal. `--progress-every 0` tắt log theo khoảng version. Với NumPy, mỗi pair có 143 khoảng version; một lệnh `git show`/`git diff` có thể mất thêm thời gian nếu Git phải tải blob còn thiếu. Hai file JSON chỉ được ghi sau khi phạm vi đã chọn chạy xong.
 
 **Luồng xử lý:**
 
@@ -137,3 +142,53 @@ python trace_source_changes.py --library pandas
 **Output:** `data/source_change_candidates.json` **chỉ lưu khoảng có ít nhất một candidate liên quan đến deprecated API hoặc replacement API**; không yêu cầu cả hai API cùng thay đổi. Mỗi record có `mapping_id`, `library`, hai tên API, `from_version`, `to_version`, hai commit SHA, trạng thái từng API trước/sau, `changes` và `evidence`; mỗi change có `evidence_refs`. `data/source_trace_unresolved.json` lưu riêng các khoảng không kiểm tra được đầy đủ, kể cả khi vẫn phát hiện được một candidate ở API còn lại. Khoảng không có candidate và không có lỗi không được ghi thành event. Hai file này được ghi lại theo phạm vi của mỗi lần chạy và được Git ignore.
 
 **Giới hạn:** resolver xử lý Python `import`, re-export, `__all__` tĩnh, alias, hàm, method và một số chuỗi kế thừa có thể lần theo tĩnh. Import có điều kiện được đánh dấu `requires_review`; namespace động, kế thừa không giải được, extension và source không parse được có thể thành `unresolved`. Script kiểm tra repository gốc, tag, SHA và `source_url` nhưng chưa so sánh nội dung wheel PyPI với Git source (`artifact_source_match_status: not_verified`). Git ở bước này có thể tải blob còn thiếu của repository clone một phần. `comparison_base_version` trong evolution path là milestone có thay đổi API trước đó được giữ lại, không phải version liền kề dùng để quét ở bước này.
+
+Các rule bổ sung cho NumPy cũ nhận diện import nội bộ kiểu Python 2 (`from core import *`), theo dõi `__all__` cập nhật bằng literal, và giữ `unknown` khi namespace được nạp qua `pkgload`. Với `__getattr__`, chỉ kết luận API vắng mặt khi có thể chứng minh nhánh truy cập tên đó kết thúc bằng `AttributeError`. Wrapper chỉ chuyển tiếp `*args, **kwargs` nguyên vẹn được so sánh theo chữ ký của hàm đích; output giữ cả `declared_parameters` và `effective_parameters`. Evidence Git diff chứa những hunk giao với vị trí symbol liên quan (`relevant_hunks`), thay vì toàn bộ diff của file. Các suy luận tĩnh qua import có điều kiện vẫn cần review; `public_api_added` không được khẳng định nếu snapshot trước có loader động.
+
+## Bước 6 — Trích xuất thông báo thay đổi API từ release notes
+
+**Mô tả:** `trace_release_notes.py` đọc HTML đã cache ở bước 3 để lấy các thông báo có liên quan tới từng cặp API. Bước này chạy **độc lập với source candidates của bước 5**: một thông báo chỉ xuất hiện trong release notes vẫn có thể được ghi nhận. Kết quả ở đây là `documented` claim, chưa phải kết luận rằng source code đã thay đổi. Bước đối chiếu hai nguồn sẽ được thực hiện sau.
+
+**Input:** `data/api_mapping_pairs.json`, tập version đã thu thập trong `data/pypi_versions_with_github_diy.json`, `data/release_notes.json` và các file `cache/{library}/docs/{version}/release_notes.html`. Phiên bản không có record release note hoặc không có file HTML được ghi riêng, không suy đoán nội dung còn thiếu.
+
+**Xem trước đoạn sẽ gửi cho LLM (không gọi API, không ghi output):**
+
+```powershell
+python trace_release_notes.py --mapping-id 3 --version 1.25.0 --dry-run
+```
+
+**Chạy với OpenAI API:**
+
+```powershell
+$env:OPENAI_API_KEY = "<API key của bạn>"
+
+# Một cặp / một version trước khi mở rộng phạm vi.
+python trace_release_notes.py --mapping-id 3 --version 1.25.0
+
+# Một thư viện hoặc toàn bộ 8 thư viện.
+python trace_release_notes.py --library numpy
+python trace_release_notes.py
+```
+
+**Chạy với Gemini API:**
+
+```powershell
+$env:GEMINI_API_KEY = "<API key của bạn>"
+python trace_release_notes.py --provider gemini --mapping-id 3 --version 1.25.0
+```
+
+`test_trace_release_notes.py` là unit test dùng phản hồi giả, không cần API key và không gọi dịch vụ bên ngoài. Muốn thử LLM thật với một pair/version, chạy `trace_release_notes.py` như hai ví dụ trên. Đặt key trong biến môi trường của phiên PowerShell hiện tại; không ghi key vào file Python hoặc commit lên Git.
+
+Có thể chọn `--provider`, `--model`, `--mapping-id`, `--library` (lặp lại được), `--version`, `--output`, `--unresolved-output` và `--progress-every`. Mặc định dùng `openai`/`gpt-4o-mini`; với `--provider gemini`, mặc định dùng `gemini-3.8-flash`. Mỗi lần chạy ghi lại hai file output theo đúng phạm vi được chọn; nên lưu kết quả thử nghiệm ra đường dẫn riêng nếu cần giữ kết quả của lần chạy trước. Chỉ các note có đoạn ứng viên mới tạo API call; hãy dùng `--dry-run` để kiểm tra phạm vi và chi phí trước khi chạy rộng.
+
+**Luồng xử lý:**
+
+1. Ghép từng pair với các version của thư viện trong metadata. Kiểm tra record và file release note. Thiếu note được ghi `release_note_missing`; file không đọc được được ghi riêng. Không lấy announcement version làm điểm xuất phát nên có thể thấy cả thông báo trước và sau nó trong tập version hiện có.
+2. Parse HTML thành các block văn bản, bỏ `script`, `style`, `nav`, `header`, `footer`. Rule tìm tên API đầy đủ và các alias Python phổ biến (ví dụ `numpy.product`/`np.product`), lấy block trúng cùng ngữ cảnh sát bên. Tên ngắn ít đặc trưng cần thêm ngữ cảnh migration. Đây là bước tìm ứng viên, không phải xác minh sự kiện.
+3. Gửi tối đa 12 block trong một request tới OpenAI Responses API hoặc Gemini Interactions API với structured output. LLM chỉ được trích xuất phát biểu rõ ràng: deprecation, khuyến nghị thay thế, removal, introduction, thay đổi signature, behavior, compatibility hoặc thay đổi được mô tả khác. Nếu note nói về tương lai/quá khứ, `temporal_status` và `effective_version` giữ thông tin đó tách khỏi `release_version`. Nếu không có claim rõ ràng, trả mảng rỗng.
+4. Rule kiểm tra `event_type`, API đích, `block_id`, và `quote` phải là chuỗi con của đúng block đã gửi và có nhắc đến một API của pair. Claim không đạt bị ghi `invalid_or_ungrounded_claims`. `quote_verified` chỉ xác nhận đoạn trích khớp HTML, **không** xác minh ngữ nghĩa hay source; claim quan trọng vẫn cần đối chiếu hoặc review.
+5. Chỉ lưu note có claim hợp lệ. Mỗi claim có `observation_type: documented`, `event_type`, `target_api`, `description`, `temporal_status`, `effective_version`, `quote` và `evidence_refs`. Evidence chứa `release_url`, `release_path`, SHA-256 của HTML, `block_id` và block text để truy vết. Lỗi API, claim thiếu bằng chứng và note còn thiếu được ghi ở file unresolved.
+
+**Output:** `data/release_note_claims.json` chứa `mapping_id`, `library`, cặp API, `release_version`, nguồn release note, `provider`, `model`, `claims` và `evidence`. `data/release_note_unresolved.json` chứa các pair/version chưa thể kiểm tra đầy đủ. Cả hai file được Git ignore. Không có mention hoặc LLM không thấy claim rõ ràng thì không tạo event; điều đó không chứng minh API không thay đổi.
+
+**Giới hạn:** rule tìm đoạn có thể bỏ sót cách gọi API không nằm trong alias đã khai báo, nội dung chỉ nêu ý gián tiếp hoặc tài liệu ngoài danh sách release notes; HTML trang web có thể chứa nội dung ngoài phần note. LLM có thể hiểu sai phát biểu dù quote hợp lệ. Các thông báo nguồn tài liệu chưa được đối chiếu với `source_observed` của bước 5, và thiếu release note không được tự nối thành evolution path hoàn chỉnh.
