@@ -8,6 +8,7 @@ API_Evolution/
 ├── enrich_pypi_versions.py      # Bước 2: ghép Git tag và commit SHA
 ├── crawl_release_notes.py       # Bước 3: tải release notes
 ├── crawl_source.py              # Bước 4: tải và chuyển version source
+├── trace_source_changes.py      # Bước 5: tìm thay đổi Python API trong source
 ├── data/                        # JSON kết quả; *_diy.json là bản chỉnh tay
 ├── cache/{library}/
 │   ├── docs/{version}/release_notes.html
@@ -99,3 +100,40 @@ python crawl_source.py --library numpy --version 1.4.1
 ```
 
 **Output:** `cache/{library}/source`, một Git repository cho mỗi thư viện.
+
+## Bước 5 — Phát hiện thay đổi Python API từ source code
+
+**Mô tả:** `trace_source_changes.py` theo dõi từng cặp trong `data/api_mapping_pairs.json` qua các version đã thu thập. Script đọc source tại commit SHA và Git diff để tạo các quan sát về public API và implementation. Git diff chỉ giúp tìm vị trí cần kiểm tra; một diff không tự động trở thành evolution event. Bước 5 chưa dùng LLM hoặc release notes.
+
+**Input:** `data/api_mapping_pairs.json`, `data/pypi_versions_with_github_diy.json` và Git repository tại `cache/{library}/source`. Mỗi version phải được gắn với đúng commit SHA; nếu chưa xác minh được ánh xạ giữa bản phát hành PyPI và source Git, ghi trạng thái này trong kết quả thay vì coi hai nguồn là tương đương.
+
+**Chạy toàn bộ:**
+
+```powershell
+python trace_source_changes.py
+```
+
+**Chạy riêng:**
+
+```powershell
+# Một migration pair trên tất cả version NumPy đã thu thập.
+python trace_source_changes.py --mapping-id 3
+
+# Một khoảng version, gồm hai đầu. Output của lần chạy chỉ chứa khoảng đã chọn.
+python trace_source_changes.py --mapping-id 3 --from-version 1.24.4 --to-version 1.25.0
+
+# Toàn bộ các pair của một thư viện.
+python trace_source_changes.py --library pandas
+```
+
+**Luồng xử lý:**
+
+1. Với mỗi library, sắp xếp các version đã thu thập và kiểm tra commit SHA có thể đọc được. Giữ nguyên tên version trong metadata, kể cả `1.0` và `1.0.0` nếu có. Đọc snapshot bằng `git show` và so sánh bằng `git diff` theo SHA để không phải liên tục chuyển checkout của repository dùng chung.
+2. Với mỗi cặp API ở từng snapshot, lần theo tên public qua import, re-export, alias, wrapper và vị trí định nghĩa. Ghi trạng thái public của deprecated API và replacement API riêng biệt: `present`, `absent` hoặc `unknown`. Trường hợp export động, extension hoặc code sinh ra mà rule chưa giải được phải giữ `unknown`.
+3. So sánh từng cặp version liền kề **trong tập đã thu thập** để định vị thay đổi. Dùng Git diff khoanh vùng file, rồi đối chiếu symbol public và source/AST tương ứng ở cả hai snapshot. Tái sử dụng kết quả phân tích một snapshot cho các migration pair cùng library. Nếu thiếu snapshot hoặc không lần được đường từ public API tới implementation, ghi khoảng chưa xác minh.
+4. Tạo candidate cho các thay đổi rule nhận diện được: thêm/gỡ public export; thêm/gỡ tham số, đổi giá trị mặc định, thứ tự, kind hoặc annotation; đổi alias, đích delegation hoặc đường code phát deprecation warning. Thay đổi thân hàm được ghi `implementation_changed` với trạng thái `requires_review` nếu chưa có thay đổi public rõ ràng. Rule không tự kết luận hành vi runtime hoặc kiểu dữ liệu thực tế đã đổi.
+5. Gắn bằng chứng source và Git diff cho từng candidate: version, commit SHA, file path, symbol, vị trí dòng, diff hash và các hunk header. Tách `source_observed` khỏi trạng thái xác minh như `verified` hoặc `requires_review`; không suy ra `introduced` hoặc `removed` chỉ từ một snapshot đơn lẻ.
+
+**Output:** `data/source_change_candidates.json` **chỉ lưu khoảng có ít nhất một candidate liên quan đến deprecated API hoặc replacement API**; không yêu cầu cả hai API cùng thay đổi. Mỗi record có `mapping_id`, `library`, hai tên API, `from_version`, `to_version`, hai commit SHA, trạng thái từng API trước/sau, `changes` và `evidence`; mỗi change có `evidence_refs`. `data/source_trace_unresolved.json` lưu riêng các khoảng không kiểm tra được đầy đủ, kể cả khi vẫn phát hiện được một candidate ở API còn lại. Khoảng không có candidate và không có lỗi không được ghi thành event. Hai file này được ghi lại theo phạm vi của mỗi lần chạy và được Git ignore.
+
+**Giới hạn:** resolver xử lý Python `import`, re-export, `__all__` tĩnh, alias, hàm, method và một số chuỗi kế thừa có thể lần theo tĩnh. Import có điều kiện được đánh dấu `requires_review`; namespace động, kế thừa không giải được, extension và source không parse được có thể thành `unresolved`. Script kiểm tra repository gốc, tag, SHA và `source_url` nhưng chưa so sánh nội dung wheel PyPI với Git source (`artifact_source_match_status: not_verified`). Git ở bước này có thể tải blob còn thiếu của repository clone một phần. `comparison_base_version` trong evolution path là milestone có thay đổi API trước đó được giữ lại, không phải version liền kề dùng để quét ở bước này.
