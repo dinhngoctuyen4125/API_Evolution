@@ -25,8 +25,10 @@ PAIRS_PATH = ROOT / "data" / "api_mapping_pairs.json"
 VERSIONS_PATH = ROOT / "data" / "pypi_versions_with_github_diy.json"
 DEFAULT_OUTPUT = ROOT / "data" / "source_change_candidates.json"
 DEFAULT_UNRESOLVED = ROOT / "data" / "source_trace_unresolved.json"
+DEFAULT_COVERAGE = ROOT / "data" / "source_trace_coverage.json"
 FULL_SHA = re.compile(r"[0-9a-fA-F]{40}\Z")
 ROOT_MODULE = {"pytorch": "torch", "scikit-learn": "sklearn"}
+GENERATED_PUBLIC_ROOTS = {"tensorflow"}
 MAX_IMPORT_DEPTH = 24
 
 
@@ -163,14 +165,55 @@ def body_hash(node):
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
-def warning_calls(node):
-    return any(
-        isinstance(child, ast.Call) and dotted(child.func) in {"warn", "warnings.warn"}
-        and (any("DeprecationWarning" in (expr(arg) or "") for arg in child.args[1:])
-             or any(keyword.arg == "category" and "DeprecationWarning" in
-                    (expr(keyword.value) or "") for keyword in child.keywords))
-        for child in ast.walk(node)
-    )
+def warning_observations(node, api_symbol):
+    """Classify static deprecation calls without treating parameter warnings as API warnings."""
+    if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        return []
+    parameters = {item["name"] for item in signature(node) or []}
+    literal_messages = {}
+    for statement in node.body:
+        if isinstance(statement, ast.Assign) and isinstance(statement.value, ast.Constant) \
+                and isinstance(statement.value.value, str):
+            for target in statement.targets:
+                if isinstance(target, ast.Name):
+                    literal_messages[target.id] = (statement.value.value, statement.lineno)
+    observations = []
+
+    def visit(item, guards=()):
+        if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
+            return
+        if isinstance(item, ast.If):
+            tested = {child.id for child in ast.walk(item.test) if isinstance(child, ast.Name)}
+            for child in item.body + item.orelse:
+                visit(child, guards + (tested,))
+            return
+        if isinstance(item, ast.Call) and dotted(item.func) in {"warn", "warnings.warn"} \
+                and (any("DeprecationWarning" in (expr(arg) or "") for arg in item.args[1:])
+                     or any(keyword.arg == "category" and "DeprecationWarning" in
+                            (expr(keyword.value) or "") for keyword in item.keywords)):
+            affected = sorted(set().union(*guards) & parameters) if guards else []
+            message = ""
+            if item.args:
+                first = item.args[0]
+                if isinstance(first, ast.Name):
+                    known = literal_messages.get(first.id)
+                    message = known[0] if known and known[1] < item.lineno else ""
+                else:
+                    message = expr(first) or ""
+            if affected:
+                scope = "parameter"
+            elif not guards and re.search(rf"\b{re.escape(api_symbol)}\b", message):
+                scope = "api"
+            else:
+                scope = "unknown"
+            observations.append({"scope": scope, "line_start": item.lineno,
+                                 "affected_parameters": affected})
+        for child in ast.iter_child_nodes(item):
+            visit(child, guards)
+
+    for statement in node.body:
+        visit(statement)
+    return observations
 
 
 def delegated_call(node):
@@ -419,8 +462,11 @@ class SourceReader:
         if getters and not all(getattr_excludes_name(item, name) for item in getters):
             uncertain = True
         uncertain |= dynamic_loader
+        generated_root = module == self.root_module and module in GENERATED_PUBLIC_ROOTS
+        uncertain |= generated_root
         return Resolution("unknown" if uncertain else "absent",
                           "dynamic_package_loader" if dynamic_loader else
+                          "generated_public_namespace_unresolved" if generated_root else
                           "dynamic_or_unresolved_export" if uncertain else
                           "getattr_excludes_name" if getters else None, path=path)
 
@@ -506,17 +552,18 @@ class SourceReader:
             effective = signature(target.node) if target.status == "present" else None
             effective_status = "forwarded" if effective is not None else "unresolved_forwarding"
             effective_resolution = target if effective is not None else resolved
-        warning = warning_calls(node) if node is not None else None
-        warning_line = getattr(node, "lineno", None) if warning else None
+        warnings = warning_observations(node, getattr(node, "name", ""))
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and resolved.tree:
             # NumPy-style dispatch decorators can emit the warning in a helper.
             helper_names = {child.id for dec in node.decorator_list
                             for child in ast.walk(dec) if isinstance(child, ast.Name)}
             for item in resolved.tree.body:
                 if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)) \
-                        and item.name in helper_names and warning_calls(item):
-                    warning = True
-                    warning_line = item.lineno
+                        and item.name in helper_names:
+                    warnings.extend(warning_observations(item, node.name))
+        warning = bool(warnings) if node is not None else None
+        warning_scopes = sorted({item["scope"] for item in warnings})
+        warning_line = warnings[0]["line_start"] if warnings else None
         state = {
             "api": api, "public_status": resolved.status,
             "reason": resolved.reason, "source_path": resolved.path,
@@ -526,13 +573,21 @@ class SourceReader:
             "declared_parameters": signature(node),
             "effective_parameters": effective,
             "effective_signature_status": effective_status,
+            "signature_inference_status": (
+                "resolved_static_wrapper" if effective_status == "forwarded" else
+                "resolved_static_declaration" if effective_status == "direct" else "unknown"
+            ),
+            "runtime_signature_status": "not_checked",
             "effective_source_path": effective_resolution.path,
             "effective_line_start": getattr(effective_resolution.node, "lineno", None),
             "effective_line_end": getattr(effective_resolution.node, "end_lineno", None),
             "wrapper_target": wrapper_target,
             "alias_target": resolved.alias_target,
             "delegates_to": delegated_call(node),
-            "deprecation_warning_path": warning,
+            "deprecation_warning_path": ("api" in warning_scopes) if node is not None else None,
+            "warning_observed": warning,
+            "deprecation_warning_scopes": warning_scopes,
+            "warning_observations": warnings,
             "warning_line_start": warning_line,
             "implementation_hash": body_hash(node),
         }
@@ -583,14 +638,29 @@ def compare_states(before, after):
     changes = compare_parameters(before["effective_parameters"], after["effective_parameters"])
     for field, kind in (("alias_target", "alias_target_changed"),
                         ("delegates_to", "delegation_changed"),
-                        ("wrapper_target", "wrapper_forwarding_changed"),
-                        ("deprecation_warning_path", "warning_path_changed")):
+                        ("wrapper_target", "wrapper_forwarding_changed")):
         if before[field] != after[field]:
             if field == "delegates_to" and None in (before[field], after[field]):
                 continue
-            if field == "deprecation_warning_path":
-                kind = "warning_path_added" if after[field] else "warning_path_removed"
             changes.append({"kind": kind, "before": before[field], "after": after[field]})
+    for scope in sorted(set(before["deprecation_warning_scopes"])
+                        | set(after["deprecation_warning_scopes"])):
+        before_has = scope in before["deprecation_warning_scopes"]
+        after_has = scope in after["deprecation_warning_scopes"]
+        if before_has != after_has:
+            kind = {"api": "warning_path", "parameter": "parameter_warning_path",
+                    "unknown": "unclassified_warning_path"}[scope]
+            change = {"kind": f"{kind}_{'added' if after_has else 'removed'}",
+                      "warning_scope": scope, "before": before_has, "after": after_has}
+            observed_state = after if after_has else before
+            affected = sorted({parameter for item in observed_state["warning_observations"]
+                               if item["scope"] == scope
+                               for parameter in item["affected_parameters"]})
+            if affected:
+                change["affected_parameters"] = affected
+                if len(affected) == 1:
+                    change["parameter"] = affected[0]
+            changes.append(change)
     if before["implementation_hash"] and after["implementation_hash"]:
         if before["implementation_hash"] != after["implementation_hash"] and not changes:
             changes.append({"kind": "implementation_changed", "before": None,
@@ -608,6 +678,89 @@ def compare_states(before, after):
     return changes, reason
 
 
+PARAMETER_CHANGES = {"parameter_added", "parameter_removed", "parameter_default_changed",
+                     "parameter_kind_changed", "annotation_changed", "parameter_order_changed"}
+
+
+def classify_change_origin(change, before, after, states):
+    """Distinguish a changed declaration from a changed forwarded target."""
+    if change["kind"] not in PARAMETER_CHANGES:
+        change["change_origin"] = "source_observation"
+        return
+    if before["effective_signature_status"] == after["effective_signature_status"] == "forwarded" \
+            and before["wrapper_target"] == after["wrapper_target"]:
+        change["change_origin"] = "forwarded_via_wrapper"
+        for api, (_, target_after) in states.items():
+            if api != change["api"] and target_after["source_path"] == after["effective_source_path"] \
+                    and target_after["line_start"] == after["effective_line_start"]:
+                change["origin_api"] = api
+                break
+    elif before["effective_signature_status"] == after["effective_signature_status"] == "direct":
+        change["change_origin"] = "direct_declaration"
+    else:
+        change["change_origin"] = "mixed_or_unresolved"
+
+
+def verify_source_change(change, before, after, mapping_status, evidence_items):
+    """Verify narrow source claims, without claiming artifact or runtime equivalence."""
+    properties = []
+    source_refs = [item for item in evidence_items if item["kind"] == "source"
+                   and item.get("api") == change["api"]]
+    if any(item["commit_sha"] == mapping_status[0][0] and item["line_start"]
+           for item in source_refs):
+        properties.append("source_symbol_before_located")
+    if any(item["commit_sha"] == mapping_status[1][0] and item["line_start"]
+           for item in source_refs):
+        properties.append("source_symbol_after_located")
+    tags_match = all(status == "tag_matches_commit" for _, status in mapping_status)
+    if tags_match:
+        properties.append("git_tags_match_commit_shas")
+    diff = next((item for item in evidence_items if item["kind"] == "git_diff"), None)
+    hunks = [hunk for hunk in diff["relevant_hunks"]
+             if change["api"] in hunk["related_apis"]] if diff else []
+    parameter = change.get("parameter")
+    hunk_support = bool(hunks) and (parameter is None or any(
+        re.search(rf"\b{re.escape(parameter)}\b", hunk["excerpt"]) for hunk in hunks
+    ))
+    if hunk_support:
+        properties.append("relevant_git_diff_hunk_located")
+    old = {item["name"]: item for item in before["effective_parameters"] or []}
+    new = {item["name"]: item for item in after["effective_parameters"] or []}
+    structural = False
+    if change["kind"] == "parameter_added" and parameter not in old and parameter in new:
+        properties.extend(("parameter_absent_before", "parameter_present_after"))
+        structural = True
+    elif change["kind"] == "parameter_removed" and parameter in old and parameter not in new:
+        properties.extend(("parameter_present_before", "parameter_absent_after"))
+        structural = True
+    elif change["kind"] in {"parameter_default_changed", "parameter_kind_changed",
+                             "annotation_changed"} and parameter in old and parameter in new:
+        field = {"parameter_default_changed": "default", "parameter_kind_changed": "kind",
+                 "annotation_changed": "annotation"}[change["kind"]]
+        structural = old[parameter][field] != new[parameter][field]
+        if structural:
+            properties.append(f"parameter_{field}_differs_between_snapshots")
+    elif change["kind"] == "parameter_order_changed" and old and new:
+        structural = [p["name"] for p in before["effective_parameters"]] != [
+            p["name"] for p in after["effective_parameters"]]
+        if structural:
+            properties.append("parameter_order_differs_between_snapshots")
+    if structural and change["change_origin"] == "forwarded_via_wrapper":
+        properties.append("static_wrapper_forwarding_resolved")
+    conditional = any(state["reason"] in {"conditional_import", "conditional_definition"}
+                      for state in (before, after))
+    source_located = all(key in properties for key in
+                         ("source_symbol_before_located", "source_symbol_after_located"))
+    if change["kind"] in PARAMETER_CHANGES and structural and source_located \
+            and hunk_support and tags_match and not conditional \
+            and change["change_origin"] != "mixed_or_unresolved":
+        change["verification_status"] = "verified"
+    else:
+        change["verification_status"] = "requires_review"
+    change["verified_properties"] = properties
+    change["verification_scope"] = "git_source_only"
+
+
 def evidence(library, sha, state, forwarded=False):
     path = state["effective_source_path"] if forwarded else state["source_path"]
     if not path:
@@ -616,7 +769,8 @@ def evidence(library, sha, state, forwarded=False):
     url = f"https://github.com/{REPOSITORIES[library]}/blob/{sha}/{path}"
     if line:
         url += f"#L{line}"
-    return {"kind": "source", "commit_sha": sha, "source_path": path,
+    return {"kind": "source", "api": state["api"],
+            "commit_sha": sha, "source_path": path,
             "role": "forwarded_target" if forwarded else "public_symbol",
             "line_start": line, "line_end": state["effective_line_end"] if forwarded else state["line_end"],
             "warning_line_start": state["warning_line_start"], "url": url}
@@ -632,10 +786,10 @@ def diff_evidence(repo, old_sha, new_sha, states, changes):
                 start = state.get(f"{prefix}line_start")
                 end = state.get(f"{prefix}line_end")
                 if path and start:
-                    regions[path][side].append((start, end or start))
+                    regions[path][side].append((start, end or start, api))
             if state["source_path"] and state["warning_line_start"]:
                 line = state["warning_line_start"]
-                regions[state["source_path"]][side].append((line, line))
+                regions[state["source_path"]][side].append((line, line, api))
     paths = set(regions)
     if not paths:
         return None
@@ -648,20 +802,22 @@ def diff_evidence(repo, old_sha, new_sha, states, changes):
     selected = []
     current = None
 
-    def intersects(path, side, start, count):
-        for low, high in regions.get(path, {}).get(side, []):
+    def matching_apis(path, side, start, count):
+        matches = set()
+        for low, high, api in regions.get(path, {}).get(side, []):
             if count == 0 and low - 1 <= start <= high:
-                return True
+                matches.add(api)
             if count and start <= high and start + count - 1 >= low:
-                return True
-        return False
+                matches.add(api)
+        return matches
 
     def finish():
         if current and current["relevant"]:
             excerpt = "\n".join(current["lines"])
             selected.append({"old_path": old_path, "new_path": new_path,
                              "header": current["header"], "excerpt": excerpt[:2000],
-                             "excerpt_truncated": len(excerpt) > 2000})
+                             "excerpt_truncated": len(excerpt) > 2000,
+                             "related_apis": sorted(current["related_apis"])})
 
     for line in result.stdout.splitlines():
         if line.startswith("diff --git "):
@@ -675,11 +831,14 @@ def diff_evidence(repo, old_sha, new_sha, states, changes):
         elif line.startswith("@@ "):
             finish()
             match = hunk_pattern.match(line)
-            relevant = bool(match) and (
-                intersects(old_path, "old", int(match.group(1)), int(match.group(2) or 1)) or
-                intersects(new_path, "new", int(match.group(3)), int(match.group(4) or 1))
-            )
-            current = {"header": line, "relevant": relevant, "lines": [line]}
+            related = set()
+            if match:
+                related.update(matching_apis(old_path, "old", int(match.group(1)),
+                                             int(match.group(2) or 1)))
+                related.update(matching_apis(new_path, "new", int(match.group(3)),
+                                             int(match.group(4) or 1)))
+            current = {"header": line, "relevant": bool(related),
+                       "related_apis": related, "lines": [line]}
         elif current:
             current["lines"].append(line)
     finish()
@@ -751,6 +910,9 @@ def scan_pair(pair, versions, reader, version_status, progress=None, progress_ev
                                    "details": reasons})
             if not changes:
                 continue
+            for change in changes:
+                before, after = states[change["api"]]
+                classify_change_origin(change, before, after, states)
             source_evidence = []
             for api, (before, after) in states.items():
                 if not any(change["api"] == api for change in changes):
@@ -769,11 +931,14 @@ def scan_pair(pair, versions, reader, version_status, progress=None, progress_ev
             for change in changes:
                 change["observation_kind"] = "source_observed"
                 change["evidence_refs"] = [item["id"] for item in source_evidence
-                                           if item.get("kind") == "git_diff" or item["source_path"] in {
-                                               states[change["api"]][0]["source_path"],
-                                               states[change["api"]][1]["source_path"],
-                                               states[change["api"]][0]["effective_source_path"],
-                                               states[change["api"]][1]["effective_source_path"]}]
+                                           if (item["kind"] == "source" and item["api"] == change["api"])
+                                           or (item["kind"] == "git_diff" and any(
+                                               change["api"] in hunk["related_apis"]
+                                               for hunk in item["relevant_hunks"]))]
+                before, after = states[change["api"]]
+                verify_source_change(change, before, after,
+                                     ((old_sha, statuses[0]), (new_sha, statuses[1])),
+                                     source_evidence)
             candidates.append({**base, "artifact_source_match_status": "not_verified",
                                "tag_status": list(statuses),
                                "api_states_before": {api: state[0] for api, state in states.items()},
@@ -804,6 +969,37 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def summarize_coverage(pair, versions, candidates, unresolved, blocked_reason=None):
+    candidate_intervals = {(item["from_version"], item["to_version"])
+                           for item in candidates}
+    unresolved_intervals = {(item.get("from_version"), item.get("to_version"))
+                            for item in unresolved if item.get("from_version")}
+    planned = max(0, len(versions) - 1)
+    scanned = 0 if blocked_reason else planned
+    return {"mapping_id": pair["id"], "library": pair["library"],
+            "deprecated_api": pair["deprecated_api"],
+            "replacement_api": pair["replacement_api"],
+            "version_scope": "collected_versions_only",
+            "first_version": versions[0]["version"] if versions else None,
+            "last_version": versions[-1]["version"] if versions else None,
+            "versions_considered": len(versions), "intervals_planned": planned,
+            "versions_scanned": 0 if blocked_reason else len(versions),
+            "intervals_scanned": scanned,
+            "candidate_intervals": len(candidate_intervals),
+            "unresolved_intervals": len(unresolved_intervals),
+            "unresolved_interval_refs": [
+                {"from_version": old, "to_version": new}
+                for old, new in sorted(unresolved_intervals)
+            ],
+            "rule_checked_without_candidate": max(
+                0, scanned - len(candidate_intervals | unresolved_intervals)
+            ),
+            "coverage_status": "blocked" if blocked_reason else
+            "partial" if unresolved or scanned == 0 else "rule_checked",
+            "blocking_reason": blocked_reason,
+            "historical_completeness": "not_claimed"}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--library", choices=sorted(REPOSITORIES))
@@ -812,6 +1008,7 @@ def main(argv=None):
     parser.add_argument("--to-version", help="Last version to scan (inclusive)")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--unresolved-output", type=Path, default=DEFAULT_UNRESOLVED)
+    parser.add_argument("--coverage-output", type=Path, default=DEFAULT_COVERAGE)
     parser.add_argument("--progress-every", type=int, default=10,
                         help="Show progress every N version intervals (0 disables interval logs)")
     args = parser.parse_args(argv)
@@ -826,7 +1023,7 @@ def main(argv=None):
         pairs = [pair for pair in pairs if pair["library"] == args.library]
     if not pairs:
         parser.error("No migration pairs match the selected filters")
-    candidates, unresolved = [], []
+    candidates, unresolved, coverage = [], [], []
     for library in sorted({pair["library"] for pair in pairs}):
         selected = [pair for pair in pairs if pair["library"] == library]
         versions = grouped[library]
@@ -848,15 +1045,21 @@ def main(argv=None):
         repo = ROOT / "cache" / library / "source"
         if not repo.is_dir():
             for pair in selected:
-                unresolved.append({"mapping_id": pair["id"], "library": library,
-                                   "reason": "source_repository_missing"})
+                missing = [{"mapping_id": pair["id"], "library": library,
+                            "reason": "source_repository_missing"}]
+                unresolved.extend(missing)
+                coverage.append(summarize_coverage(pair, versions, [], missing,
+                                                   "source_repository_missing"))
             continue
         try:
             validate_source(repo, f"https://github.com/{REPOSITORIES[library]}.git")
         except (OSError, RuntimeError) as exc:
             for pair in selected:
-                unresolved.append({"mapping_id": pair["id"], "library": library,
-                                   "reason": "source_repository_invalid", "detail": str(exc)})
+                missing = [{"mapping_id": pair["id"], "library": library,
+                            "reason": "source_repository_invalid", "detail": str(exc)}]
+                unresolved.extend(missing)
+                coverage.append(summarize_coverage(pair, versions, [], missing,
+                                                   "source_repository_invalid"))
             continue
         reader = SourceReader(repo, library)
         version_status = {}
@@ -872,12 +1075,15 @@ def main(argv=None):
                                        progress=report, progress_every=args.progress_every)
             candidates.extend(found)
             unresolved.extend(missing)
+            coverage.append(summarize_coverage(pair, versions, found, missing))
             report(f"{library} #{pair['id']}: {len(found)} changes, "
                    f"{len(missing)} unresolved intervals")
     write_json(args.output, candidates)
     write_json(args.unresolved_output, unresolved)
+    write_json(args.coverage_output, coverage)
     print(f"Saved {len(candidates)} change records to {args.output}")
     print(f"Saved {len(unresolved)} unresolved intervals to {args.unresolved_output}")
+    print(f"Saved {len(coverage)} coverage records to {args.coverage_output}")
     return 0
 
 
