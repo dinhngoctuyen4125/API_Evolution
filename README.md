@@ -122,7 +122,7 @@ mapping_id, library
     │   ├── source_location             # path, line_start, line_end
     │   ├── public_binding              # kind, path, target
     │   ├── declared_parameters[]       # name, kind, default, annotation
-    │   ├── effective_parameters?       # chỉ khi khác declared_parameters
+    │   ├── effective_parameters        # trực tiếp = declared; wrapper/alias đã giải = đích; chưa rõ = null
     │   └── return_annotation, evidence_refs[]
     ├── transitions[]                   # chỉ giữa hai release liền kề có API
     │   └── from_version, to_version, status, changes[], evidence_refs[]

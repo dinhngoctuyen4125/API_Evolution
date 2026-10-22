@@ -137,10 +137,13 @@ def find_binding(reader, sha, api, resolved):
 def resolve_effective_parameters(reader, sha, resolved):
     node = resolved.node
     target = forwarding_wrapper_target(node)
-    if target and resolved.module:
+    if target:
+        if not resolved.module:
+            return None, None
         forwarded = reader.resolve_name(sha, resolved.module, target)
         if forwarded.status == "present":
             return signature(forwarded.node), forwarded
+        return None, None
     if resolved.alias_target and resolved.module:
         alias = resolved.alias_target
         if "." not in alias:
@@ -151,7 +154,9 @@ def resolve_effective_parameters(reader, sha, resolved):
             return None, None
         if target_resolution.status == "present":
             return signature(target_resolution.node), target_resolution
-    return None, None
+        return None, None
+    # A direct declaration already is the effective signature.
+    return signature(node), None
 
 
 def read_api_state(reader, record, api, validation_reason):
@@ -174,12 +179,11 @@ def read_api_state(reader, record, api, validation_reason):
                                 "line_end": getattr(node, "end_lineno", None)},
             "public_binding": find_binding(reader, sha, api, resolved),
             "declared_parameters": declared,
+            "effective_parameters": effective,
             "return_annotation": expr(node.returns)
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) else None,
             "evidence_refs": [],
         }
-        if effective is not None and effective != declared:
-            state["effective_parameters"] = effective
         private = {"body_hash": body_hash(node)}
         if effective_resolution and effective_resolution.path:
             target_node = effective_resolution.node
@@ -236,12 +240,19 @@ def compare_parameters(before, after, scope):
 
 def compare_states(old, new, old_private, new_private):
     changes = []
-    changes.extend(compare_parameters(old["declared_parameters"],
-                                      new["declared_parameters"], "declared"))
-    old_effective = old.get("effective_parameters", old["declared_parameters"])
-    new_effective = new.get("effective_parameters", new["declared_parameters"])
-    if old_effective != old["declared_parameters"] or new_effective != new["declared_parameters"]:
+    old_effective = old["effective_parameters"]
+    new_effective = new["effective_parameters"]
+    if old_effective is not None and new_effective is not None:
         changes.extend(compare_parameters(old_effective, new_effective, "effective"))
+        # Retain public wrapper declarations when they differ from the resolved target.
+        if (old["declared_parameters"] != old_effective
+                or new["declared_parameters"] != new_effective):
+            changes.extend(compare_parameters(old["declared_parameters"],
+                                              new["declared_parameters"], "declared"))
+    else:
+        # A missing effective signature must never be replaced by a guess.
+        changes.extend(compare_parameters(old["declared_parameters"],
+                                          new["declared_parameters"], "declared"))
     for field, kind in (("return_annotation", "return_annotation_changed"),
                         ("public_binding", "public_binding_changed")):
         if old[field] != new[field]:
