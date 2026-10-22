@@ -1779,6 +1779,49 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def compact_candidate(candidate):
+    """Omit redundant output fields after all source and runtime checks finish."""
+    for field in ("migration_mapping", "artifact_source_match_status",
+                  "relationship_first_observed_version", "source_verification_status"):
+        candidate.pop(field, None)
+    candidate["coverage_ref"].pop("mapping_id", None)
+    for side in ("before", "after"):
+        candidate[f"implementation_relationship_{side}"].pop("basis", None)
+        for state in candidate[f"api_states_{side}"].values():
+            for field in ("namespace_resolution_status", "signature_inference_status",
+                          "warning_runtime_status", "implementation_hash_scope",
+                          "delegates_to", "delegation_targets", "deprecation_warning_path",
+                          "warning_defined_in_source", "deprecation_warning_scopes"):
+                state.pop(field, None)
+            for field in ("runtime_namespace_status", "runtime_signature_status"):
+                if state.get(field) == "not_checked":
+                    state.pop(field)
+            if state.get("effective_parameters") == state.get("declared_parameters") \
+                    and not state.get("wrapper_target"):
+                state.pop("effective_parameters", None)
+            for effective, declared in (("effective_source_path", "source_path"),
+                                        ("effective_line_start", "line_start"),
+                                        ("effective_line_end", "line_end")):
+                if state.get(effective) == state.get(declared):
+                    state.pop(effective, None)
+    for change in candidate["changes"]:
+        change.pop("observation_kind", None)
+        change.pop("verification_scope", None)
+        before = candidate["api_states_before"][change["api"]]
+        after = candidate["api_states_after"][change["api"]]
+        if change["kind"] == "implementation_changed" and \
+                change.get("before_hash") == before.get("implementation_hash") and \
+                change.get("after_hash") == after.get("implementation_hash"):
+            change.pop("before_hash")
+            change.pop("after_hash")
+        if change["kind"] == "parameter_renamed" and \
+                change.get("before_implementation_hash") == before.get("implementation_hash") and \
+                change.get("after_implementation_hash") == after.get("implementation_hash"):
+            change.pop("before_implementation_hash")
+            change.pop("after_implementation_hash")
+    return candidate
+
+
 def unresolved_reason_codes(item):
     codes = set()
     status_codes = {"tag_missing": "missing_tag", "tag_not_fetched": "missing_tag",
@@ -2086,6 +2129,8 @@ def main(argv=None):
         attach_runtime_verification(candidates, runtime_map)
     for item in unresolved:
         item["reason_codes"] = unresolved_reason_codes(item)
+    for candidate in candidates:
+        compact_candidate(candidate)
     write_json(args.output, candidates)
     write_json(args.unresolved_output, unresolved)
     write_json(args.coverage_output, coverage)

@@ -125,6 +125,8 @@ python trace_source_changes.py --library $library `
 - `source_trace_unresolved.json`: các khoảng chưa phân tích đầy đủ và nguyên nhân.
 - `source_trace_coverage.json`: trạng thái kiểm tra của từng khoảng version đã thu thập.
 
+Trong `source_change_candidates.json`, trường `effective_*` vắng mặt lấy giá trị trường gốc, trạng thái runtime vắng mặt là chưa kiểm tra; mốc quan hệ đầu tiên nằm ở `source_trace_coverage.json`.
+
 **Các rule kiểm tra:**
 
 - **Version và Git:** Đối chiếu tag, SHA và source URL trong input với Git; ví dụ tag `v1.25.0` phải trỏ đúng commit đã ghi.
