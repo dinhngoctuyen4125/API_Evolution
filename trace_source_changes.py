@@ -1,8 +1,8 @@
-"""Find source-observed Python API changes between curated releases.
+"""Trace each mapped API independently across curated Git source releases.
 
-Only intervals with a relevant candidate go to the main output. Intervals that
-cannot be checked reliably go to a separate unresolved output. This script does
-not read release notes or claim that an implementation diff changes behavior.
+This source phase records availability and structural changes for each API.
+It does not read release notes, determine a migration announcement, or infer
+behavioral equivalence from an implementation diff.
 """
 
 import argparse
@@ -14,6 +14,7 @@ import json
 import re
 import subprocess
 import sys
+import warnings
 from collections import OrderedDict, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -25,7 +26,7 @@ from enrich_pypi_versions import REPOSITORIES
 ROOT = Path(__file__).resolve().parent
 PAIRS_PATH = ROOT / "data" / "api_mapping_pairs.json"
 VERSIONS_PATH = ROOT / "data" / "pypi_versions_with_github_diy.json"
-DEFAULT_OUTPUT = ROOT / "data" / "source_change_candidates.json"
+DEFAULT_OUTPUT = ROOT / "data" / "api_source_tracks.json"
 DEFAULT_UNRESOLVED = ROOT / "data" / "source_trace_unresolved.json"
 DEFAULT_COVERAGE = ROOT / "data" / "source_trace_coverage.json"
 FULL_SHA = re.compile(r"[0-9a-fA-F]{40}\Z")
@@ -79,12 +80,17 @@ def module_statements(body, conditional=False):
 
 def legacy_line_rewrite(line):
     body, ending = line.rstrip("\r\n"), line[len(line.rstrip("\r\n")):]
-    match = re.fullmatch(r"([ \t]*)except[ \t]+([\w.]+)[ \t]*,[ \t]*(\w+)[ \t]*:", body)
+    match = re.fullmatch(r"([ \t]*)except[ \t]+(?:\(([\w.]+)\)|([\w.]+))[ \t]*,[ \t]*(\w+)[ \t]*:([ \t]*(?:#.*)?)", body)
     if match:
-        return f"{match[1]}except {match[2]} as {match[3]}:{ending}", "except_binding"
+        return f"{match[1]}except {match[2] or match[3]} as {match[4]}:{match[5]}{ending}", "except_binding"
     match = re.fullmatch(r"([ \t]*)print[ \t]*>>[ \t]*([^,#]+),[ \t]*([^#]+)", body)
     if match:
-        return f"{match[1]}print({match[3]}, file={match[2]}){ending}", "print_redirect"
+        values = match[3].rstrip()
+        no_newline = values.endswith(",")
+        if no_newline:
+            values = values[:-1].rstrip()
+        end = ", end=' '" if no_newline else ""
+        return f"{match[1]}print({values}{end}, file={match[2]}){ending}", "print_redirect"
     match = re.fullmatch(r"([ \t]*)print[ \t]+([^#]+)", body)
     if match:
         return f"{match[1]}print({match[2]}){ending}", "print_statement"
@@ -101,7 +107,10 @@ def parse_with_legacy_syntax(source, path):
     rewrites = []
     for _ in range(32):
         try:
-            tree = ast.parse("".join(lines), filename=path)
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", message="invalid escape sequence",
+                                        category=SyntaxWarning)
+                tree = ast.parse("".join(lines), filename=path)
             redirect_lines = sorted({item.lineno for item in ast.walk(tree)
                                      if isinstance(item, ast.BinOp)
                                      and isinstance(item.left, ast.Name)
@@ -297,10 +306,14 @@ def warning_observations(node, api_symbol):
             for child in item.body + item.orelse:
                 visit(child, guards + (tested,))
             return
-        if isinstance(item, ast.Call) and dotted(item.func) in {"warn", "warnings.warn"} \
-                and (any("DeprecationWarning" in (expr(arg) or "") for arg in item.args[1:])
-                     or any(keyword.arg == "category" and "DeprecationWarning" in
-                            (expr(keyword.value) or "") for keyword in item.keywords)):
+        if isinstance(item, ast.Call) and dotted(item.func) in {"warn", "warnings.warn"}:
+            category_values = [expr(arg) or "" for arg in item.args[1:]] + [
+                expr(keyword.value) or "" for keyword in item.keywords
+                if keyword.arg == "category"
+            ]
+            if not any("DeprecationWarning" in value or "FutureWarning" in value
+                       for value in category_values):
+                return
             affected = sorted(set().union(*guards) & parameters) if guards else []
             message = ""
             if item.args:
@@ -310,9 +323,13 @@ def warning_observations(node, api_symbol):
                     message = known[0] if known and known[1] < item.lineno else ""
                 else:
                     message = expr(first) or ""
+            if any("FutureWarning" in value for value in category_values) and \
+                    not re.search(r"deprecat", message, re.IGNORECASE):
+                return
             if affected:
                 scope = "parameter"
-            elif not guards and re.search(rf"\b{re.escape(api_symbol)}\b", message):
+            elif not guards and (re.search(rf"\b{re.escape(api_symbol)}\b", message)
+                                 or re.search(r"\bthis method\b", message, re.IGNORECASE)):
                 scope = "api"
             else:
                 scope = "unknown"
@@ -775,6 +792,66 @@ class SourceReader:
                 return Resolution("unknown", "nested_attribute_unresolved", path=result.path)
         return result or Resolution("unknown", "empty_api")
 
+    def generated_class_member(self, sha, parent, name):
+        """Resolve a literal member installed by a classmethod in a module-level loop."""
+        node = parent.node
+        if not isinstance(node, ast.ClassDef) or parent.tree is None:
+            return None
+        installers = set()
+        for method in node.body:
+            if not isinstance(method, (ast.FunctionDef, ast.AsyncFunctionDef)) or \
+                    not any(dotted(dec) == "classmethod" for dec in method.decorator_list) or \
+                    len(method.args.args) < 2:
+                continue
+            cls_arg, name_arg = method.args.args[:2]
+            if any(isinstance(item, ast.Call) and dotted(item.func) == "setattr"
+                   and len(item.args) >= 2 and isinstance(item.args[0], ast.Name)
+                   and item.args[0].id == cls_arg.arg
+                   and isinstance(item.args[1], ast.Name)
+                   and item.args[1].id == name_arg.arg
+                   for item in ast.walk(method)):
+                installers.add(method.name)
+        if not installers:
+            return None
+        for statement in parent.tree.body:
+            if not isinstance(statement, ast.For) or not isinstance(statement.target, ast.Tuple) \
+                    or not statement.target.elts or not isinstance(statement.target.elts[0], ast.Name) \
+                    or not isinstance(statement.iter, ast.Call):
+                continue
+            loop_name = statement.target.elts[0].id
+            installed = any(isinstance(item, ast.Expr) and isinstance(item.value, ast.Call)
+                            and dotted(item.value.func) in
+                            {f"{node.name}.{method}" for method in installers}
+                            and item.value.args and isinstance(item.value.args[0], ast.Name)
+                            and item.value.args[0].id == loop_name
+                            for item in statement.body)
+            if not installed:
+                continue
+            generator_name = dotted(statement.iter.func)
+            if not generator_name or "." not in generator_name:
+                continue
+            prefix, _, function_name = generator_name.rpartition(".")
+            namespace = self.resolve_name(sha, parent.module, prefix)
+            if namespace.status != "present" or namespace.reason or not namespace.module:
+                continue
+            generator = self.resolve_name(sha, namespace.module, function_name)
+            if generator.status != "present" or generator.reason or not isinstance(
+                generator.node, (ast.FunctionDef, ast.AsyncFunctionDef)
+            ):
+                continue
+            for returned in ast.walk(generator.node):
+                if not isinstance(returned, ast.Return) or not isinstance(
+                    returned.value, (ast.List, ast.Tuple)
+                ):
+                    continue
+                for item in returned.value.elts:
+                    if isinstance(item, (ast.Tuple, ast.List)) and item.elts and isinstance(
+                        item.elts[0], ast.Constant
+                    ) and item.elts[0].value == name:
+                        return Resolution("present", "generated_class_member", path=parent.path,
+                                          node=statement, tree=parent.tree, module=parent.module)
+        return None
+
     def resolve_class_member(self, sha, parent, name, seen=None):
         seen = seen or set()
         node = parent.node
@@ -793,6 +870,9 @@ class SourceReader:
                 return Resolution("present", path=parent.path, node=item,
                                   tree=parent.tree, module=parent.module,
                                   alias_target=dotted(item.value))
+        generated = self.generated_class_member(sha, parent, name)
+        if generated is not None:
+            return generated
         uncertain = False
         for base in node.bases:
             base_name = dotted(base)
@@ -807,6 +887,8 @@ class SourceReader:
                              else Resolution("unknown", "qualified_base_unresolved"))
             else:
                 inherited = self.resolve_name(sha, parent.module, base_name)
+            if base_name == "object" and inherited.status == "absent":
+                continue
             if inherited.status != "present" or not isinstance(inherited.node, ast.ClassDef):
                 uncertain = True
                 continue
@@ -857,10 +939,13 @@ class SourceReader:
             "namespace_resolution_status": "unresolved" if resolved.status == "unknown"
             else "rule_checked",
             "runtime_namespace_status": "not_checked",
-            "symbol": getattr(node, "name", None),
+            "symbol": api.rsplit(".", 1)[-1] if resolved.reason == "generated_class_member"
+            else getattr(node, "name", None),
             "line_start": getattr(node, "lineno", None),
             "line_end": getattr(node, "end_lineno", None),
             "declared_parameters": signature(node),
+            "return_annotation": expr(node.returns)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) else None,
             "effective_parameters": effective,
             "effective_signature_status": effective_status,
             "signature_inference_status": (
@@ -1072,6 +1157,10 @@ def compare_states(before, after, before_node=None, after_node=None):
     if old_status == "absent":
         return [], None
     changes = compare_parameters(before["effective_parameters"], after["effective_parameters"])
+    if before["return_annotation"] != after["return_annotation"]:
+        changes.append({"kind": "return_annotation_changed",
+                        "before": before["return_annotation"],
+                        "after": after["return_annotation"]})
     renames = parameter_renames(before["effective_parameters"], after["effective_parameters"])
     if before["source_path"] and after["source_path"] and \
             before["source_path"] != after["source_path"]:
@@ -1192,7 +1281,7 @@ def classify_change_origin(change, before, after, states):
                     and target_after["line_start"] == after["effective_line_start"]:
                 change["origin_api"] = api
                 break
-        if "origin_api" not in change:
+        if "origin_api" not in change and len(states) > 1:
             change["unresolved_reason"] = "wrapper_target_not_in_migration_pair"
 
 
@@ -2027,7 +2116,7 @@ def summarize_coverage(pair, versions, candidates, unresolved, blocked_reason=No
             "historical_completeness": "not_claimed"}
 
 
-def main(argv=None):
+def legacy_main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--library", choices=sorted(REPOSITORIES))
     parser.add_argument("--mapping-id", type=int)
@@ -2137,6 +2226,263 @@ def main(argv=None):
     print(f"Saved {len(candidates)} change records to {args.output}")
     print(f"Saved {len(unresolved)} unresolved intervals to {args.unresolved_output}")
     print(f"Saved {len(coverage)} coverage records to {args.coverage_output}")
+    return 0
+
+
+def compact_api_state(state):
+    """Keep source facts needed to compare one API across releases."""
+    fields = (
+        "public_status", "reason", "source_path", "symbol", "line_start", "line_end",
+        "declared_parameters", "return_annotation", "effective_signature_status",
+        "wrapper_target", "alias_target", "delegation_target_details",
+        "delegation_resolution_status", "forwarded_arguments", "warning_trigger",
+        "warning_observations", "implementation_hash", "normalized_implementation_hash",
+    )
+    result = {field: state[field] for field in fields
+              if field == "public_status" or state.get(field) not in (None, [], {})}
+    if state.get("effective_parameters") != state.get("declared_parameters"):
+        result["effective_parameters"] = state.get("effective_parameters")
+    if state.get("effective_source_path") and \
+            state.get("effective_source_path") != state.get("source_path"):
+        result["effective_source_path"] = state.get("effective_source_path")
+    for field in ("line_start", "line_end"):
+        effective = state.get(f"effective_{field}")
+        if effective is not None and effective != state.get(field):
+            result[f"effective_{field}"] = effective
+    return result
+
+
+def api_interval_evidence(reader, library, api, old, new, before, after, changes):
+    """Collect source locations and diffs for one API, without pair-level claims."""
+    old_sha, new_sha = old["commit_sha"], new["commit_sha"]
+    items = []
+    for sha, state in ((old_sha, before), (new_sha, after)):
+        for forwarded in (False, True) if state["wrapper_target"] else (False,):
+            item = evidence(reader, library, sha, state, forwarded)
+            if item and item not in items:
+                items.append(item)
+    function_diff = function_diff_evidence(reader, old_sha, new_sha, api, before, after)
+    if function_diff:
+        items.append(function_diff)
+    git_diff = diff_evidence(reader.repo, old_sha, new_sha,
+                             {api: (before, after)}, changes)
+    if git_diff:
+        items.append(git_diff)
+    for change in changes:
+        if change["kind"] == "indirect_implementation_changed":
+            item = dependency_diff_evidence(reader, old_sha, new_sha, change)
+            if item:
+                items.append(item)
+    for index, item in enumerate(items, start=1):
+        item["id"] = f"source-{api}-{old['version']}-{new['version']}-{index}"
+    for change in changes:
+        change["evidence_refs"] = [
+            item["id"] for item in items
+            if item.get("api") == api or item["kind"] == "git_diff"
+        ]
+        if change["kind"] == "implementation_changed":
+            describe_function_change(change, function_diff)
+        verify_source_change(
+            change, before, after,
+            ((old_sha, old["tag_status"]), (new_sha, new["tag_status"])), items,
+        )
+        change.pop("verified_properties", None)
+        change.pop("verification_scope", None)
+    return items
+
+
+def scan_api_track(api, library, versions, reader, version_status, mapping_ids,
+                   block_reason=None, progress=None, progress_every=10):
+    """Resolve every release and compare one API only with itself."""
+    hard_failures = {"invalid_commit_sha", "source_url_mismatch", "commit_missing",
+                     "tag_mismatch"}
+    snapshots, raw_states, unresolved = [], [], []
+    for index, record in enumerate(versions, start=1):
+        version, sha = record["version"], record["commit_sha"]
+        if progress and progress_every and (
+            index == 1 or index % progress_every == 0 or index == len(versions)
+        ):
+            progress(f"  version {index}/{len(versions)}: {version}")
+        tag_status = version_status.get(version, block_reason or "not_checked")
+        issue = block_reason or (tag_status if tag_status in hard_failures else None)
+        state = None
+        if issue is None:
+            try:
+                state = reader.state(sha, api)
+            except (OSError, RuntimeError) as exc:
+                issue = f"source_read_failed: {exc}"
+        if state is None:
+            state = {"api": api, "public_status": "unknown", "reason": issue}
+            raw_states.append(None)
+        else:
+            raw_states.append(state)
+        snapshot = {"version": version, "commit_sha": sha,
+                    "tag_status": tag_status, "state": compact_api_state(state)}
+        snapshots.append(snapshot)
+        if state["public_status"] == "unknown" or tag_status != "tag_matches_commit":
+            unresolved.append({"library": library, "api": api,
+                               "mapping_ids": mapping_ids, "version": version,
+                               "reason": issue or state.get("reason") or tag_status})
+
+    transitions = []
+    for index, (old, new) in enumerate(zip(versions, versions[1:])):
+        before, after = raw_states[index:index + 2]
+        base = {"from_version": old["version"], "to_version": new["version"],
+                "from_commit_sha": old["commit_sha"],
+                "to_commit_sha": new["commit_sha"]}
+        if before is None or after is None or "unknown" in (
+            before["public_status"], after["public_status"]
+        ):
+            reason = "source_state_unresolved"
+            transitions.append({**base, "status": "unresolved", "reason": reason,
+                                "changes": []})
+            unresolved.append({"library": library, "api": api,
+                               "mapping_ids": mapping_ids, **base, "reason": reason})
+            continue
+        old_sha, new_sha = old["commit_sha"], new["commit_sha"]
+        try:
+            renames = parameter_renames(before["effective_parameters"],
+                                        after["effective_parameters"])
+            check_body = bool(renames) and before["implementation_hash"] != \
+                after["implementation_hash"] and before["effective_signature_status"] == \
+                after["effective_signature_status"] == "direct"
+            before_node = reader.resolve_api(old_sha, api).node if check_body else None
+            after_node = reader.resolve_api(new_sha, api).node if check_body else None
+            changes, reason = compare_states(before, after, before_node, after_node)
+            changes.extend(indirect_implementation_changes(
+                api, reader, old_sha, new_sha, before, after))
+            for change in changes:
+                classify_change_origin(change, before, after, {api: (before, after)})
+            items = api_interval_evidence(
+                reader, library, api,
+                {**old, "tag_status": version_status[old["version"]]},
+                {**new, "tag_status": version_status[new["version"]]},
+                before, after, changes,
+            ) if changes else []
+            status = "partial" if reason else "changed" if changes else \
+                "absent_both" if before["public_status"] == "absent" else "unchanged"
+            transitions.append({**base, "status": status, "changes": changes,
+                                **({"reason": reason} if reason else {}),
+                                **({"evidence": items} if items else {})})
+            if reason:
+                unresolved.append({"library": library, "api": api,
+                                   "mapping_ids": mapping_ids, **base, "reason": reason})
+        except (OSError, RuntimeError) as exc:
+            reason = f"source_read_failed: {exc}"
+            transitions.append({**base, "status": "unresolved", "reason": reason,
+                                "changes": []})
+            unresolved.append({"library": library, "api": api,
+                               "mapping_ids": mapping_ids, **base, "reason": reason})
+
+    versions_by_status = {status: [item["version"] for item in snapshots
+                                   if item["state"]["public_status"] == status]
+                          for status in ("present", "absent", "unknown")}
+    coverage = {"library": library, "api": api, "mapping_ids": mapping_ids,
+                "versions_considered": len(versions),
+                "versions_present": len(versions_by_status["present"]),
+                "versions_absent": len(versions_by_status["absent"]),
+                "versions_unresolved": len(versions_by_status["unknown"]),
+                "intervals_planned": max(0, len(versions) - 1),
+                "intervals_changed": sum(t["status"] == "changed" for t in transitions),
+                "intervals_unresolved": sum(t["status"] in {"unresolved", "partial"}
+                                            for t in transitions),
+                "coverage_status": "partial" if unresolved else "rule_checked"}
+    track = {"library": library, "api": api, "mapping_ids": mapping_ids,
+             "versions_present": versions_by_status["present"],
+             "versions_absent": versions_by_status["absent"],
+             "versions_unresolved": versions_by_status["unknown"],
+             "snapshots": snapshots, "transitions": transitions}
+    return track, unresolved, coverage
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--library", choices=sorted(REPOSITORIES))
+    parser.add_argument("--mapping-id", type=int)
+    parser.add_argument("--from-version")
+    parser.add_argument("--to-version")
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--unresolved-output", type=Path)
+    parser.add_argument("--coverage-output", type=Path)
+    parser.add_argument("--progress-every", type=int, default=10)
+    args = parser.parse_args(argv)
+    if args.progress_every < 0:
+        parser.error("--progress-every must be nonnegative")
+    pairs, grouped = load_inputs()
+    if args.mapping_id is not None:
+        pairs = [pair for pair in pairs if pair["id"] == args.mapping_id]
+    if args.library:
+        pairs = [pair for pair in pairs if pair["library"] == args.library]
+    if not pairs:
+        parser.error("No migration pairs match the selected filters")
+    tracks, unresolved, coverage = [], [], []
+    for library in sorted({pair["library"] for pair in pairs}):
+        selected = [pair for pair in pairs if pair["library"] == library]
+        versions = grouped[library]
+        names = [item["version"] for item in versions]
+        if args.from_version:
+            if args.from_version not in names:
+                parser.error(f"{library}: unknown from-version {args.from_version}")
+            versions = versions[names.index(args.from_version):]
+        if args.to_version:
+            names = [item["version"] for item in versions]
+            if args.to_version not in names:
+                parser.error(f"{library}: unknown or earlier to-version {args.to_version}")
+            versions = versions[:names.index(args.to_version) + 1]
+        repo = ROOT / "cache" / library / "source"
+        block_reason = None
+        if not repo.is_dir():
+            block_reason = "source_repository_missing"
+        else:
+            try:
+                validate_source(repo, f"https://github.com/{REPOSITORIES[library]}.git")
+            except (OSError, RuntimeError):
+                block_reason = "source_repository_invalid"
+        version_status = {}
+        reader = SourceReader(repo, library) if block_reason is None else None
+        if reader:
+            print(f"{library}: validating {len(versions)} versions...", file=sys.stderr)
+            for record in versions:
+                version_status[record["version"]] = validate_version(repo, library, record)
+        apis = sorted({api for pair in selected
+                       for api in (pair["deprecated_api"], pair["replacement_api"])})
+        for api in apis:
+            mapping_ids = [pair["id"] for pair in selected
+                           if api in (pair["deprecated_api"], pair["replacement_api"])]
+            print(f"{library}: tracing {api} across {len(versions)} versions...",
+                  file=sys.stderr, flush=True)
+            track, issues, summary = scan_api_track(
+                api, library, versions, reader, version_status, mapping_ids,
+                block_reason=block_reason, progress=lambda msg: print(msg, file=sys.stderr,
+                                                                       flush=True),
+                progress_every=args.progress_every)
+            tracks.append(track)
+            unresolved.extend(issues)
+            coverage.append(summary)
+            print(f"  {len(track['versions_present'])} present versions, "
+                  f"{summary['intervals_changed']} changed intervals, "
+                  f"{summary['intervals_unresolved']} unresolved intervals",
+                  file=sys.stderr, flush=True)
+    output = args.output or (ROOT / "data" / args.library / "api_source_tracks.json"
+                             if args.library else DEFAULT_OUTPUT)
+    unresolved_output = args.unresolved_output or output.with_name(
+        "api_source_unresolved.json")
+    coverage_output = args.coverage_output or output.with_name(
+        "api_source_coverage.json")
+    result = {"schema_version": 1, "phase": "source_api_evolution",
+              "source_basis": "git_source_static_resolution",
+              "docstrings_analyzed": False,
+              "mapping_pairs": [{"mapping_id": pair["id"], "library": pair["library"],
+                                 "deprecated_api": pair["deprecated_api"],
+                                 "replacement_api": pair["replacement_api"]}
+                                for pair in pairs],
+              "api_tracks": tracks}
+    write_json(output, result)
+    write_json(unresolved_output, unresolved)
+    write_json(coverage_output, coverage)
+    print(f"Saved {len(tracks)} independent API tracks to {output}")
+    print(f"Saved {len(unresolved)} source issues to {unresolved_output}")
+    print(f"Saved {len(coverage)} coverage records to {coverage_output}")
     return 0
 
 

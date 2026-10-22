@@ -8,7 +8,8 @@ API_Evolution/
 ├── enrich_pypi_versions.py      # Bước 2: ghép Git tag và commit SHA
 ├── crawl_release_notes.py       # Bước 3: tải release notes
 ├── crawl_source.py              # Bước 4: tải và chuyển version source
-├── trace_source_changes.py      # Bước 5: tìm thay đổi Python API trong source
+├── build_api_source_tracks.py    # Bước 5: dựng đường tiến hóa source riêng cho từng API
+├── source_evolution_rules.py     # Rule phân giải public API và AST trong Git source
 ├── data/                        # JSON kết quả; *_diy.json là bản chỉnh tay
 ├── cache/{library}/
 │   ├── docs/{version}/release_notes.html
@@ -101,44 +102,32 @@ python crawl_source.py --library numpy --version 1.4.1
 
 **Output:** `cache/{library}/source`, một Git repository cho mỗi thư viện.
 
-## Bước 5 — Phát hiện thay đổi Python API từ source code
+## Bước 5 — Dựng đường tiến hóa source cho từng API
 
-**Mô tả:** So sánh các version liền kề của từng cặp API trên Git source để tạo candidate thay đổi và bằng chứng đi kèm. Bước này không phân tích docstring.
+**Mô tả:** Với mỗi cặp trong `data/api_mapping_pairs.json`, quét Git source tại các version trong `data/pypi_versions_with_github_diy.json` và dựng riêng đường tiến hóa của từng API. Chỉ liệt kê version đã xác nhận API hiện diện; không phân tích docstring hoặc release notes.
 
-**Input:** `data/api_mapping_pairs.json`, `data/pypi_versions_with_github_diy.json` và repository `cache/{library}/source` từ Bước 4.
-
-**Chạy riêng từng thư viện:**
-
+**Chạy từng thư viện:**
 ```powershell
-$library = "numpy"
-python trace_source_changes.py --library $library `
-  --output "data/$library/source_change_candidates.json" `
-  --unresolved-output "data/$library/source_trace_unresolved.json" `
-  --coverage-output "data/$library/source_trace_coverage.json"
+python build_api_source_tracks.py --library numpy
 ```
 
-Đổi giá trị `$library` để chạy thư viện khác, ví dụ `pandas` hoặc `scikit-learn`.
+**Schema** cho `data/{library}/api_source_tracks.json` (mỗi phần tử là một cặp):
 
-**Output:**
+```text
+mapping_id, library
+└── api_states[]                         # 2 lịch sử API độc lập
+    ├── role, api                       # deprecated_api | replacement_api
+    ├── versions[]                      # chỉ version xác nhận có API
+    │   ├── version, commit_sha
+    │   ├── source_location             # path, line_start, line_end
+    │   ├── public_binding              # kind, path, target
+    │   ├── declared_parameters[]       # name, kind, default, annotation
+    │   ├── effective_parameters?       # chỉ khi khác declared_parameters
+    │   └── return_annotation, evidence_refs[]
+    ├── transitions[]                   # chỉ giữa hai release liền kề có API
+    │   └── from_version, to_version, status, changes[], evidence_refs[]
+    ├── coverage                        # version có/vắng/chưa rõ; khoảng đã/chưa so sánh
+    └── evidence[]                      # source location và Git diff theo ID
+```
 
-- `source_change_candidates.json`: các khoảng version có candidate thay đổi và bằng chứng source.
-- `source_trace_unresolved.json`: các khoảng chưa phân tích đầy đủ và nguyên nhân.
-- `source_trace_coverage.json`: trạng thái kiểm tra của từng khoảng version đã thu thập.
-
-Trong `source_change_candidates.json`, trường `effective_*` vắng mặt lấy giá trị trường gốc, trạng thái runtime vắng mặt là chưa kiểm tra; mốc quan hệ đầu tiên nằm ở `source_trace_coverage.json`.
-
-**Các rule kiểm tra:**
-
-- **Version và Git:** Đối chiếu tag, SHA và source URL trong input với Git; ví dụ tag `v1.25.0` phải trỏ đúng commit đã ghi.
-- **Public API:** Đọc import, `__all__` và `__getattr__` để xét tên có được xuất ra không; ví dụ `numpy.alltrue` vắng mặt ở NumPy 2.0.
-- **Signature:** Đọc AST của hàm hoặc đích wrapper để so sánh tham số; ví dụ `x` đổi tên thành `a`, hoặc `keepdims=False` đổi thành `keepdims=np._NoValue`.
-- **Delegation:** Lần theo lời gọi `return` và biến cục bộ trong AST để xác định đích; ví dụ `all = a.all; return all(...)` gọi method `a.all`.
-- **Forwarding:** So sánh argument của lời gọi và `**kwargs`; ví dụ `keepdims` từ luôn được truyền sang chỉ truyền khi được cung cấp.
-- **Implementation:** So sánh AST thân hàm sau khi bỏ docstring; ví dụ `arr.all(...)` đổi sang `_wrapreduction(...)`, chưa kết luận hành vi đổi.
-- **Helper:** Theo lời gọi tới helper và tối đa một wrapper phía trên; ví dụ `_wrapreduction` đổi được ghi cho cả `numpy.all` và `numpy.alltrue`, với tác động hành vi chưa xác định.
-- **Di chuyển source:** So đường dẫn symbol và AST trước/sau; ví dụ `numpy/core/fromnumeric.py` chuyển sang `numpy/_core/fromnumeric.py`.
-- **Deprecation:** Tìm `warnings.warn` trong hàm hoặc decorator; ví dụ dispatcher của `alltrue` thêm cảnh báo deprecated.
-- **Migration:** Đối chiếu cặp API trong input với alias/wrapper giải được từ AST; ví dụ `product` gọi `prod`, còn khi `product` bị xóa thì quan hệ không còn kiểm tra được.
-- **Evidence:** Ghép Git diff với vị trí AST của đúng hàm; ví dụ diff của `alltrue` không lấy code của `sum`.
-- **Coverage:** Kiểm tra từng cặp version liền kề đã thu thập; ví dụ khoảng không có event được ghi `unchanged`, khoảng thiếu source là `unresolved`.
-- **Runtime tùy chọn:** Dùng interpreter được cấp để kiểm tra tên và signature; ví dụ kiểm tra `np.alltrue` còn truy cập được ở NumPy 2.0 không.
+`changes: []` nghĩa là không phát hiện thay đổi theo các rule đã chạy; không nối qua version vắng mặt hoặc chưa phân giải. Mốc công bố deprecation thuộc pha đọc release notes, còn đường tiến hóa chung của cặp thuộc pha tổng hợp sau đó.
