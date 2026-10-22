@@ -1,339 +1,208 @@
-"""Integration checks for source tracing on a small local Git history."""
-
 import ast
-import subprocess
-import tempfile
+import copy
 import unittest
-from pathlib import Path
 
-from trace_source_changes import (ROOT, SourceReader, getattr_excludes_name,
-                                  literal_exports, scan_pair, summarize_coverage)
+from trace_source_changes import (
+    SourceReader,
+    body_hash,
+    compare_parameters,
+    compare_states,
+    body_equal_after_parameter_rename,
+    implementation_relationship,
+    parse_with_legacy_syntax,
+    summarize_coverage,
+    transitive_dependency_changes,
+)
 
 
-def command(repo, *args):
-    return subprocess.run(["git", "-C", str(repo), *args], check=True,
-                          capture_output=True, text=True).stdout.strip()
+class MemoryReader(SourceReader):
+    def __init__(self, source):
+        super().__init__(None, "pkg")
+        self.source = source
+
+    def module_file(self, sha, module):
+        return "pkg/__init__.py" if module == "pkg" else None
+
+    def exact_module_file(self, sha, module):
+        return self.module_file(sha, module)
+
+    def parse(self, sha, path):
+        return ast.parse(self.source)
 
 
-class SourceTracingTests(unittest.TestCase):
-    def setUp(self):
-        fixture_dir = ROOT / "tests"
-        fixture_dir.mkdir(exist_ok=True)
-        self.temp = tempfile.TemporaryDirectory(dir=fixture_dir)
-        self.repo = Path(self.temp.name)
-        command(self.repo, "init", "-q")
-        command(self.repo, "config", "user.name", "Test")
-        command(self.repo, "config", "user.email", "test@example.invalid")
-        core = self.repo / "numpy" / "core"
-        core.mkdir(parents=True)
-        (self.repo / "numpy" / "__init__.py").write_text(
-            "from .core import *\n", encoding="utf-8")
-        (core / "__init__.py").write_text(
-            "from .fromnumeric import *\n", encoding="utf-8")
-        self.module = core / "fromnumeric.py"
-        self.versions = []
+def parameter(name, default=None):
+    return {"name": name, "kind": "positional_or_keyword",
+            "default": default, "annotation": None}
 
-    def tearDown(self):
-        self.temp.cleanup()
 
-    def commit(self, version, source):
-        self.module.write_text(source, encoding="utf-8")
-        command(self.repo, "add", ".")
-        command(self.repo, "commit", "-qm", version)
-        self.versions.append({"version": version, "commit_sha": command(self.repo, "rev-parse", "HEAD")})
+class SourceRuleTests(unittest.TestCase):
+    def test_last_unconditional_definition_wins(self):
+        reader = MemoryReader("def f(): return 1\ndef f(): return 2\n")
+        result = reader.resolve_name("sha", "pkg", "f")
+        self.assertEqual(result.node.lineno, 2)
 
-    def pair(self):
-        return {"id": 3, "library": "numpy", "deprecated_api": "numpy.product",
-                "replacement_api": "numpy.prod"}
+    def test_last_unconditional_assignment_wins(self):
+        reader = MemoryReader("def f(): return 1\nf = replacement\n")
+        result = reader.resolve_name("sha", "pkg", "f")
+        self.assertEqual(result.node.lineno, 2)
+        self.assertEqual(result.alias_target, "replacement")
 
-    def test_detects_reexported_signature_warning_and_removal(self):
-        self.commit("1.0", """__all__ = ['product', 'prod']
-def prod(a):
-    return a
-def product(a):
-    return prod(a)
-""")
-        self.commit("1.1", """__all__ = ['product', 'prod']
-import warnings
-def prod(a, where=None):
-    return a
-def product(*args, **kwargs):
-    warnings.warn('product deprecated', DeprecationWarning)
-    return prod(*args, **kwargs)
-""")
-        self.commit("2.0", """__all__ = ['prod']
-def prod(a, where=None):
-    return a
-""")
-        reader = SourceReader(self.repo, "numpy")
-        status = {version["version"]: "tag_matches_commit" for version in self.versions}
-        progress = []
-        records, unresolved = scan_pair(self.pair(), self.versions, reader, status,
-                                        progress=progress.append, progress_every=1)
-        self.assertEqual(unresolved, [])
-        self.assertEqual(len(records), 2)
-        self.assertEqual(len(progress), 2)
-        self.assertIn("interval 1/2", progress[0])
-        first = records[0]
-        self.assertEqual(first["library"], "numpy")
-        self.assertEqual({change["kind"] for change in first["changes"]},
-                         {"parameter_added", "wrapper_forwarding_changed", "warning_path_added"})
-        self.assertEqual(first["api_states_after"]["numpy.product"]["effective_signature_status"],
-                         "forwarded")
-        self.assertEqual([p["name"] for p in first["api_states_after"]["numpy.product"]["effective_parameters"]],
-                         ["a", "where"])
-        self.assertTrue(any(item["kind"] == "git_diff" for item in first["evidence"]))
-        direct = next(change for change in first["changes"]
-                      if change["api"] == "numpy.prod" and change["kind"] == "parameter_added")
-        forwarded = next(change for change in first["changes"]
-                         if change["api"] == "numpy.product" and change["kind"] == "parameter_added")
-        self.assertEqual(direct["change_origin"], "direct_declaration")
-        self.assertEqual(forwarded["change_origin"], "mixed_or_unresolved")
-        self.assertEqual(direct["verification_status"], "verified")
-        self.assertIn("parameter_absent_before", forwarded["verified_properties"])
-        self.assertEqual(first["api_states_after"]["numpy.product"]["runtime_signature_status"],
-                         "not_checked")
-        self.assertEqual(records[1]["changes"][0]["kind"], "public_api_removed")
+    def test_conditional_rebinding_is_unresolved(self):
+        reader = MemoryReader("def f(): return 1\nif flag:\n    def f(): return 2\n")
+        result = reader.resolve_name("sha", "pkg", "f")
+        self.assertEqual((result.status, result.reason),
+                         ("unknown", "conditional_rebinding_unresolved"))
 
-    def test_stable_wrapper_inherits_target_parameter_change(self):
-        self.commit("1.0", """__all__ = ['product', 'prod']
-def prod(a): return a
-def product(*args, **kwargs): return prod(*args, **kwargs)
-""")
-        self.commit("1.1", """__all__ = ['product', 'prod']
-def prod(a, where=None): return a
-def product(*args, **kwargs): return prod(*args, **kwargs)
-""")
-        reader = SourceReader(self.repo, "numpy")
-        status = {v["version"]: "tag_matches_commit" for v in self.versions}
-        records, unresolved = scan_pair(self.pair(), self.versions, reader, status)
-        self.assertFalse(unresolved)
-        forwarded = next(change for change in records[0]["changes"]
-                         if change["api"] == "numpy.product")
-        self.assertEqual(forwarded["change_origin"], "forwarded_via_wrapper")
-        self.assertEqual(forwarded["origin_api"], "numpy.prod")
-        self.assertEqual(forwarded["verification_status"], "verified")
-        self.assertIn("static_wrapper_forwarding_resolved", forwarded["verified_properties"])
+    def test_order_change_survives_default_change(self):
+        before = [parameter("a"), parameter("b", "0")]
+        after = [parameter("b", "1"), parameter("a")]
+        self.assertEqual({change["kind"] for change in compare_parameters(before, after)},
+                         {"parameter_default_changed", "parameter_order_changed"})
 
-    def test_parameter_warning_does_not_deprecate_replacement_api(self):
-        self.commit("1.0", """__all__ = ['product', 'prod']
-import warnings
-def prod(a, initial=None): return a
-def product(a, initial=None): return prod(a, initial)
-""")
-        self.commit("1.1", """__all__ = ['product', 'prod']
-import warnings
-def prod(a, initial=None):
-    if initial is not None:
-        warnings.warn('initial is deprecated', DeprecationWarning)
-    return a
-def product(a, initial=None): return prod(a, initial)
-""")
-        reader = SourceReader(self.repo, "numpy")
-        status = {v["version"]: "tag_matches_commit" for v in self.versions}
-        records, unresolved = scan_pair(self.pair(), self.versions, reader, status)
-        self.assertFalse(unresolved)
-        replacement = records[0]["api_states_after"]["numpy.prod"]
-        self.assertEqual(replacement["deprecation_warning_scopes"], ["parameter"])
-        self.assertFalse(replacement["deprecation_warning_path"])
-        self.assertTrue(replacement["warning_observed"])
-        self.assertEqual(replacement["warning_observations"][0]["affected_parameters"],
-                         ["initial"])
-        kinds = {change["kind"] for change in records[0]["changes"]}
-        self.assertIn("parameter_warning_path_added", kinds)
-        self.assertNotIn("warning_path_added", kinds)
-        parameter_warning = next(change for change in records[0]["changes"]
-                                 if change["kind"] == "parameter_warning_path_added")
-        self.assertEqual(parameter_warning["parameter"], "initial")
+    def test_added_parameter_does_not_count_as_reordering(self):
+        before = [parameter("a"), parameter("b")]
+        after = [parameter("a"), parameter("new"), parameter("b")]
+        self.assertEqual([change["kind"] for change in compare_parameters(before, after)],
+                         ["parameter_added"])
 
-    def test_literal_message_variable_identifies_api_warning(self):
-        function = ast.parse("def old(a):\n"
-                             "    message = 'old is deprecated'\n"
-                             "    warnings.warn(message, DeprecationWarning)\n"
-                             "    return a\n").body[0]
-        from trace_source_changes import warning_observations
-        self.assertEqual(warning_observations(function, "old")[0]["scope"], "api")
+    def test_parameter_rename_does_not_create_delegation_or_implementation_event(self):
+        old = MemoryReader("def f(x, axis=None):\n"
+                           "    method = x.all\n"
+                           "    return method(axis)\n")
+        new = MemoryReader("def f(a, axis=None):\n"
+                           "    method = a.all\n"
+                           "    return method(axis)\n")
+        old_state, new_state = old.state("old", "pkg.f"), new.state("new", "pkg.f")
+        changes, reason = compare_states(old_state, new_state,
+                                         old.resolve_api("old", "pkg.f").node,
+                                         new.resolve_api("new", "pkg.f").node)
+        self.assertIsNone(reason)
+        self.assertEqual([change["kind"] for change in changes], ["parameter_renamed"])
+        self.assertEqual((changes[0]["before"], changes[0]["after"], changes[0]["position"]),
+                         ("x", "a", 0))
+        self.assertEqual(changes[0]["implementation_change_class"],
+                         "parameter_rename_only")
+        self.assertEqual(changes[0]["semantic_equivalence_status"], "not_established")
 
-    def test_dynamic_public_namespace_is_unresolved(self):
-        self.commit("1.0", """__all__ = ['product', 'prod']
-def prod(a): return a
-def product(a): return prod(a)
-""")
-        (self.repo / "numpy" / "__init__.py").write_text(
-            "from .core import *\ndef __getattr__(name):\n    return globals()[name]\n",
-            encoding="utf-8")
-        self.commit("2.0", """__all__ = ['prod']
-def prod(a): return a
-""")
-        reader = SourceReader(self.repo, "numpy")
-        status = {version["version"]: "tag_matches_commit" for version in self.versions}
-        records, unresolved = scan_pair(self.pair(), self.versions, reader, status)
-        self.assertEqual(records, [])
-        self.assertEqual(len(unresolved), 1)
-        self.assertEqual(unresolved[0]["reason"], "source_resolution_incomplete")
+    def test_parameter_rename_keeps_independent_body_change(self):
+        before = ast.parse("def f(x): return x.all()").body[0]
+        after = ast.parse("def f(a): return a.any()").body[0]
+        self.assertFalse(body_equal_after_parameter_rename(before, after, {"x": "a"}))
+        old = MemoryReader("def f(x): return x.all()\n")
+        new = MemoryReader("def f(a): return a.any()\n")
+        changes, _ = compare_states(old.state("old", "pkg.f"), new.state("new", "pkg.f"),
+                                    before, after)
+        self.assertEqual({change["kind"] for change in changes},
+                         {"parameter_renamed", "delegation_changed", "implementation_changed"})
 
-    def test_python2_intra_package_import_finds_keepdims(self):
-        (self.repo / "numpy" / "__init__.py").write_text("from core import *\n", encoding="utf-8")
-        (self.repo / "numpy" / "core" / "__init__.py").write_text(
-            "from fromnumeric import *\n", encoding="utf-8")
-        self.commit("1.6", """__all__ = ['alltrue', 'all']
-def all(a, axis=None): return a
-def alltrue(a, axis=None): return a
-""")
-        self.commit("1.7", """__all__ = ['alltrue', 'all']
-def all(a, axis=None, keepdims=False): return a
-def alltrue(a, axis=None, keepdims=False): return all(a, axis, keepdims)
-""")
-        pair = {"id": 1, "library": "numpy", "deprecated_api": "numpy.alltrue",
-                "replacement_api": "numpy.all"}
-        reader = SourceReader(self.repo, "numpy")
-        status = {v["version"]: "tag_matches_commit" for v in self.versions}
-        records, unresolved = scan_pair(pair, self.versions, reader, status)
-        self.assertFalse(unresolved)
-        self.assertEqual(len(records), 1)
-        self.assertEqual({(c["api"], c["parameter"]) for c in records[0]["changes"]
-                          if c["kind"] == "parameter_added"},
-                         {("numpy.alltrue", "keepdims"), ("numpy.all", "keepdims")})
+    def test_multiple_name_substitutions_remain_unclassified(self):
+        changes = compare_parameters([parameter("x"), parameter("y")],
+                                     [parameter("a"), parameter("b")])
+        self.assertEqual({change["kind"] for change in changes},
+                         {"parameter_added", "parameter_removed"})
 
-    def test_bounded_getattr_allows_proven_removal(self):
-        self.commit("1.0", """__all__ = ['product', 'prod']
-def prod(a): return a
-def product(a): return prod(a)
-""")
-        (self.repo / "numpy" / "__init__.py").write_text(
-            "from .core import prod\n"
-            "def __getattr__(name):\n"
-            "    if name == 'special':\n"
-            "        return prod\n"
-            "    raise AttributeError(name)\n", encoding="utf-8")
-        self.commit("2.0", """__all__ = ['prod']
-def prod(a): return a
-""")
-        reader = SourceReader(self.repo, "numpy")
-        status = {v["version"]: "tag_matches_commit" for v in self.versions}
-        records, unresolved = scan_pair(self.pair(), self.versions, reader, status)
-        self.assertFalse(unresolved)
-        self.assertEqual(records[0]["changes"][0]["kind"], "public_api_removed")
-        self.assertEqual(records[0]["api_states_after"]["numpy.product"]["reason"],
-                         "getattr_excludes_name")
+    def test_rename_with_another_parameter_default_change(self):
+        changes = compare_parameters([parameter("x"), parameter("axis", "None")],
+                                     [parameter("a"), parameter("axis", "0")])
+        self.assertEqual({change["kind"] for change in changes},
+                         {"parameter_renamed", "parameter_default_changed"})
 
-    def test_dynamic_package_loader_does_not_imply_api_introduction(self):
-        (self.repo / "numpy" / "__init__.py").write_text(
-            "pkgload = PackageLoader()\npkgload('core')\n", encoding="utf-8")
-        self.commit("0.9", "def prod(a): return a\ndef product(a): return prod(a)\n")
-        (self.repo / "numpy" / "__init__.py").write_text(
-            "from .core import *\n", encoding="utf-8")
-        self.commit("1.0", "__all__ = ['product', 'prod']\n"
-                            "def prod(a): return a\ndef product(a): return prod(a)\n")
-        reader = SourceReader(self.repo, "numpy")
-        status = {v["version"]: "tag_matches_commit" for v in self.versions}
-        records, unresolved = scan_pair(self.pair(), self.versions, reader, status)
-        self.assertFalse(records)
-        self.assertEqual(len(unresolved), 1)
-        self.assertEqual(reader.state(self.versions[0]["commit_sha"], "numpy.product")["reason"],
-                         "dynamic_package_loader")
+    def test_docstring_only_change_has_same_implementation_hash(self):
+        original = ast.parse("def f(x): return x").body[0]
+        before, after = copy.deepcopy(original), copy.deepcopy(original)
+        before.body.insert(0, ast.Expr(value=ast.Constant("old docs")))
+        after.body.insert(0, ast.Expr(value=ast.Constant("new docs")))
+        self.assertEqual(body_hash(before), body_hash(after))
+        self.assertEqual(compare_parameters([parameter("x")], [parameter("x")]), [])
 
-    def test_unhandled_getattr_branch_remains_unknown(self):
-        self.commit("1.0", "__all__ = ['prod']\ndef prod(a): return a\n")
-        (self.repo / "numpy" / "__init__.py").write_text(
-            "from .core import prod\n"
-            "def __getattr__(name):\n"
-            "    match name:\n"
-            "        case 'product': return prod\n"
-            "    raise AttributeError(name)\n", encoding="utf-8")
-        self.commit("2.0", "__all__ = ['prod']\ndef prod(a): return a\n")
-        reader = SourceReader(self.repo, "numpy")
-        self.assertEqual(reader.state(self.versions[-1]["commit_sha"], "numpy.product")
-                         ["public_status"], "unknown")
+    def test_docstring_only_change_creates_no_event(self):
+        old = MemoryReader('def f(x):\n    """old docs"""\n    return x\n')
+        new = MemoryReader('def f(x):\n    """new docs"""\n    return x\n')
+        changes, reason = compare_states(old.state("old", "pkg.f"),
+                                         new.state("new", "pkg.f"))
+        self.assertIsNone(reason)
+        self.assertEqual(changes, [])
 
-    def test_diff_evidence_excludes_unrelated_hunks(self):
-        self.commit("1.0", """__all__ = ['product', 'prod']
-def prod(a): return a
-def product(a): return prod(a)
+    def test_same_body_without_direct_wrapper_is_not_migration_evidence(self):
+        reader = MemoryReader("def old(x): return x.all()\ndef new(x): return x.all()\n")
+        pair = {"deprecated_api": "pkg.old", "replacement_api": "pkg.new"}
+        states = {api: reader.state("sha", api) for api in pair.values()}
+        self.assertEqual(implementation_relationship(pair, reader, "sha", states)["status"],
+                         "not_observed")
 
-def unrelated():
-    return 'old_unrelated_marker'
-""")
-        self.commit("1.1", """__all__ = ['product', 'prod']
-def prod(a): return a
-def product(a, where=None): return prod(a)
+    def test_direct_wrapper_is_migration_evidence(self):
+        reader = MemoryReader("def old(*args, **kwargs): return new(*args, **kwargs)\n"
+                              "def new(x): return x\n")
+        pair = {"deprecated_api": "pkg.old", "replacement_api": "pkg.new"}
+        states = {api: reader.state("sha", api) for api in pair.values()}
+        relation = implementation_relationship(pair, reader, "sha", states)
+        self.assertEqual((relation["status"], relation["kind"]),
+                         ("observed", "direct_wrapper"))
 
-def unrelated():
-    return 'new_unrelated_marker'
-""")
-        reader = SourceReader(self.repo, "numpy")
-        status = {v["version"]: "tag_matches_commit" for v in self.versions}
-        records, unresolved = scan_pair(self.pair(), self.versions, reader, status)
-        self.assertFalse(unresolved)
-        diff = next(item for item in records[0]["evidence"] if item["kind"] == "git_diff")
-        excerpt = "\n".join(item["excerpt"] for item in diff["relevant_hunks"])
-        self.assertIn("where", excerpt)
-        self.assertNotIn("unrelated_marker", excerpt)
+    def test_legacy_syntax_fallback_preserves_line_numbers(self):
+        source = ("import sys\nprint >> sys.stderr, 'message'\n"
+                  "try:\n    pass\nexcept ImportError, error:\n    print error\n")
+        tree, rewrites = parse_with_legacy_syntax(source, "pkg/__init__.py")
+        self.assertIsNotNone(tree)
+        self.assertEqual({item["kind"] for item in rewrites},
+                         {"print_redirect", "except_binding", "print_statement"})
+        self.assertEqual(tree.body[-1].handlers[0].lineno, 5)
 
-    def test_literal_all_updates_are_evaluated_only_when_static(self):
-        self.assertEqual(literal_exports(ast.parse("__all__ = ['all']; __all__.extend(['alltrue'])")),
-                         {"all", "alltrue"})
-        self.assertIsNone(literal_exports(ast.parse("__all__ = ['all']; __all__.extend(other)")))
+    def test_unsupported_legacy_syntax_stays_unresolved(self):
+        tree, rewrites = parse_with_legacy_syntax("raise ValueError, 'x'\n", "pkg.py")
+        self.assertIsNone(tree)
+        self.assertEqual(rewrites, [])
 
-    def test_identity_comparison_does_not_prove_getattr_absence(self):
-        getter = ast.parse("def __getattr__(name):\n"
-                           "    if name is not 'product': return object()\n"
-                           "    raise AttributeError(name)\n").body[0]
-        self.assertFalse(getattr_excludes_name(getter, "product"))
+    def test_removal_makes_relationship_unavailable(self):
+        pair = {"deprecated_api": "pkg.old", "replacement_api": "pkg.new"}
+        states = {"pkg.old": {"public_status": "absent"},
+                  "pkg.new": {"public_status": "present"}}
+        result = implementation_relationship(pair, None, "sha", states)
+        self.assertEqual(result["status"], "unavailable_due_to_api_removal")
 
-    def test_coverage_counts_collected_intervals_and_unresolved(self):
-        versions = [{"version": name} for name in ("1.0", "1.1", "1.2")]
-        coverage = summarize_coverage(self.pair(), versions,
-                                      [{"from_version": "1.0", "to_version": "1.1"}],
-                                      [{"from_version": "1.1", "to_version": "1.2"}])
-        self.assertEqual(coverage["intervals_scanned"], 2)
-        self.assertEqual(coverage["candidate_intervals"], 1)
-        self.assertEqual(coverage["unresolved_intervals"], 1)
-        self.assertEqual(coverage["historical_completeness"], "not_claimed")
-        blocked = summarize_coverage(self.pair(), versions, [], [],
-                                     blocked_reason="source_repository_missing")
-        self.assertEqual(blocked["intervals_scanned"], 0)
-        self.assertEqual(blocked["intervals_planned"], 2)
-        self.assertEqual(blocked["coverage_status"], "blocked")
+    def test_changed_helper_propagates_through_proved_wrapper(self):
+        pair = {"deprecated_api": "pkg.old", "replacement_api": "pkg.new"}
+        states = {"pkg.old": ({"public_status": "present"},
+                               {"public_status": "present"})}
+        relationships = [{"status": "observed", "kind": "direct_wrapper"}] * 2
+        direct = [{"api": "pkg.new", "kind": "indirect_implementation_changed",
+                   "before_dependency": "pkg._helper", "changed_dependency": "pkg._helper",
+                   "before_hash": "a", "after_hash": "b"}]
+        events = transitive_dependency_changes(pair, states, relationships, direct)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]["dependency_path"],
+                         ["pkg.old", "pkg.new", "pkg._helper"])
+        self.assertEqual(events[0]["behavioral_impact"], "unknown")
+        relationships[1] = {"status": "not_observed", "kind": None}
+        self.assertEqual(transitive_dependency_changes(pair, states, relationships, direct), [])
 
-    def test_generic_parameter_rules_on_torch_and_sklearn_namespaces(self):
-        for package in ("torch", "sklearn"):
-            folder = self.repo / package
-            folder.mkdir()
-            (folder / "__init__.py").write_text(
-                "def old(a): return new(a)\ndef new(a): return a\n", encoding="utf-8")
-        command(self.repo, "add", ".")
-        command(self.repo, "commit", "-qm", "1.0")
-        first_sha = command(self.repo, "rev-parse", "HEAD")
-        for package in ("torch", "sklearn"):
-            (self.repo / package / "__init__.py").write_text(
-                "def old(a): return new(a)\ndef new(a, flag=False): return a\n", encoding="utf-8")
-        command(self.repo, "add", ".")
-        command(self.repo, "commit", "-qm", "1.1")
-        second_sha = command(self.repo, "rev-parse", "HEAD")
-        versions = [{"version": "1.0", "commit_sha": first_sha},
-                    {"version": "1.1", "commit_sha": second_sha}]
-        status = {"1.0": "tag_matches_commit", "1.1": "tag_matches_commit"}
-        for library, root in (("pytorch", "torch"), ("scikit-learn", "sklearn")):
-            pair = {"id": 10, "library": library, "deprecated_api": f"{root}.old",
-                    "replacement_api": f"{root}.new"}
-            records, unresolved = scan_pair(pair, versions, SourceReader(self.repo, library), status)
-            self.assertFalse(unresolved)
-            self.assertEqual(len(records), 1)
-            self.assertEqual(records[0]["changes"][0]["change_origin"], "direct_declaration")
-            self.assertEqual(records[0]["changes"][0]["verification_status"], "verified")
+    def test_relocation_with_same_body_is_path_change_only(self):
+        body = body_hash(ast.parse("def f(x): return x").body[0])
+        state = {"api": "pkg.f", "public_status": "present", "reason": None,
+                 "effective_parameters": [], "effective_signature_status": "direct",
+                 "source_path": "pkg/old.py", "alias_target": None,
+                 "wrapper_target": None, "delegation_targets": [],
+                 "delegation_resolution_status": "no_return_call_resolved",
+                 "delegates_to": None, "declared_parameters": [],
+                 "forwarded_arguments": {}, "deprecation_warning_scopes": [],
+                 "implementation_hash": body, "normalized_implementation_hash": body}
+        changes, reason = compare_states(state, {**state, "source_path": "pkg/new.py"})
+        self.assertIsNone(reason)
+        self.assertEqual([change["kind"] for change in changes], ["source_path_changed"])
+        self.assertEqual(compare_states(state, dict(state))[0], [])
 
-    def test_generated_tensorflow_root_keeps_missing_name_unknown(self):
-        folder = self.repo / "tensorflow"
-        folder.mkdir()
-        (folder / "__init__.py").write_text(
-            "from tensorflow.python import pywrap_tensorflow\n", encoding="utf-8")
-        command(self.repo, "add", ".")
-        command(self.repo, "commit", "-qm", "generated-root")
-        sha = command(self.repo, "rev-parse", "HEAD")
-        state = SourceReader(self.repo, "tensorflow").state(sha, "tensorflow.print")
-        self.assertEqual(state["public_status"], "unknown")
-        self.assertEqual(state["reason"], "generated_public_namespace_unresolved")
+    def test_coverage_keeps_unresolved_interval(self):
+        pair = {"id": 1, "library": "pkg", "deprecated_api": "pkg.old",
+                "replacement_api": "pkg.new"}
+        versions = [{"version": str(i)} for i in range(3)]
+        unresolved = [{"from_version": "1", "to_version": "2",
+                       "reason": "source_resolution_incomplete",
+                       "details": [{"before": "source_syntax_not_supported",
+                                    "after": "conditional_import"}]}]
+        coverage = summarize_coverage(pair, versions, [], unresolved,
+                                      source_compared_intervals={("0", "1"), ("1", "2")})
+        self.assertEqual([item["status"] for item in coverage["interval_results"]],
+                         ["unchanged", "unsupported"])
 
 
 if __name__ == "__main__":
