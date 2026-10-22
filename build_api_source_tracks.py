@@ -17,6 +17,7 @@ from source_evolution_rules import (
     SourceReader, body_hash, dotted, expr, forwarding_wrapper_target, git,
     module_statements, signature,
 )
+from torch_binding_rules import lookup_torch_python_binding
 
 
 ROOT = Path(__file__).resolve().parent
@@ -166,6 +167,28 @@ def read_api_state(reader, record, api, validation_reason):
     try:
         resolved = reader.resolve_api(sha, api)
         if resolved.status != "present":
+            binding = lookup_torch_python_binding(reader, sha, api)
+            if binding:
+                state = {
+                    "version": record["version"], "commit_sha": sha,
+                    "source_location": binding["declaration"],
+                    "public_binding": {
+                        "kind": "generated_python_binding",
+                        "path": binding["export"]["path"],
+                        "target": f"torch._C._VariableFunctions.{api.split('.')[-1]}",
+                    },
+                    # The binding is generated; the repository has no Python
+                    # function declaration whose parameters can be read here.
+                    "declared_parameters": None,
+                    "effective_parameters": None,
+                    "return_annotation": None,
+                    "evidence_refs": [],
+                }
+                private = {"body_hash": None, "binding_locations": [
+                    ("binding_generator", binding["generator"]),
+                    ("python_export", binding["export"]),
+                ]}
+                return "present", (state, private), None
             return resolved.status, None, resolved.reason
         node = resolved.node
         declared = signature(node)
@@ -273,10 +296,18 @@ def compare_states(old, new, old_private, new_private):
 # 5. Attach a source location to each state and a focused Git diff to changes.
 def add_source_evidence(evidences, state, private):
     identifier = f"E{len(evidences) + 1:05d}"
-    evidences.append({"id": identifier, "type": "source",
+    source_type = ("binding_declaration" if private.get("binding_locations")
+                   else "source")
+    evidences.append({"id": identifier, "type": source_type,
                       "version": state["version"], "commit_sha": state["commit_sha"],
                       **state["source_location"]})
     state["evidence_refs"].append(identifier)
+    for evidence_type, location in private.get("binding_locations", []):
+        identifier = f"E{len(evidences) + 1:05d}"
+        evidences.append({"id": identifier, "type": evidence_type,
+                          "version": state["version"],
+                          "commit_sha": state["commit_sha"], **location})
+        state["evidence_refs"].append(identifier)
     effective = private.get("effective_location")
     if effective and effective != state["source_location"]:
         identifier = f"E{len(evidences) + 1:05d}"

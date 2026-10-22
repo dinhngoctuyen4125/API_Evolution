@@ -10,6 +10,7 @@ API_Evolution/
 ├── crawl_source.py              # Bước 4: tải và chuyển version source
 ├── build_api_source_tracks.py    # Bước 5: dựng đường tiến hóa source riêng cho từng API
 ├── source_evolution_rules.py     # Rule phân giải public API và AST trong Git source
+├── torch_binding_rules.py        # Rule xác minh Python binding sinh mã của PyTorch
 ├── data/                        # JSON kết quả; *_diy.json là bản chỉnh tay
 ├── cache/{library}/
 │   ├── docs/{version}/release_notes.html
@@ -107,6 +108,7 @@ python crawl_source.py --library numpy --version 1.4.1
 **Mô tả:** Với mỗi cặp trong `data/api_mapping_pairs.json`, quét Git source tại các version trong `data/pypi_versions_with_github_diy.json` và dựng riêng đường tiến hóa của từng API. Chỉ liệt kê version đã xác nhận API hiện diện; không phân tích docstring hoặc release notes.
 
 **Chạy từng thư viện:**
+
 ```powershell
 python build_api_source_tracks.py --library numpy
 ```
@@ -130,4 +132,4 @@ mapping_id, library
     └── evidence[]                      # source location và Git diff theo ID
 ```
 
-`changes: []` nghĩa là không phát hiện thay đổi theo các rule đã chạy; không nối qua version vắng mặt hoặc chưa phân giải. Mốc công bố deprecation thuộc pha đọc release notes, còn đường tiến hóa chung của cặp thuộc pha tổng hợp sau đó.
+`changes: []` nghĩa là không phát hiện thay đổi theo các rule đã chạy; không nối qua version vắng mặt hoặc chưa phân giải. Mốc công bố deprecation thuộc pha đọc release notes, còn đường tiến hóa chung của cặp thuộc pha tổng hợp sau đó. Với PyTorch, binding sinh mã chỉ được xác nhận khi tìm thấy khai báo, generator và đường export Python; tham số chưa chứng minh được để `null`.
