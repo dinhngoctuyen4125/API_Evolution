@@ -528,7 +528,7 @@ class SourceReader:
     def module_file(self, sha, module):
         stem = module.replace(".", "/")
         files = self.paths(sha)
-        for candidate in (f"{stem}/__init__.py", f"{stem}.py"):
+        for candidate in self._module_candidates(files, module):
             if candidate in files:
                 return candidate
         # Some distributions place their import package under src/python/.
@@ -536,10 +536,17 @@ class SourceReader:
                    or path.endswith(f"/{stem}.py")]
         return matches[0] if len(matches) == 1 else None
 
-    def exact_module_file(self, sha, module):
+    def _module_candidates(self, files, module):
         stem = module.replace(".", "/")
+        candidates = (f"{stem}/__init__.py", f"{stem}.py")
+        if (module == self.root_module or module.startswith(f"{self.root_module}.")) \
+                and f"src/{self.root_module}/__init__.py" in files:
+            candidates += (f"src/{stem}/__init__.py", f"src/{stem}.py")
+        return candidates
+
+    def exact_module_file(self, sha, module):
         files = self.paths(sha)
-        return next((candidate for candidate in (f"{stem}/__init__.py", f"{stem}.py")
+        return next((candidate for candidate in self._module_candidates(files, module)
                      if candidate in files), None)
 
     def parse(self, sha, path):

@@ -9,6 +9,7 @@ import ast
 import json
 import re
 import sys
+import time
 from pathlib import Path
 
 from crawl_source import validate_source
@@ -572,7 +573,7 @@ def relevant_git_diff(reader, old, new, old_private, new_private):
 
 
 # 6. Assemble two independent histories and coverage for every mapping pair.
-def build_history(reader, api, versions, validation):
+def build_history(reader, api, versions, validation, trace_versions=False):
     states = []
     private_states = []
     presence = []
@@ -580,6 +581,10 @@ def build_history(reader, api, versions, validation):
     unresolved = []
     evidences = []
     for index, record in enumerate(versions, 1):
+        started = time.perf_counter()
+        if trace_versions:
+            print(f"  {api}: starting {index}/{len(versions)} "
+                  f"version {record['version']}", file=sys.stderr, flush=True)
         status, result, reason = read_api_state(
             reader, record, api, validation[record["version"]])
         presence.append(status)
@@ -593,7 +598,12 @@ def build_history(reader, api, versions, validation):
         else:
             unresolved.append({"version": record["version"],
                                "reason": reason or "source_resolution_unresolved"})
-        if index == 1 or index % 25 == 0 or index == len(versions):
+        if trace_versions:
+            print(f"  {api}: finished {index}/{len(versions)} "
+                  f"version {record['version']} ({status}, "
+                  f"{time.perf_counter() - started:.2f}s)",
+                  file=sys.stderr, flush=True)
+        elif index == 1 or index % 25 == 0 or index == len(versions):
             print(f"  {api}: {index}/{len(versions)} versions", file=sys.stderr,
                   flush=True)
 
@@ -681,6 +691,8 @@ def main(argv=None):
     parser.add_argument("--from-version", help="First curated version (for inspection)")
     parser.add_argument("--to-version", help="Last curated version (for inspection)")
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--trace-versions", action="store_true",
+                        help="Log the start, result, and elapsed time of each traced version")
     args = parser.parse_args(argv)
     try:
         pairs, versions = load_inputs(args.library, args.mapping_id)
@@ -696,7 +708,8 @@ def main(argv=None):
         histories = {}
         for api in apis:
             print(f"{args.library}: tracing {api}", file=sys.stderr, flush=True)
-            histories[api] = build_history(reader, api, versions, validation)
+            histories[api] = build_history(reader, api, versions, validation,
+                                           trace_versions=args.trace_versions)
         output = args.output or ROOT / "data" / args.library / "api_source_tracks.json"
         result = write_results(output, pairs, histories)
         print(f"Wrote {len(result)} mapping pairs to {output}", file=sys.stderr)
