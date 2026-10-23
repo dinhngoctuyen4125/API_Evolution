@@ -1,1 +1,1 @@
-# Chỉ dùng thư viện chuẩn của Python; không cần cài thêm gói.
+openai>=2.29.0

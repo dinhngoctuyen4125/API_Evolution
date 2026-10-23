@@ -8,9 +8,12 @@ API_Evolution/
 ├── enrich_pypi_versions.py      # Bước 2: ghép Git tag và commit SHA
 ├── crawl_release_notes.py       # Bước 3: tải release notes
 ├── crawl_source.py              # Bước 4: tải và chuyển version source
-├── build_api_source_tracks.py    # Bước 5: dựng đường tiến hóa source riêng cho từng API
+├── build_api_source_tracks.py   # Bước 5: dựng đường tiến hóa source riêng cho từng API
+├── build_migration_evolution.py  # Bước 6: tổng hợp đường tiến hóa của cặp bằng GPT-6 Luna
 ├── source_evolution_rules.py     # Rule phân giải public API và AST trong Git source
 ├── torch_binding_rules.py        # Rule xác minh Python binding sinh mã của PyTorch
+├── scipy_export_rules.py         # Rule truy export SciPy từ Cython và generator
+├── prompts/migration_evolution.txt # Prompt tổng hợp cho bước 6
 ├── data/                        # JSON kết quả; *_diy.json là bản chỉnh tay
 ├── cache/{library}/
 │   ├── docs/{version}/release_notes.html
@@ -105,22 +108,54 @@ python crawl_source.py --library numpy --version 1.4.1
 
 ## Bước 5 — Dựng đường tiến hóa source cho từng API
 
-**Mô tả:** Với mỗi cặp trong `data/api_mapping_pairs.json`, quét Git source tại các version trong `data/pypi_versions_with_github_diy.json` và dựng riêng đường tiến hóa của từng API. Chỉ liệt kê version đã xác nhận API hiện diện; không phân tích docstring hoặc release notes.
+**Mô tả:** Với mỗi cặp trong `data/api_mapping_pairs.json`, kiểm tra các Git
+commit theo `data/pypi_versions_with_github_diy.json`, rồi dựng hai lịch sử
+độc lập: một cho `deprecated_api`, một cho `replacement_api`. Chỉ đưa vào
+`versions[]` các release đã xác nhận API hiện diện. `coverage` ghi riêng release
+vắng mặt và release chưa thể xác định (`unknown`). Transition so sánh source
+giữa các release liền kề được trace; bước này không xác định mốc thông báo
+deprecation và không phân tích docstring hay release notes.
 
 **Chạy từng thư viện:**
 
 ```powershell
 python build_api_source_tracks.py --library numpy
+
+# Kiểm tra một cặp hoặc một khoảng release mà không ghi đè output đầy đủ.
+python build_api_source_tracks.py --library scipy --mapping-id 49 --from-version 1.10.0 --to-version 1.10.1 --output data/scipy/mapping_49_probe.json
 ```
+
+Khi không truyền `--mapping-id` và không giới hạn version, script xử lý toàn bộ
+mapping của thư viện trên tất cả release đã tuyển chọn và ghi đè
+`data/{library}/api_source_tracks.json`. Dùng `--trace-versions` để xem thời
+gian và kết quả của từng API ở từng release.
 
 Với Transformers, resolver đọc `define_import_structure` và `__all__` tại từng
 commit để truy từ public API đến module chứa định nghĩa. Tên class chỉ giúp chọn
-thư mục model cần kiểm tra; nếu không xác nhận được export từ source hoặc có nhiều
-đích trùng tên, chương trình dùng resolver chung.
+thư mục model cần kiểm tra. Nếu model ứng viên không xác nhận được export, trạng
+thái là `unknown` để tránh quét toàn bộ model và tránh kết luận `absent` thiếu
+bằng chứng. Resolver chung xử lý các release không nhận diện được cấu trúc lazy.
 
 ```powershell
 python build_api_source_tracks.py --library transformers --mapping-id 117 --trace-versions
 ```
+
+Với TensorFlow, chương trình tìm đường dẫn ứng viên cho mọi API bằng một lượt
+quét checkout, rồi truy theo từng release để dùng chung index `tf_export`.
+Vì thế log hiển thị `tracing version ...`, rồi `traced ... APIs`; kết quả vẫn là
+lịch sử riêng cho từng API. Việc xác nhận từng export dựa trên decorator trong
+source tại đúng commit.
+
+```powershell
+python build_api_source_tracks.py --library tensorflow --trace-versions
+```
+
+Với SciPy, resolver chung duyệt các `import *` trong module liên quan và có
+thể dùng `__all__` tĩnh để bỏ qua nhánh không chứa tên cần tìm. Rule riêng xác
+nhận một số export `scipy.special` từ `_ufuncs.pyx` hoặc
+`functions.json` cùng mã generator; method của đối tượng tạo từ class, như
+`scipy.stats.chi2.sf`, được truy qua class và lớp cơ sở. Khi source vẫn thiếu
+bằng chứng, trạng thái tiếp tục là `unknown`.
 
 **Schema** cho `data/{library}/api_source_tracks.json` (mỗi phần tử là một cặp):
 
@@ -134,7 +169,7 @@ mapping_id, library
     │   ├── public_binding              # kind, path, target
     │   ├── declared_parameters[]       # name, kind, default, annotation
     │   ├── effective_parameters        # trực tiếp = declared; wrapper/alias đã giải = đích; chưa rõ = null
-    │   └── return_annotation, evidence_refs[]
+    │   └── return_annotation, evidence_refs[]; generated_signatures nếu có
     ├── transitions[]                   # chỉ giữa hai release liền kề có API
     │   └── from_version, to_version, status, changes[], evidence_refs[]
     ├── coverage                        # version có/vắng/chưa rõ; khoảng đã/chưa so sánh
@@ -142,3 +177,45 @@ mapping_id, library
 ```
 
 `changes: []` nghĩa là không phát hiện thay đổi theo các rule đã chạy; không nối qua version vắng mặt hoặc chưa phân giải. Mốc công bố deprecation thuộc pha đọc release notes, còn đường tiến hóa chung của cặp thuộc pha tổng hợp sau đó. Với PyTorch, tham số binding sinh mã lấy từ ATen schema; `effective_parameters` gộp overload `.out` khi generator xác nhận, còn `annotation` giữ nguyên kiểu ATen.
+
+## Bước 6 — Tổng hợp đường tiến hóa của cặp migration
+
+`build_migration_evolution.py` ghép từng cặp trong `data/api_mapping_pairs.json` với
+`deprecated_version` trong `data/api_mapping_version.json` và hai lịch sử API của
+`data/{library}/api_source_tracks.json`. Script rút gọn source track thành các
+sự kiện có version và bằng chứng; `gpt-6-luna` chọn các mốc để hợp nhất. Output
+được kiểm tra lại với input, sau đó script dựng `api_states`, chữ ký và `changes`
+từ dữ liệu gốc. Bước này không đọc release notes hay docstring.
+
+```powershell
+pip install -r requirements.txt
+$env:OPENAI_API_KEY = "..."
+
+# Xem input gửi cho model, không gọi API.
+python build_migration_evolution.py --library numpy --mapping-id 3 --dry-run
+
+# Một cặp hoặc cả thư viện. Có thể chạy lại với --resume.
+python build_migration_evolution.py --library numpy --mapping-id 3
+python build_migration_evolution.py --library numpy --resume
+```
+
+Output mặc định là `data/{library}/migration_evolution.json`; khi chọn một
+`--mapping-id`, output mặc định là
+`data/{library}/migration_evolution_mapping_{id}.json` để không ghi đè file
+toàn thư viện. Những cặp thiếu deprecation record được báo và bỏ qua khi chạy
+cả thư viện; chọn trực tiếp một cặp thiếu input sẽ báo lỗi. Nếu version
+deprecation không nằm trong release đã trace, mốc đó có trạng thái API
+`unknown`. Chỉ ghi `removed` khi source track có chuyển tiếp trực tiếp từ
+`present` sang `absent`; một khoảng `unknown` không chứng minh API đã bị xóa.
+Trường `source` của mốc deprecation dẫn về record trong
+`api_mapping_version.json`, vì input này không chứa URL release note.
+Trong output, `compared_to_version` là mốc đã chọn ngay trước đó;
+`changes[].from_version` giữ bản source thực sự được so sánh tại bước 5.
+Mỗi `milestone` gồm `version`, `compared_to_version`, `api_states[]` của cả hai
+API và `changes[]` đã chọn. `api_states[].status` có thể là `active`,
+`deprecated`, `removed`, `absent` hoặc `unknown`; signature bằng `null` nếu
+source không xác nhận được API tại version đó. Mỗi change giữ API, loại thay
+đổi, giá trị trước/sau, version gốc để so sánh và bằng chứng source nếu có.
+Ví dụ `data/expected_step_5.json` chỉ minh họa cấu trúc: output giữ nguyên
+chuỗi version trong input, và không tự thêm diễn giải implementation hay URL
+release note khi input không cung cấp.

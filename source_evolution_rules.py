@@ -710,6 +710,27 @@ class SourceReader:
                     if result.status != "present":
                         return result
                 return result
+            # A public object may be constructed from a class in the same module,
+            # with the requested method inherited from one of that class's bases.
+            if isinstance(result.node, (ast.Assign, ast.AnnAssign)) and result.module:
+                value = result.node.value
+                constructor = dotted(value.func) if isinstance(value, ast.Call) else None
+                if constructor and "." not in constructor:
+                    instance_class = self.resolve_name(sha, result.module, constructor)
+                    if instance_class.status == "present" and isinstance(
+                        instance_class.node, ast.ClassDef
+                    ):
+                        for child_name in parts[index + 1:]:
+                            if not isinstance(instance_class.node, ast.ClassDef):
+                                return Resolution("unknown", "nested_attribute_unresolved",
+                                                  path=instance_class.path)
+                            result = self.resolve_class_member(sha, instance_class, child_name)
+                            if result.status != "present":
+                                return result if result.status == "unknown" else Resolution(
+                                    "unknown", "instance_member_unresolved", path=instance_class.path
+                                )
+                            instance_class = result
+                        return result
             if result.module and result.module != module and self.module_file(sha, result.module):
                 module = result.module
             elif self.module_file(sha, f"{module}.{name}"):

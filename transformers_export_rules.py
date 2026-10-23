@@ -8,7 +8,7 @@ and a real definition or import of the requested name in that module.
 import ast
 import re
 
-from source_evolution_rules import dotted, literal_exports, module_statements
+from source_evolution_rules import Resolution, dotted, literal_exports, module_statements
 
 
 def location(path, node):
@@ -83,8 +83,10 @@ def lookup_transformers_export(reader, sha, api):
     models_path = reader.exact_module_file(sha, models_module)
     if not root_path or not models_path:
         return None
-    root_lazy = lazy_declaration(reader.parse(sha, root_path))
-    models_lazy = lazy_declaration(reader.parse(sha, models_path))
+    root_tree = reader.parse(sha, root_path)
+    models_tree = reader.parse(sha, models_path)
+    root_lazy = lazy_declaration(root_tree)
+    models_lazy = lazy_declaration(models_tree)
     if root_lazy is None or models_lazy is None:
         return None
     if not any(isinstance(node, ast.Constant) and node.value == "models"
@@ -94,6 +96,7 @@ def lookup_transformers_export(reader, sha, api):
     # The longest model prefix is usually the target. Keep shorter prefixes as
     # candidates too; only source declarations can confirm a match.
     candidates = []
+    inspected_models = []
     for model in candidate_models(files, public_name):
         model_module = f"transformers.models.{model}"
         model_path = reader.exact_module_file(sha, model_module)
@@ -102,6 +105,7 @@ def lookup_transformers_export(reader, sha, api):
         model_lazy = lazy_declaration(reader.parse(sha, model_path))
         if model_lazy is None:
             continue
+        inspected_models.append(model_path)
         prefix = model_path.removesuffix("__init__.py")
         matches = []
         adjacent = sorted(path for path in files if path.startswith(prefix)
@@ -125,9 +129,18 @@ def lookup_transformers_export(reader, sha, api):
         if len(matches) == 1:
             candidates.append((model_module, model_path, model_lazy, *matches[0]))
         elif len(matches) > 1:
-            return None
+            return (Resolution("unknown", "ambiguous_lazy_export", path=model_path),
+                    None, [])
     if len(candidates) != 1:
-        return None
+        if not inspected_models or any(
+                isinstance(node, ast.Constant) and node.value == public_name
+                for tree in (root_tree, models_tree) for node in ast.walk(tree)):
+            return None
+        # Source verifies the name is not exported by its candidate model, but
+        # another model might export the same spelling. Preserve uncertainty
+        # without traversing hundreds of unrelated wildcard imports.
+        return (Resolution("unknown", "lazy_export_not_confirmed",
+                           path=inspected_models[0]), None, [])
     model_module, model_path, model_lazy, resolved, export_path, export_node = candidates[0]
     class_module = resolved.module
     if len(names) > 2:

@@ -19,7 +19,9 @@ from source_evolution_rules import (
     error_message_profile, expr, forwarding_wrapper_target, git, module_statements,
     signature, source_structure,
 )
-from tensorflow_export_rules import lookup_tensorflow_export
+from tensorflow_export_rules import (export_index, lookup_tensorflow_export,
+                                     prepare_candidate_paths)
+from scipy_export_rules import lookup_scipy_generated_export
 from torch_binding_rules import lookup_torch_python_binding
 from transformers_export_rules import lookup_transformers_export
 
@@ -98,6 +100,22 @@ def find_binding(reader, sha, api, resolved):
         if isinstance(parent.node, ast.ClassDef):
             return {"kind": "class_member", "path": resolved.path,
                     "target": f"{resolved.module}.{parent.node.name}.{parts[-1]}"}, []
+        if isinstance(parent.node, (ast.Assign, ast.AnnAssign)):
+            value = parent.node.value
+            constructor = dotted(value.func) if isinstance(value, ast.Call) else None
+            if constructor and "." not in constructor and parent.module:
+                instance_class = reader.resolve_name(sha, parent.module, constructor)
+                if instance_class.status == "present" and isinstance(
+                    instance_class.node, ast.ClassDef
+                ):
+                    owner = next((item.name for item in (resolved.tree.body if resolved.tree else [])
+                                  if isinstance(item, ast.ClassDef)
+                                  and resolved.node in item.body), None)
+                    target = f"{resolved.module}.{owner}.{parts[-1]}" if owner else \
+                        f"{resolved.module}.{parts[-1]}"
+                    return {"kind": "instance_member", "path": parent.path,
+                            "target": target}, [
+                        ("instance_constructor", location(parent.path, parent.node))]
 
     module = parent_api if reader.module_file(sha, parent_api) else parts[0]
     name = parts[-1] if module == parent_api else parts[1]
@@ -218,6 +236,31 @@ def read_api_state(reader, record, api, validation_reason):
             if tf_export_binding:
                 resolved = tf_export_binding["resolution"]
         if resolved.status != "present":
+            generated = lookup_scipy_generated_export(reader, sha, api)
+            if generated:
+                state = {
+                    "version": record["version"], "commit_sha": sha,
+                    "source_location": generated["declaration"],
+                    "public_binding": {
+                        "kind": generated["kind"],
+                        "path": generated["export"]["path"],
+                        "target": generated["target"],
+                    },
+                    "declared_parameters": generated["parameters"],
+                    "effective_parameters": generated["parameters"],
+                    "return_annotation": None,
+                    "evidence_refs": [],
+                }
+                if generated["generated_signatures"] is not None:
+                    state["generated_signatures"] = generated["generated_signatures"]
+                private = {"body_hash": None, "binding_declaration": True,
+                           "binding_locations": [
+                               ("public_import", generated["export"]),
+                           ]}
+                if generated["generator"]:
+                    private["binding_locations"].append(
+                        ("binding_generator", generated["generator"]))
+                return "present", (state, private), None
             binding = lookup_torch_python_binding(reader, sha, api)
             if binding:
                 state = {
@@ -418,6 +461,12 @@ def compare_source_structure(old, new, old_private, new_private):
 
 def compare_states(old, new, old_private, new_private):
     changes = compare_source_structure(old, new, old_private, new_private)
+    if (old.get("generated_signatures") is not None
+            and new.get("generated_signatures") is not None
+            and old["generated_signatures"] != new["generated_signatures"]):
+        changes.append({"kind": "generated_ufunc_signatures_changed",
+                        "before": old["generated_signatures"],
+                        "after": new["generated_signatures"]})
     old_effective = old["effective_parameters"]
     new_effective = new["effective_parameters"]
     if old_effective is not None and new_effective is not None:
@@ -578,7 +627,8 @@ def relevant_git_diff(reader, old, new, old_private, new_private):
 
 
 # 6. Assemble two independent histories and coverage for every mapping pair.
-def build_history(reader, api, versions, validation, trace_versions=False):
+def build_history(reader, api, versions, validation, trace_versions=False,
+                  observations=None):
     states = []
     private_states = []
     presence = []
@@ -586,12 +636,14 @@ def build_history(reader, api, versions, validation, trace_versions=False):
     unresolved = []
     evidences = []
     for index, record in enumerate(versions, 1):
-        started = time.perf_counter()
-        if trace_versions:
+        started = time.perf_counter() if observations is None else None
+        if trace_versions and observations is None:
             print(f"  {api}: starting {index}/{len(versions)} "
                   f"version {record['version']}", file=sys.stderr, flush=True)
-        status, result, reason = read_api_state(
-            reader, record, api, validation[record["version"]])
+        status, result, reason = (observations[index - 1] if observations is not None
+                                  else read_api_state(
+                                      reader, record, api,
+                                      validation[record["version"]]))
         presence.append(status)
         if status == "present":
             state, private = result
@@ -603,12 +655,13 @@ def build_history(reader, api, versions, validation, trace_versions=False):
         else:
             unresolved.append({"version": record["version"],
                                "reason": reason or "source_resolution_unresolved"})
-        if trace_versions:
+        if trace_versions and observations is None:
             print(f"  {api}: finished {index}/{len(versions)} "
                   f"version {record['version']} ({status}, "
                   f"{time.perf_counter() - started:.2f}s)",
                   file=sys.stderr, flush=True)
-        elif index == 1 or index % 25 == 0 or index == len(versions):
+        elif observations is None and (
+                index == 1 or index % 25 == 0 or index == len(versions)):
             print(f"  {api}: {index}/{len(versions)} versions", file=sys.stderr,
                   flush=True)
 
@@ -711,10 +764,42 @@ def main(argv=None):
         apis = sorted({pair[role] for pair in pairs
                        for role in ("deprecated_api", "replacement_api")})
         histories = {}
-        for api in apis:
-            print(f"{args.library}: tracing {api}", file=sys.stderr, flush=True)
-            histories[api] = build_history(reader, api, versions, validation,
-                                           trace_versions=args.trace_versions)
+        if args.library == "tensorflow":
+            # The generated public namespace shares one expensive tf_export
+            # source index per release. Visit all APIs before moving to the
+            # next release so that the index and source tree stay cached.
+            prepare_candidate_paths(
+                repo, (api.removeprefix("tensorflow.") for api in apis))
+            observations = {api: [] for api in apis}
+            for index, record in enumerate(versions, 1):
+                version_started = time.perf_counter()
+                print(f"tensorflow: tracing version {index}/{len(versions)} "
+                      f"{record['version']}", file=sys.stderr, flush=True)
+                for api_index, api in enumerate(apis, 1):
+                    started = time.perf_counter()
+                    status, result, reason = read_api_state(
+                        reader, record, api, validation[record["version"]])
+                    observations[api].append((status, result, reason))
+                    if args.trace_versions:
+                        print(f"  {api}: {record['version']} ({status}, "
+                              f"{time.perf_counter() - started:.2f}s)",
+                              file=sys.stderr, flush=True)
+                    elif api_index % 25 == 0:
+                        print(f"  traced {api_index}/{len(apis)} APIs",
+                              file=sys.stderr, flush=True)
+                export_index.cache_clear()
+                print(f"tensorflow: finished version {record['version']} "
+                      f"({time.perf_counter() - version_started:.2f}s)",
+                      file=sys.stderr, flush=True)
+            for api in apis:
+                histories[api] = build_history(
+                    reader, api, versions, validation,
+                    observations=observations[api])
+        else:
+            for api in apis:
+                print(f"{args.library}: tracing {api}", file=sys.stderr, flush=True)
+                histories[api] = build_history(reader, api, versions, validation,
+                                               trace_versions=args.trace_versions)
         output = args.output or ROOT / "data" / args.library / "api_source_tracks.json"
         result = write_results(output, pairs, histories)
         print(f"Wrote {len(result)} mapping pairs to {output}", file=sys.stderr)

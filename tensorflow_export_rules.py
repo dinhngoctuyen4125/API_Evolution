@@ -10,9 +10,46 @@ from functools import lru_cache
 from source_evolution_rules import Resolution, dotted, module_statements
 
 
-@lru_cache(maxsize=64)
+_prepared_candidate_paths = {}
+
+
+def prepare_candidate_paths(repo, export_names):
+    """Scan the checkout once for all requested name hints.
+
+    The checkout only supplies candidate paths; lookup_tensorflow_export still
+    verifies every decorator in the selected Git commit.
+    """
+    names = set(export_names)
+    pending = {name for name in names if (repo, name) not in _prepared_candidate_paths}
+    if not pending:
+        return
+    paths = {name: set() for name in pending}
+    root = repo / "tensorflow"
+    if root.is_dir():
+        choices = "|".join(re.escape(name) for name in sorted(pending, key=len, reverse=True))
+        quoted = re.compile(r"(?P<quote>['\"])(?P<name>" + choices + r")(?P=quote)")
+        for path in root.rglob("*.py"):
+            if path.stem.endswith("_test") or "tests" in path.parts:
+                continue
+            try:
+                source = path.read_text(encoding="utf-8")
+            except (OSError, UnicodeError):
+                continue
+            if "tf_export" not in source:
+                continue
+            relative = path.relative_to(repo).as_posix()
+            for match in quoted.finditer(source):
+                paths[match.group("name")].add(relative)
+    for name, found in paths.items():
+        _prepared_candidate_paths[repo, name] = tuple(sorted(found))
+
+
+@lru_cache(maxsize=4096)
 def candidate_paths(repo, export_name):
     """Use the local checkout only to discover paths; verify every Git commit below."""
+    prepared = _prepared_candidate_paths.get((repo, export_name))
+    if prepared is not None:
+        return prepared
     root = repo / "tensorflow"
     if not root.is_dir():
         return ()

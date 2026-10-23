@@ -7,4 +7,5 @@
 !/data/api_mapping_*.json
 !expected_step_*.json
 !expected_step_*_new.json
+!/data/**/api_source_tracks.json
 /cache/
