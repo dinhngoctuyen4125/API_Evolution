@@ -14,9 +14,11 @@ from pathlib import Path
 from crawl_source import validate_source
 from enrich_pypi_versions import REPOSITORIES
 from source_evolution_rules import (
-    SourceReader, body_hash, dotted, expr, forwarding_wrapper_target, git,
-    module_statements, signature,
+    SourceReader, body_hash, docstring_spans, dotted, error_message_changes,
+    error_message_profile, expr, forwarding_wrapper_target, git, module_statements,
+    signature, source_structure,
 )
+from tensorflow_export_rules import lookup_tensorflow_export
 from torch_binding_rules import lookup_torch_python_binding
 
 
@@ -83,56 +85,89 @@ def validate_releases(repo, library, versions):
 
 # 3. Resolve a public binding and read its source declaration at one release.
 def find_binding(reader, sha, api, resolved):
+    def location(path, node):
+        return {"path": path, "line_start": node.lineno,
+                "line_end": node.end_lineno}
+
     parts = api.split(".")
     parent_api = ".".join(parts[:-1])
     if len(parts) > 2:
         parent = reader.resolve_api(sha, parent_api)
         if isinstance(parent.node, ast.ClassDef):
             return {"kind": "class_member", "path": resolved.path,
-                    "target": f"{resolved.module}.{parent.node.name}.{parts[-1]}"}
+                    "target": f"{resolved.module}.{parent.node.name}.{parts[-1]}"}, []
 
     module = parent_api if reader.module_file(sha, parent_api) else parts[0]
     name = parts[-1] if module == parent_api else parts[1]
     path = reader.module_file(sha, module)
     if not path:
         return {"kind": "resolved_export", "path": resolved.path,
-                "target": f"{resolved.module}.{getattr(resolved.node, 'name', name)}"}
+                "target": f"{resolved.module}.{getattr(resolved.node, 'name', name)}"}, []
     tree = reader.parse(sha, path)
     if tree is None:
         return {"kind": "resolved_export", "path": resolved.path,
-                "target": f"{resolved.module}.{getattr(resolved.node, 'name', name)}"}
+                "target": f"{resolved.module}.{getattr(resolved.node, 'name', name)}"}, []
 
     binding = None
+    binding_node = None
     wildcard = False
+    wildcard_node = None
     for node, _conditional in module_statements(tree.body):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) \
                 and node.name == name:
             binding = {"kind": "definition", "path": path,
                        "target": f"{module}.{name}"}
+            binding_node = node
         elif isinstance(node, (ast.Assign, ast.AnnAssign)):
             targets = node.targets if isinstance(node, ast.Assign) else [node.target]
             if any(isinstance(target, ast.Name) and target.id == name
                    for target in targets):
                 binding = {"kind": "alias", "path": path,
                            "target": dotted(node.value) or f"{module}.{name}"}
+                binding_node = node
         elif isinstance(node, ast.ImportFrom):
             for alias in node.names:
                 if alias.name == "*":
                     wildcard = True
+                    imported = reader.relative_module(sha, module, path, node)
+                    if imported == resolved.module:
+                        wildcard_node = node
                 elif (alias.asname or alias.name) == name:
                     imported = reader.relative_module(sha, module, path, node)
                     binding = {"kind": "import", "path": path,
                                "target": f"{imported}.{alias.name}" if imported else alias.name}
+                    binding_node = node
         elif isinstance(node, ast.Import):
             for alias in node.names:
                 if (alias.asname or alias.name.split(".")[0]) == name:
                     binding = {"kind": "import", "path": path,
                                "target": alias.name}
+                    binding_node = node
     if binding:
-        return binding
+        evidence = [] if binding["kind"] == "definition" else [
+            ("public_binding", location(path, binding_node))]
+        return binding, evidence
     target = f"{resolved.module}.{getattr(resolved.node, 'name', name)}"
+    evidence = []
+    if wildcard_node:
+        evidence.append(("public_import", location(path, wildcard_node)))
+        source_tree = reader.parse(sha, resolved.path)
+        for item, _conditional in module_statements(source_tree.body):
+            if not isinstance(item, (ast.Assign, ast.AnnAssign)):
+                continue
+            targets = item.targets if isinstance(item, ast.Assign) else [item.target]
+            if not any(isinstance(value, ast.Name) and value.id == "__all__"
+                       for value in targets):
+                continue
+            try:
+                exports = ast.literal_eval(item.value)
+            except (ValueError, TypeError, SyntaxError):
+                continue
+            if isinstance(exports, (list, tuple, set)) and name in exports:
+                evidence.append(("wildcard_export", location(resolved.path, item)))
+                break
     return {"kind": "wildcard_import" if wildcard else "submodule",
-            "path": path, "target": target}
+            "path": path, "target": target}, evidence
 
 
 def resolve_effective_parameters(reader, sha, resolved):
@@ -166,6 +201,18 @@ def read_api_state(reader, record, api, validation_reason):
     sha = record["commit_sha"]
     try:
         resolved = reader.resolve_api(sha, api)
+        tf_export_binding = None
+        if resolved.status != "present" and reader.library == "tensorflow":
+            tf_export_binding, export_reason = lookup_tensorflow_export(
+                reader, sha, api, record["version"])
+            if (export_reason in {"tf_export_other_generation",
+                                  "tf_export_name_absent"}
+                    and resolved.reason == "generated_public_namespace_unresolved"):
+                return "absent", None, export_reason
+            if export_reason:
+                return "unknown", None, export_reason
+            if tf_export_binding:
+                resolved = tf_export_binding["resolution"]
         if resolved.status != "present":
             binding = lookup_torch_python_binding(reader, sha, api)
             if binding:
@@ -177,16 +224,16 @@ def read_api_state(reader, record, api, validation_reason):
                         "path": binding["export"]["path"],
                         "target": f"torch._C._VariableFunctions.{api.split('.')[-1]}",
                     },
-                    # The binding is generated; the repository has no Python
-                    # function declaration whose parameters can be read here.
-                    "declared_parameters": None,
-                    "effective_parameters": None,
+                    "declared_parameters": binding["declared_parameters"],
+                    "effective_parameters": binding["effective_parameters"],
                     "return_annotation": None,
                     "evidence_refs": [],
                 }
-                private = {"body_hash": None, "binding_locations": [
+                private = {"body_hash": None, "binding_declaration": True,
+                           "binding_locations": [
                     ("binding_generator", binding["generator"]),
                     ("python_export", binding["export"]),
+                    *binding["parameter_evidence"],
                 ]}
                 return "present", (state, private), None
             return resolved.status, None, resolved.reason
@@ -194,20 +241,33 @@ def read_api_state(reader, record, api, validation_reason):
         declared = signature(node)
         effective, effective_resolution = resolve_effective_parameters(
             reader, sha, resolved)
+        if tf_export_binding:
+            public_binding = {"kind": "tf_export",
+                              "path": tf_export_binding["decorator"]["path"],
+                              "target": tf_export_binding["target"],
+                              "export_names": tf_export_binding["export_names"]}
+            binding_evidence = [("tf_export_decorator",
+                                 tf_export_binding["decorator"])]
+        else:
+            public_binding, binding_evidence = find_binding(reader, sha, api, resolved)
         state = {
             "version": record["version"],
             "commit_sha": sha,
             "source_location": {"path": resolved.path,
                                 "line_start": getattr(node, "lineno", None),
                                 "line_end": getattr(node, "end_lineno", None)},
-            "public_binding": find_binding(reader, sha, api, resolved),
+            "public_binding": public_binding,
             "declared_parameters": declared,
             "effective_parameters": effective,
             "return_annotation": expr(node.returns)
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) else None,
             "evidence_refs": [],
         }
-        private = {"body_hash": body_hash(node)}
+        private = {"body_hash": body_hash(node),
+                   "source_structure": source_structure(node),
+                   "error_message_profile": error_message_profile(node),
+                   "docstring_spans": docstring_spans(node),
+                   "binding_locations": binding_evidence}
         if effective_resolution and effective_resolution.path:
             target_node = effective_resolution.node
             private["effective_location"] = {
@@ -215,6 +275,7 @@ def read_api_state(reader, record, api, validation_reason):
                 "line_start": getattr(target_node, "lineno", None),
                 "line_end": getattr(target_node, "end_lineno", None),
             }
+            private["effective_docstring_spans"] = docstring_spans(target_node)
         return "present", (state, private), None
     except (OSError, RuntimeError) as exc:
         return "unknown", None, f"source_read_failed: {exc}"
@@ -261,8 +322,96 @@ def compare_parameters(before, after, scope):
     return changes
 
 
-def compare_states(old, new, old_private, new_private):
+def compare_source_structure(old, new, old_private, new_private):
+    before = old_private.get("source_structure")
+    after = new_private.get("source_structure")
+    if not before or not after:
+        return []
     changes = []
+    if before["kind"] != after["kind"]:
+        changes.append({"kind": "definition_kind_changed",
+                        "before": before["kind"], "after": after["kind"]})
+
+    def changed(field, kind, applicable):
+        if applicable and before.get(field) != after.get(field):
+            changes.append({"kind": kind, "before": before.get(field),
+                            "after": after.get(field)})
+
+    class_involved = "ClassDef" in (before["kind"], after["kind"])
+    assignment_involved = any(kind in ("Assign", "AnnAssign")
+                              for kind in (before["kind"], after["kind"]))
+    import_involved = any(kind in ("Import", "ImportFrom")
+                          for kind in (before["kind"], after["kind"]))
+    changed("bases", "class_bases_changed", class_involved)
+    changed("expression", "assignment_expression_changed", assignment_involved)
+    changed("annotation", "assignment_annotation_changed", assignment_involved)
+    if assignment_involved:
+        changed("targets", "assignment_targets_changed", True)
+    elif import_involved:
+        changed("targets", "import_targets_changed", True)
+        changed("module", "import_module_changed", True)
+        changed("level", "import_level_changed", True)
+
+    if not class_involved:
+        return changes
+    old_methods = before.get("methods", [])
+    new_methods = after.get("methods", [])
+    old_names = [method["name"] for method in old_methods]
+    new_names = [method["name"] for method in new_methods]
+    if len(set(old_names)) != len(old_names) or len(set(new_names)) != len(new_names):
+        # Repeated overload declarations cannot be paired safely by name.
+        def normalized(methods):
+            return [{key: method[key] for key in
+                     ("name", "kind", "parameters", "return_annotation", "body_hash")}
+                    for method in methods]
+        if normalized(old_methods) != normalized(new_methods):
+            changes.append({"kind": "declared_methods_changed",
+                            "scope": "direct_class_declaration",
+                            "before": old_names, "after": new_names})
+        return changes
+    old_by_name = {method["name"]: method for method in old_methods}
+    new_by_name = {method["name"]: method for method in new_methods}
+
+    def method_evidence(method, state):
+        return {"name": method["name"], "kind": method["kind"],
+                "parameters": method["parameters"],
+                "return_annotation": method["return_annotation"],
+                "source_location": {"path": state["source_location"]["path"],
+                                    "line_start": method["line_start"],
+                                    "line_end": method["line_end"]}}
+
+    for name in sorted(old_by_name.keys() - new_by_name.keys()):
+        changes.append({"kind": "declared_method_removed",
+                        "scope": "direct_class_declaration", "method": name,
+                        "before": method_evidence(old_by_name[name], old), "after": None})
+    for name in sorted(new_by_name.keys() - old_by_name.keys()):
+        changes.append({"kind": "declared_method_added",
+                        "scope": "direct_class_declaration", "method": name,
+                        "before": None, "after": method_evidence(new_by_name[name], new)})
+    for name in sorted(old_by_name.keys() & new_by_name.keys()):
+        old_method, new_method = old_by_name[name], new_by_name[name]
+        if old_method["kind"] != new_method["kind"]:
+            changes.append({"kind": "declared_method_kind_changed",
+                            "scope": "direct_class_declaration", "method": name,
+                            "before": old_method["kind"], "after": new_method["kind"]})
+        changes.extend(compare_parameters(old_method["parameters"],
+                                          new_method["parameters"],
+                                          f"declared_method:{name}"))
+        if old_method["return_annotation"] != new_method["return_annotation"]:
+            changes.append({"kind": "declared_method_return_annotation_changed",
+                            "method": name,
+                            "before": old_method["return_annotation"],
+                            "after": new_method["return_annotation"]})
+        if old_method["body_hash"] != new_method["body_hash"]:
+            changes.append({"kind": "declared_method_implementation_changed",
+                            "method": name,
+                            "before": method_evidence(old_method, old),
+                            "after": method_evidence(new_method, new)})
+    return changes
+
+
+def compare_states(old, new, old_private, new_private):
+    changes = compare_source_structure(old, new, old_private, new_private)
     old_effective = old["effective_parameters"]
     new_effective = new["effective_parameters"]
     if old_effective is not None and new_effective is not None:
@@ -276,6 +425,11 @@ def compare_states(old, new, old_private, new_private):
         # A missing effective signature must never be replaced by a guess.
         changes.extend(compare_parameters(old["declared_parameters"],
                                           new["declared_parameters"], "declared"))
+    if ((old["public_binding"]["kind"] == "generated_python_binding") !=
+            (new["public_binding"]["kind"] == "generated_python_binding")):
+        # ATen schema types and Python annotations are different source types.
+        changes = [change for change in changes
+                   if change["kind"] != "parameter_annotation_changed"]
     for field, kind in (("return_annotation", "return_annotation_changed"),
                         ("public_binding", "public_binding_changed")):
         if old[field] != new[field]:
@@ -287,7 +441,11 @@ def compare_states(old, new, old_private, new_private):
                         "after": new_path})
     old_hash, new_hash = old_private["body_hash"], new_private["body_hash"]
     if old_hash and new_hash and old_hash != new_hash:
-        changes.append({"kind": "implementation_changed",
+        message_only = error_message_changes(
+            old_private.get("error_message_profile"),
+            new_private.get("error_message_profile"))
+        changes.append({"kind": "error_message_changed" if message_only
+                        else "implementation_changed",
                         "before": {"version": old["version"], **old["source_location"]},
                         "after": {"version": new["version"], **new["source_location"]}})
     return changes
@@ -296,7 +454,7 @@ def compare_states(old, new, old_private, new_private):
 # 5. Attach a source location to each state and a focused Git diff to changes.
 def add_source_evidence(evidences, state, private):
     identifier = f"E{len(evidences) + 1:05d}"
-    source_type = ("binding_declaration" if private.get("binding_locations")
+    source_type = ("binding_declaration" if private.get("binding_declaration")
                    else "source")
     evidences.append({"id": identifier, "type": source_type,
                       "version": state["version"], "commit_sha": state["commit_sha"],
@@ -318,12 +476,37 @@ def add_source_evidence(evidences, state, private):
 
 
 def relevant_git_diff(reader, old, new, old_private, new_private):
+    message_spans = error_message_changes(
+        old_private.get("error_message_profile"),
+        new_private.get("error_message_profile"))
+
     def locations(state, private):
-        return [state["source_location"], private.get("effective_location")]
+        return [(state["source_location"], private.get("docstring_spans", [])),
+                (private.get("effective_location"),
+                 private.get("effective_docstring_spans", [])),
+                *((location, []) for evidence_type, location in
+                  private.get("binding_locations", [])
+                  if evidence_type == "tf_export_decorator")]
+
+    def classify_line(state, private, path, line, focus):
+        matches = [spans for location, spans in locations(state, private)
+                   if location and path == location["path"]
+                   and location["line_start"] is not None
+                   and location["line_start"] <= line <=
+                   (location["line_end"] or location["line_start"])]
+        if not matches:
+            return False, False, False
+        code = any(not any(start <= line <= end for start, end in spans)
+                   for spans in matches)
+        focused = bool(code and message_spans
+                       and path == state["source_location"]["path"]
+                       and any(start <= line <= end
+                               for start, end in message_spans[focus]))
+        return True, code, focused
 
     paths = sorted({location["path"] for state, private in (
         (old, old_private), (new, new_private))
-        for location in locations(state, private)
+        for location, _spans in locations(state, private)
         if location and location["path"]})
     if not paths:
         return None
@@ -337,8 +520,12 @@ def relevant_git_diff(reader, old, new, old_private, new_private):
     current = None
 
     def finish():
-        if current and current["relevant"]:
-            selected.append(current["text"][:3000])
+        if current and current["relevant"] and current["code"]:
+            excerpt = current["text"]
+            if len(excerpt) > 3000:
+                excerpt = (excerpt[:1450] + "\n... [diff excerpt truncated] ...\n"
+                           + excerpt[-1450:])
+            selected.append((current["focused"], excerpt))
 
     for line in result.stdout.splitlines():
         if line.startswith("diff --git "):
@@ -351,26 +538,37 @@ def relevant_git_diff(reader, old, new, old_private, new_private):
         elif line.startswith("@@ "):
             finish()
             match = headers.match(line)
-            relevant = False
-            if match:
-                for state, private, path, start, count in (
-                    (old, old_private, old_path, int(match[1]), int(match[2] or 1)),
-                    (new, new_private, new_path, int(match[3]), int(match[4] or 1)),
-                ):
-                    for location in locations(state, private):
-                        if not location:
-                            continue
-                        low, high = location["line_start"], location["line_end"]
-                        if path == location["path"] and low is not None:
-                            relevant |= start <= (high or low) and start + max(count, 1) >= low
-            current = {"relevant": relevant, "text": line}
+            current = {"relevant": False, "code": False, "focused": False,
+                       "text": line,
+                       "old_line": int(match[1]) if match else None,
+                       "new_line": int(match[3]) if match else None}
         elif current:
             current["text"] += "\n" + line
+            if line.startswith("-") and current["old_line"] is not None:
+                relevant, code, focused = classify_line(
+                    old, old_private, old_path, current["old_line"], 0)
+                current["relevant"] |= relevant
+                current["code"] |= code
+                current["focused"] |= focused
+                current["old_line"] += 1
+            elif line.startswith("+") and current["new_line"] is not None:
+                relevant, code, focused = classify_line(
+                    new, new_private, new_path, current["new_line"], 1)
+                current["relevant"] |= relevant
+                current["code"] |= code
+                current["focused"] |= focused
+                current["new_line"] += 1
+            elif line.startswith(" "):
+                if current["old_line"] is not None:
+                    current["old_line"] += 1
+                    current["new_line"] += 1
     finish()
+    if message_spans and any(focused for focused, _ in selected):
+        selected = [item for item in selected if item[0]]
     return {"type": "git_diff", "from_version": old["version"],
             "to_version": new["version"], "from_commit_sha": old["commit_sha"],
             "to_commit_sha": new["commit_sha"], "paths": paths,
-            "diff_excerpt": "\n".join(selected[:4])} if selected else None
+            "diff_excerpt": "\n".join(excerpt for _, excerpt in selected[:8])} if selected else None
 
 
 # 6. Assemble two independent histories and coverage for every mapping pair.
@@ -417,7 +615,7 @@ def build_history(reader, api, versions, validation):
         old, old_private = by_version[old_record["version"]]
         new, new_private = by_version[new_record["version"]]
         changes = compare_states(old, new, old_private, new_private)
-        refs = [*old["evidence_refs"], *new["evidence_refs"]] if changes else []
+        refs = [*old["evidence_refs"], *new["evidence_refs"]]
         status = "compared"
         if changes:
             try:
@@ -431,6 +629,17 @@ def build_history(reader, api, versions, validation):
                 unresolved_intervals.append({"from_version": old["version"],
                                              "to_version": new["version"],
                                              "reason": f"git_diff_failed: {exc}"})
+        elif old_private["body_hash"] and old_private["body_hash"] == new_private["body_hash"]:
+            identifier = f"E{len(evidences) + 1:05d}"
+            evidences.append({"id": identifier, "type": "ast_comparison",
+                              "from_version": old["version"],
+                              "to_version": new["version"],
+                              "from_commit_sha": old["commit_sha"],
+                              "to_commit_sha": new["commit_sha"],
+                              "hash_scope": "function_body_ast_excluding_docstring",
+                              "before_hash": old_private["body_hash"],
+                              "after_hash": new_private["body_hash"]})
+            refs.append(identifier)
         for change in changes:
             change["evidence_refs"] = refs.copy()
         transitions.append({"from_version": old["version"],

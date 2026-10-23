@@ -129,7 +129,7 @@ mapping_id, library
     ├── transitions[]                   # chỉ giữa hai release liền kề có API
     │   └── from_version, to_version, status, changes[], evidence_refs[]
     ├── coverage                        # version có/vắng/chưa rõ; khoảng đã/chưa so sánh
-    └── evidence[]                      # source location và Git diff theo ID
+    └── evidence[]                      # source, public binding, Git diff và so sánh AST theo ID
 ```
 
-`changes: []` nghĩa là không phát hiện thay đổi theo các rule đã chạy; không nối qua version vắng mặt hoặc chưa phân giải. Mốc công bố deprecation thuộc pha đọc release notes, còn đường tiến hóa chung của cặp thuộc pha tổng hợp sau đó. Với PyTorch, binding sinh mã chỉ được xác nhận khi tìm thấy khai báo, generator và đường export Python; tham số chưa chứng minh được để `null`.
+`changes: []` nghĩa là không phát hiện thay đổi theo các rule đã chạy; không nối qua version vắng mặt hoặc chưa phân giải. Mốc công bố deprecation thuộc pha đọc release notes, còn đường tiến hóa chung của cặp thuộc pha tổng hợp sau đó. Với PyTorch, tham số binding sinh mã lấy từ ATen schema; `effective_parameters` gộp overload `.out` khi generator xác nhận, còn `annotation` giữ nguyên kiểu ATen.

@@ -5,6 +5,7 @@ It resolves source bindings and signatures without importing target libraries.
 """
 
 import ast
+import copy
 import hashlib
 import re
 import subprocess
@@ -210,12 +211,179 @@ def executable_statements(node):
     return body
 
 
-def body_hash(node):
+def docstring_spans(node):
+    """Line spans of docstrings in a function and its nested definitions."""
+    if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+        return []
+    spans = []
+    for child in ast.walk(node):
+        if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) \
+                and child.body and isinstance(child.body[0], ast.Expr) \
+                and isinstance(child.body[0].value, ast.Constant) \
+                and isinstance(child.body[0].value.value, str):
+            doc = child.body[0]
+            spans.append((doc.lineno, doc.end_lineno))
+    return spans
+
+
+def executable_body(node):
+    """Copy a function body without docstrings, including nested definitions."""
     if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
         return None
-    body = executable_statements(node)
-    value = ast.dump(ast.Module(body=body, type_ignores=[]), include_attributes=False)
+
+    class WithoutDocstrings(ast.NodeTransformer):
+        def visit_FunctionDef(self, child):
+            self.generic_visit(child)
+            child.body = executable_statements(child)
+            return child
+
+        visit_AsyncFunctionDef = visit_FunctionDef
+        visit_ClassDef = visit_FunctionDef
+
+    cleaned = WithoutDocstrings().visit(copy.deepcopy(node))
+    return ast.Module(body=cleaned.body, type_ignores=[])
+
+
+def body_hash(node):
+    body = executable_body(node)
+    if body is None:
+        return None
+    value = ast.dump(body, include_attributes=False)
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def source_structure(node):
+    """Record directly declared Python structure, excluding docstring content."""
+    structure = {"kind": type(node).__name__}
+    if isinstance(node, ast.ClassDef):
+        structure["bases"] = [expr(base) for base in node.bases]
+        structure["methods"] = [
+            {"name": method.name, "kind": type(method).__name__,
+             "parameters": signature(method),
+             "return_annotation": expr(method.returns),
+             "line_start": method.lineno, "line_end": method.end_lineno,
+             "body_hash": body_hash(method)}
+            for method in node.body
+            if isinstance(method, (ast.FunctionDef, ast.AsyncFunctionDef))
+        ]
+    elif isinstance(node, (ast.Assign, ast.AnnAssign)):
+        targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+        structure["targets"] = [expr(target) for target in targets]
+        structure["expression"] = expr(node.value)
+        if isinstance(node, ast.AnnAssign):
+            structure["annotation"] = expr(node.annotation)
+    elif isinstance(node, ast.ImportFrom):
+        structure["module"] = node.module
+        structure["level"] = node.level
+        structure["targets"] = [
+            {"name": alias.name, "asname": alias.asname} for alias in node.names]
+    elif isinstance(node, ast.Import):
+        structure["targets"] = [
+            {"name": alias.name, "asname": alias.asname} for alias in node.names]
+    return structure
+
+
+def error_message_profile(node):
+    """Mask only strings used solely as exception messages in a copied body."""
+    body = executable_body(node)
+    if body is None:
+        return None
+
+    def simple_value(value):
+        if isinstance(value, (ast.Name, ast.Constant)):
+            return True
+        if isinstance(value, (ast.Tuple, ast.List)):
+            return all(simple_value(item) for item in value.elts)
+        return False
+
+    def string_expression(value):
+        if isinstance(value, ast.Constant):
+            return isinstance(value.value, str)
+        if isinstance(value, ast.JoinedStr):
+            return all(isinstance(item, ast.Constant)
+                       or (isinstance(item, ast.FormattedValue)
+                           and simple_value(item.value)) for item in value.values)
+        if isinstance(value, ast.BinOp) and isinstance(value.op, (ast.Add, ast.Mod)):
+            return string_expression(value.left) and (
+                string_expression(value.right) if isinstance(value.op, ast.Add)
+                else simple_value(value.right))
+        return (isinstance(value, ast.Call) and isinstance(value.func, ast.Attribute)
+                and value.func.attr == "format" and string_expression(value.func.value)
+                and all(simple_value(arg) for arg in value.args)
+                and all(simple_value(arg.value) for arg in value.keywords))
+
+    direct = set()
+    message_loads = {}
+    for child in ast.walk(body):
+        if not isinstance(child, ast.Raise) or not isinstance(child.exc, ast.Call) \
+                or not child.exc.args:
+            continue
+        exception = dotted(child.exc.func)
+        if not exception or not exception.rsplit(".", 1)[-1].endswith(
+                ("Error", "Exception")):
+            continue
+        message = child.exc.args[0]
+        if string_expression(message):
+            direct.add(id(message))
+        elif isinstance(message, ast.Name):
+            message_loads.setdefault(message.id, set()).add(id(message))
+
+    assignments = {}
+    for child in ast.walk(body):
+        if isinstance(child, ast.Assign) and len(child.targets) == 1 \
+                and isinstance(child.targets[0], ast.Name):
+            assignments.setdefault(child.targets[0].id, []).append(child)
+    safe_names = set()
+    for name, loads in message_loads.items():
+        all_loads = {id(child) for child in ast.walk(body)
+                     if isinstance(child, ast.Name) and child.id == name
+                     and isinstance(child.ctx, ast.Load)}
+        all_stores = {id(child) for child in ast.walk(body)
+                      if isinstance(child, ast.Name) and child.id == name
+                      and isinstance(child.ctx, ast.Store)}
+        assigned = assignments.get(name, [])
+        if (all_loads == loads
+                and all_stores == {id(item.targets[0]) for item in assigned}
+                and assigned and all(string_expression(item.value) for item in assigned)):
+            safe_names.add(name)
+
+    candidates = []
+
+    class MaskMessages(ast.NodeTransformer):
+        def mask(self, value):
+            candidates.append((ast.dump(value, include_attributes=False),
+                               (value.lineno, value.end_lineno)))
+            return ast.copy_location(ast.Constant(value="<error message>"), value)
+
+        def visit_Raise(self, child):
+            self.generic_visit(child)
+            if isinstance(child.exc, ast.Call) and child.exc.args \
+                    and id(child.exc.args[0]) in direct:
+                child.exc.args[0] = self.mask(child.exc.args[0])
+            return child
+
+        def visit_Assign(self, child):
+            self.generic_visit(child)
+            if len(child.targets) == 1 and isinstance(child.targets[0], ast.Name) \
+                    and child.targets[0].id in safe_names:
+                child.value = self.mask(child.value)
+            return child
+
+    MaskMessages().visit(body)
+    return {"shape": ast.dump(body, include_attributes=False),
+            "messages": candidates}
+
+
+def error_message_changes(before, after):
+    """Return source spans when the only body differences are error messages."""
+    if not before or not after or before["shape"] != after["shape"]:
+        return None
+    old_messages, new_messages = before["messages"], after["messages"]
+    if len(old_messages) != len(new_messages):
+        return None
+    changed = [(old[1], new[1]) for old, new in zip(old_messages, new_messages)
+               if old[0] != new[0]]
+    return ([old for old, _ in changed], [new for _, new in changed]) if changed else None
 
 
 # Public API resolution
@@ -265,14 +433,11 @@ def excludes_name(test, parameter, name):
     return False
 
 
-def getattr_excludes_name(node, name):
+def getattr_excludes_name(node, name, module_tree=None):
     """Prove a module __getattr__ cannot return this name; otherwise stay unknown."""
     if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) or not node.args.args:
         return False
     final = node.body[-1] if node.body else None
-    if not isinstance(final, ast.Raise) or not isinstance(final.exc, ast.Call) \
-            or dotted(final.exc.func) != "AttributeError":
-        return False
     parameter = node.args.args[0].arg
 
     def can_return(nodes):
@@ -290,7 +455,44 @@ def getattr_excludes_name(node, name):
                 return True
         return False
 
-    return not can_return(node.body)
+    if isinstance(final, ast.Raise) and isinstance(final.exc, ast.Call) \
+            and dotted(final.exc.func) == "AttributeError":
+        return not can_return(node.body)
+
+    # A guarded globals()[name] lookup can only return a binding already in the
+    # module namespace. The resolver has checked those bindings above.
+    guarded_lookup = (
+        isinstance(final, ast.Try) and len(final.body) == 1
+        and not final.orelse and not final.finalbody
+        and isinstance(final.body[0], ast.Return)
+        and isinstance(final.body[0].value, ast.Subscript)
+        and isinstance(final.body[0].value.value, ast.Call)
+        and dotted(final.body[0].value.value.func) == "globals"
+        and isinstance(final.body[0].value.slice, ast.Name)
+        and final.body[0].value.slice.id == parameter
+        and len(final.handlers) == 1
+        and dotted(final.handlers[0].type) == "KeyError"
+        and len(final.handlers[0].body) == 1
+        and isinstance(final.handlers[0].body[0], ast.Raise)
+        and dotted(final.handlers[0].body[0].exc) == "AttributeError"
+    )
+    if not guarded_lookup or module_tree is None:
+        return False
+    # Do not make a negative claim when source can add globals dynamically.
+    for item in ast.walk(module_tree):
+        if isinstance(item, ast.Subscript) and isinstance(item.ctx, ast.Store) \
+                and isinstance(item.value, ast.Call) \
+                and dotted(item.value.func) == "globals":
+            return False
+        if isinstance(item, ast.Call) and (
+            dotted(item.func) == "exec" or
+            (isinstance(item.func, ast.Attribute)
+             and item.func.attr in {"update", "setdefault"}
+             and isinstance(item.func.value, ast.Call)
+             and dotted(item.func.value.func) == "globals")
+        ):
+            return False
+    return not can_return(node.body[:-1])
 
 
 @dataclass
@@ -473,7 +675,8 @@ class SourceReader:
             and dotted(item.value.func) == "pkgload"
             for item, _ in statements
         )
-        if getters and not all(getattr_excludes_name(item, name) for item in getters):
+        if getters and not all(getattr_excludes_name(item, name, tree)
+                               for item in getters):
             uncertain = True
         uncertain |= dynamic_loader
         generated_root = module == self.root_module and module in GENERATED_PUBLIC_ROOTS
