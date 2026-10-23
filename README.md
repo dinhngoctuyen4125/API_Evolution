@@ -110,11 +110,7 @@ python crawl_source.py --library numpy --version 1.4.1
 
 **Mô tả:** Với mỗi cặp trong `data/api_mapping_pairs.json`, kiểm tra các Git
 commit theo `data/pypi_versions_with_github_diy.json`, rồi dựng hai lịch sử
-độc lập: một cho `deprecated_api`, một cho `replacement_api`. Chỉ đưa vào
-`versions[]` các release đã xác nhận API hiện diện. `coverage` ghi riêng release
-vắng mặt và release chưa thể xác định (`unknown`). Transition so sánh source
-giữa các release liền kề được trace; bước này không xác định mốc thông báo
-deprecation và không phân tích docstring hay release notes.
+độc lập: một cho `deprecated_api`, một cho `replacement_api`.
 
 **Chạy từng thư viện:**
 
@@ -129,33 +125,6 @@ Khi không truyền `--mapping-id` và không giới hạn version, script xử 
 mapping của thư viện trên tất cả release đã tuyển chọn và ghi đè
 `data/{library}/api_source_tracks.json`. Dùng `--trace-versions` để xem thời
 gian và kết quả của từng API ở từng release.
-
-Với Transformers, resolver đọc `define_import_structure` và `__all__` tại từng
-commit để truy từ public API đến module chứa định nghĩa. Tên class chỉ giúp chọn
-thư mục model cần kiểm tra. Nếu model ứng viên không xác nhận được export, trạng
-thái là `unknown` để tránh quét toàn bộ model và tránh kết luận `absent` thiếu
-bằng chứng. Resolver chung xử lý các release không nhận diện được cấu trúc lazy.
-
-```powershell
-python build_api_source_tracks.py --library transformers --mapping-id 117 --trace-versions
-```
-
-Với TensorFlow, chương trình tìm đường dẫn ứng viên cho mọi API bằng một lượt
-quét checkout, rồi truy theo từng release để dùng chung index `tf_export`.
-Vì thế log hiển thị `tracing version ...`, rồi `traced ... APIs`; kết quả vẫn là
-lịch sử riêng cho từng API. Việc xác nhận từng export dựa trên decorator trong
-source tại đúng commit.
-
-```powershell
-python build_api_source_tracks.py --library tensorflow --trace-versions
-```
-
-Với SciPy, resolver chung duyệt các `import *` trong module liên quan và có
-thể dùng `__all__` tĩnh để bỏ qua nhánh không chứa tên cần tìm. Rule riêng xác
-nhận một số export `scipy.special` từ `_ufuncs.pyx` hoặc
-`functions.json` cùng mã generator; method của đối tượng tạo từ class, như
-`scipy.stats.chi2.sf`, được truy qua class và lớp cơ sở. Khi source vẫn thiếu
-bằng chứng, trạng thái tiếp tục là `unknown`.
 
 **Schema** cho `data/{library}/api_source_tracks.json` (mỗi phần tử là một cặp):
 
@@ -176,11 +145,9 @@ mapping_id, library
     └── evidence[]                      # source, public binding, Git diff và so sánh AST theo ID
 ```
 
-`changes: []` nghĩa là không phát hiện thay đổi theo các rule đã chạy; không nối qua version vắng mặt hoặc chưa phân giải. Mốc công bố deprecation thuộc pha đọc release notes, còn đường tiến hóa chung của cặp thuộc pha tổng hợp sau đó. Với PyTorch, tham số binding sinh mã lấy từ ATen schema; `effective_parameters` gộp overload `.out` khi generator xác nhận, còn `annotation` giữ nguyên kiểu ATen.
-
 ## Bước 6 — Tổng hợp đường tiến hóa của cặp migration
 
-`build_migration_evolution.py` ghép từng cặp trong `data/api_mapping_pairs.json` với
+**Mô tả:** Ghép từng cặp trong `data/api_mapping_pairs.json` với
 `deprecated_version` trong `data/api_mapping_version.json` và hai lịch sử API của
 `data/{library}/api_source_tracks.json`. Script rút gọn source track thành các
 sự kiện có version và bằng chứng; `gpt-6-luna` chọn các mốc để hợp nhất. Output
@@ -199,23 +166,36 @@ python build_migration_evolution.py --library numpy --mapping-id 3
 python build_migration_evolution.py --library numpy --resume
 ```
 
-Output mặc định là `data/{library}/migration_evolution.json`; khi chọn một
+**Output:** mặc định là `data/{library}/migration_evolution.json`; khi chọn một
 `--mapping-id`, output mặc định là
 `data/{library}/migration_evolution_mapping_{id}.json` để không ghi đè file
-toàn thư viện. Những cặp thiếu deprecation record được báo và bỏ qua khi chạy
-cả thư viện; chọn trực tiếp một cặp thiếu input sẽ báo lỗi. Nếu version
-deprecation không nằm trong release đã trace, mốc đó có trạng thái API
-`unknown`. Chỉ ghi `removed` khi source track có chuyển tiếp trực tiếp từ
-`present` sang `absent`; một khoảng `unknown` không chứng minh API đã bị xóa.
-Trường `source` của mốc deprecation dẫn về record trong
-`api_mapping_version.json`, vì input này không chứa URL release note.
-Trong output, `compared_to_version` là mốc đã chọn ngay trước đó;
-`changes[].from_version` giữ bản source thực sự được so sánh tại bước 5.
-Mỗi `milestone` gồm `version`, `compared_to_version`, `api_states[]` của cả hai
-API và `changes[]` đã chọn. `api_states[].status` có thể là `active`,
-`deprecated`, `removed`, `absent` hoặc `unknown`; signature bằng `null` nếu
-source không xác nhận được API tại version đó. Mỗi change giữ API, loại thay
-đổi, giá trị trước/sau, version gốc để so sánh và bằng chứng source nếu có.
-Ví dụ `data/expected_step_5.json` chỉ minh họa cấu trúc: output giữ nguyên
-chuỗi version trong input, và không tự thêm diễn giải implementation hay URL
-release note khi input không cung cấp.
+toàn thư viện.
+
+**Schema dự kiến:**
+
+```text
+[]                                           # Một phần tử cho mỗi cặp migration
+└── mapping_id, library                      # ID cặp, tên thư viện
+    ├── seed                                 # deprecated_api, replacement_api
+    ├── deprecated_version: string           # Version có thông báo deprecated từ bước trước
+    ├── milestones[]                         # Các mốc hợp nhất theo thứ tự version
+    │   ├── version: string
+    │   ├── compared_to_version: string|null # Mốc trước đó; null ở mốc đầu tiên
+    │   ├── api_states[]                     # Trạng thái của cả hai API tại mốc này
+    │   │   └── name, status, signature, effective_signature
+    │   └── changes[]                        # Các thay đổi được chọn cho mốc này
+    │       ├── api, type, parameter
+    │       ├── old_value, new_value, from_version
+    │       └── source, delegates_to, source_evidence[]
+    └── model, input_digest                   # Model đã dùng, mã băm của input
+```
+
+`status` nhận một trong các giá trị `active`, `deprecated`, `removed`, `absent`,
+`unknown`. `signature` là chữ ký khai báo; `effective_signature` là chữ ký sau
+khi giải wrapper hoặc alias nếu xác định được. Hai trường này có thể là `null`.
+Trong `changes[]`, `type` có thể là `parameter_added`, `parameter_rename`,
+`default_changed`, `wrapper_changed`, `implementation_changed`, `deprecated`,
+`removed`, v.v. Các trường không áp dụng có giá trị `null`; `source_evidence[]`
+giữ vị trí source hoặc commit từ bước 5 nếu có. `source` trỏ tới bản ghi input
+đã dùng, không tự tạo URL release note. `from_version` của một thay đổi là
+version gốc trong source track, có thể khác `compared_to_version` của mốc.
