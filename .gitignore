@@ -4,7 +4,7 @@
 
 /data/**/*.json
 !/data/**/*_diy.json
-!/data/api_mapping_pairs.json
+!/data/api_mapping_*.json
 !expected_step_*.json
 !expected_step_*_new.json
 /cache/

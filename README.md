@@ -113,6 +113,15 @@ python crawl_source.py --library numpy --version 1.4.1
 python build_api_source_tracks.py --library numpy
 ```
 
+Với Transformers, resolver đọc `define_import_structure` và `__all__` tại từng
+commit để truy từ public API đến module chứa định nghĩa. Tên class chỉ giúp chọn
+thư mục model cần kiểm tra; nếu không xác nhận được export từ source hoặc có nhiều
+đích trùng tên, chương trình dùng resolver chung.
+
+```powershell
+python build_api_source_tracks.py --library transformers --mapping-id 117 --trace-versions
+```
+
 **Schema** cho `data/{library}/api_source_tracks.json` (mỗi phần tử là một cặp):
 
 ```text

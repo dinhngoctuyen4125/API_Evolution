@@ -21,6 +21,7 @@ from source_evolution_rules import (
 )
 from tensorflow_export_rules import lookup_tensorflow_export
 from torch_binding_rules import lookup_torch_python_binding
+from transformers_export_rules import lookup_transformers_export
 
 
 ROOT = Path(__file__).resolve().parent
@@ -201,7 +202,9 @@ def read_api_state(reader, record, api, validation_reason):
         return "unknown", None, validation_reason
     sha = record["commit_sha"]
     try:
-        resolved = reader.resolve_api(sha, api)
+        transformers_binding = lookup_transformers_export(reader, sha, api)
+        resolved = (transformers_binding[0] if transformers_binding
+                    else reader.resolve_api(sha, api))
         tf_export_binding = None
         if resolved.status != "present" and reader.library == "tensorflow":
             tf_export_binding, export_reason = lookup_tensorflow_export(
@@ -249,6 +252,8 @@ def read_api_state(reader, record, api, validation_reason):
                               "export_names": tf_export_binding["export_names"]}
             binding_evidence = [("tf_export_decorator",
                                  tf_export_binding["decorator"])]
+        elif transformers_binding:
+            public_binding, binding_evidence = transformers_binding[1:]
         else:
             public_binding, binding_evidence = find_binding(reader, sha, api, resolved)
         state = {
