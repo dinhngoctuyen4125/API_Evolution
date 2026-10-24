@@ -12,11 +12,14 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 PROMPT = ROOT / "prompts" / "migration_evolution.txt"
 MODEL = "gpt-6-luna"
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
 def version_key(version):
@@ -355,19 +358,41 @@ def render_milestones(facts, selection, version_states, statuses):
     return result
 
 
-def call_model(client, prompt, facts, model):
-    response = client.responses.create(
-        model=model, reasoning={"effort": "low"},
-        input=[{"role": "system", "content": prompt},
-               {"role": "user", "content": json.dumps(facts, ensure_ascii=False,
-                                                         separators=(",", ":"))}],
-        text={"format": {"type": "json_schema", "name": "migration_milestones",
-                         "strict": True, "schema": RESPONSE_SCHEMA}},
-        store=False,
-    )
-    if response.status != "completed" or not response.output_text:
-        raise RuntimeError(f"Model response incomplete: {response.status}")
-    return json.loads(response.output_text)
+def provider_model(model, provider):
+    if provider == "openrouter" and "/" not in model:
+        return f"openai/{model}"
+    if provider == "openai" and model.startswith("openai/"):
+        return model.removeprefix("openai/")
+    return model
+
+
+def call_model(client, prompt, facts, model, provider):
+    messages = [{"role": "system", "content": prompt},
+                {"role": "user", "content": json.dumps(
+                    facts, ensure_ascii=False, separators=(",", ":"))}]
+    if provider == "openrouter":
+        response = client.chat.completions.create(
+            model=model, messages=messages,
+            response_format={"type": "json_schema", "json_schema": {
+                "name": "migration_milestones", "strict": True,
+                "schema": RESPONSE_SCHEMA}},
+        )
+        if not response.choices or response.choices[0].finish_reason != "stop":
+            raise RuntimeError("Model response incomplete")
+        content = response.choices[0].message.content
+    else:
+        response = client.responses.create(
+            model=model, reasoning={"effort": "low"}, input=messages,
+            text={"format": {"type": "json_schema", "name": "migration_milestones",
+                             "strict": True, "schema": RESPONSE_SCHEMA}},
+            store=False,
+        )
+        if response.status != "completed":
+            raise RuntimeError(f"Model response incomplete: {response.status}")
+        content = response.output_text
+    if not content:
+        raise RuntimeError("Model response has no JSON content")
+    return json.loads(content)
 
 
 def main(argv=None):
@@ -375,6 +400,8 @@ def main(argv=None):
     parser.add_argument("--library", required=True)
     parser.add_argument("--mapping-id", type=int)
     parser.add_argument("--model", default=MODEL)
+    parser.add_argument("--provider", choices=("openrouter", "openai"),
+                        help="Defaults to OpenRouter when OPENROUTER_API_KEY is set")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--dry-run", action="store_true",
                         help="Print one model input without calling the API")
@@ -382,6 +409,7 @@ def main(argv=None):
                         help="Reuse output entries with the same input digest")
     args = parser.parse_args(argv)
     try:
+        load_dotenv(ROOT / ".env")
         ready, missing = load_inputs(args.library, args.mapping_id)
         for mapping_id, reason in missing:
             print(f"Skipping mapping {mapping_id}: missing {reason}", file=sys.stderr)
@@ -390,18 +418,26 @@ def main(argv=None):
         if not ready:
             raise ValueError("No mappings have both inputs")
         prompt = PROMPT.read_text(encoding="utf-8")
+        provider = args.provider or ("openrouter" if os.getenv("OPENROUTER_API_KEY")
+                                     else "openai")
+        model = provider_model(args.model, provider)
         if args.dry_run:
             facts, _, _ = build_facts(*ready[0])
-            print(json.dumps({"model": args.model, "instructions": prompt,
+            print(json.dumps({"provider": provider, "model": model,
+                              "instructions": prompt,
                               "input": facts}, ensure_ascii=False, indent=2))
             return
-        if not os.getenv("OPENAI_API_KEY"):
-            raise ValueError("Set OPENAI_API_KEY before calling the model")
+        key_name = "OPENROUTER_API_KEY" if provider == "openrouter" else "OPENAI_API_KEY"
+        api_key = os.getenv(key_name)
+        if not api_key:
+            raise ValueError(f"Set {key_name} before calling the model")
         try:
             from openai import OpenAI
         except ImportError as exc:
-            raise ValueError("Install requirements.txt to use the OpenAI API") from exc
-        client = OpenAI(timeout=180, max_retries=2)
+            raise ValueError("Install requirements.txt to use the model API") from exc
+        client = OpenAI(api_key=api_key, timeout=180, max_retries=2,
+                        **({"base_url": OPENROUTER_BASE_URL}
+                           if provider == "openrouter" else {}))
         default_name = (f"migration_evolution_mapping_{args.mapping_id}.json"
                         if args.mapping_id is not None else "migration_evolution.json")
         output = args.output or DATA / args.library / default_name
@@ -410,20 +446,20 @@ def main(argv=None):
         for index, (pair, announcement, track) in enumerate(ready, 1):
             facts, version_states, statuses = build_facts(pair, announcement, track)
             digest = hashlib.sha256(json.dumps(
-                [args.model, prompt, facts], ensure_ascii=False,
+                [provider, model, prompt, facts], ensure_ascii=False,
                 sort_keys=True).encode("utf-8")).hexdigest()
             if args.resume and results.get(pair["id"], {}).get("input_digest") == digest:
                 print(f"{index}/{len(ready)} mapping {pair['id']}: reused", file=sys.stderr)
                 continue
             print(f"{index}/{len(ready)} mapping {pair['id']}: {len(facts['candidate_events'])} "
                   "events", file=sys.stderr, flush=True)
-            selection = validate_selection(call_model(client, prompt, facts, args.model),
+            selection = validate_selection(call_model(client, prompt, facts, model, provider),
                                            facts["candidate_events"])
             results[pair["id"]] = {
                 "mapping_id": pair["id"], "library": pair["library"],
                 "seed": facts["seed"], "deprecated_version": facts["deprecated_version"],
                 "milestones": render_milestones(facts, selection, version_states, statuses),
-                "model": args.model, "input_digest": digest,
+                "model": model, "input_digest": digest,
             }
             write_json(output, [results[key] for key in sorted(results)])
         print(f"Wrote {len(results)} migration histories to {output}", file=sys.stderr)

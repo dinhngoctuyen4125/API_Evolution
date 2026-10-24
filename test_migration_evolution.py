@@ -2,13 +2,29 @@
 
 import unittest
 from collections import defaultdict
+from types import SimpleNamespace
+from unittest.mock import Mock
 
 from build_migration_evolution import (
-    build_facts, load_inputs, render_milestones, validate_selection, version_key,
+    build_facts, call_model, load_inputs, provider_model, render_milestones,
+    validate_selection, version_key,
 )
 
 
 class MigrationEvolutionTest(unittest.TestCase):
+    def test_openrouter_uses_qualified_model_and_json_schema(self):
+        client = Mock()
+        client.chat.completions.create.return_value = SimpleNamespace(choices=[
+            SimpleNamespace(finish_reason="stop", message=SimpleNamespace(
+                content='{"milestones": []}'))])
+        model = provider_model("gpt-6-luna", "openrouter")
+        self.assertEqual(model, "openai/gpt-6-luna")
+        self.assertEqual(call_model(client, "prompt", {"mapping_id": 1}, model,
+                                    "openrouter"), {"milestones": []})
+        request = client.chat.completions.create.call_args.kwargs
+        self.assertEqual(request["model"], model)
+        self.assertEqual(request["response_format"]["type"], "json_schema")
+
     def test_numpy_pair_merges_source_and_announcement(self):
         ready, missing = load_inputs("numpy", 3)
         self.assertFalse(missing)

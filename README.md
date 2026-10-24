@@ -156,7 +156,7 @@ từ dữ liệu gốc. Bước này không đọc release notes hay docstring.
 
 ```powershell
 pip install -r requirements.txt
-$env:OPENAI_API_KEY = "..."
+$env:OPENROUTER_API_KEY = "sk-or-v1-..."
 
 # Xem input gửi cho model, không gọi API.
 python build_migration_evolution.py --library numpy --mapping-id 3 --dry-run
@@ -165,6 +165,16 @@ python build_migration_evolution.py --library numpy --mapping-id 3 --dry-run
 python build_migration_evolution.py --library numpy --mapping-id 3
 python build_migration_evolution.py --library numpy --resume
 ```
+
+Script tự chọn OpenRouter khi có `OPENROUTER_API_KEY`; model mặc định được gửi
+dưới tên `openai/gpt-6-luna`. Có thể đặt key trong file `.env` ở thư mục gốc:
+
+```ini
+OPENROUTER_API_KEY=sk-or-v1-...
+```
+
+File `.env` được bỏ qua bởi Git. Nếu muốn gọi OpenAI trực tiếp, đặt
+`OPENAI_API_KEY` và thêm `--provider openai`.
 
 **Output:** mặc định là `data/{library}/migration_evolution.json`; khi chọn một
 `--mapping-id`, output mặc định là
