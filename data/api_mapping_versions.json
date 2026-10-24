@@ -130,21 +130,21 @@
     "library": "pytorch",
     "deprecated_api": "torch.lu",
     "replacement_api": "torch.linalg.lu_factor",
-    "deprecated_version": "1.13.0"
+    "deprecated_version": "1.12.0"
   },
   {
     "id": 20,
     "library": "pytorch",
     "deprecated_api": "torch.lu_solve",
     "replacement_api": "torch.linalg.lu_solve",
-    "deprecated_version": "1.13.0"
+    "deprecated_version": "1.12.0"
   },
   {
     "id": 21,
     "library": "pytorch",
     "deprecated_api": "torch.matrix_rank",
     "replacement_api": "torch.linalg.matrix_rank",
-    "deprecated_version": "1.8.0"
+    "deprecated_version": "1.9.0"
   },
   {
     "id": 22,
@@ -158,14 +158,14 @@
     "library": "pytorch",
     "deprecated_api": "torch.nn.functional.upsample_bilinear",
     "replacement_api": "torch.nn.functional.interpolate",
-    "deprecated_version": "0.2.0"
+    "deprecated_version": "0.4.1"
   },
   {
     "id": 24,
     "library": "pytorch",
     "deprecated_api": "torch.nn.functional.upsample_nearest",
     "replacement_api": "torch.nn.functional.interpolate",
-    "deprecated_version": "0.2.0"
+    "deprecated_version": "0.4.1"
   },
   {
     "id": 25,
@@ -186,7 +186,7 @@
     "library": "pytorch",
     "deprecated_api": "torch.nn.utils.weight_norm",
     "replacement_api": "torch.nn.utils.parametrizations.weight_norm",
-    "deprecated_version": "2.1.0"
+    "deprecated_version": "2.2.0"
   },
   {
     "id": 28,
@@ -200,7 +200,7 @@
     "library": "pytorch",
     "deprecated_api": "torch.qr",
     "replacement_api": "torch.linalg.qr",
-    "deprecated_version": "1.8.0"
+    "deprecated_version": "1.9.0"
   },
   {
     "id": 30,
@@ -214,7 +214,7 @@
     "library": "pytorch",
     "deprecated_api": "torch.svd",
     "replacement_api": "torch.linalg.svd",
-    "deprecated_version": "1.8.0"
+    "deprecated_version": "1.9.0"
   },
   {
     "id": 32,
@@ -228,7 +228,7 @@
     "library": "pytorch",
     "deprecated_api": "torch.testing.assert_allclose",
     "replacement_api": "torch.testing.assert_close",
-    "deprecated_version": "1.12.0"
+    "deprecated_version": "1.10.0"
   },
   {
     "id": 34,
@@ -312,7 +312,7 @@
     "library": "scipy",
     "deprecated_api": "scipy.signal.hanning",
     "replacement_api": "scipy.signal.windows.hann",
-    "deprecated_version": "1.1.0"
+    "deprecated_version": "1.9.0"
   },
   {
     "id": 46,
@@ -403,84 +403,84 @@
     "library": "tensorflow",
     "deprecated_api": "tensorflow.Print",
     "replacement_api": "tensorflow.print",
-    "deprecated_version": "1.12.0"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 61,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.all_variables",
     "replacement_api": "tensorflow.global_variables",
-    "deprecated_version": "0.12.0"
+    "deprecated_version": "1.13.1"
   },
   {
     "id": 62,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.arg_max",
     "replacement_api": "tensorflow.math.argmax",
-    "deprecated_version": "1.3.0"
+    "deprecated_version": "1.13.1"
   },
   {
     "id": 63,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.arg_min",
     "replacement_api": "tensorflow.math.argmin",
-    "deprecated_version": "1.3.0"
+    "deprecated_version": "1.13.1"
   },
   {
     "id": 64,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.Print",
     "replacement_api": "tensorflow.print",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 65,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.all_variables",
     "replacement_api": "tensorflow.global_variables",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 66,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.arg_max",
     "replacement_api": "tensorflow.math.argmax",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 67,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.arg_min",
     "replacement_api": "tensorflow.math.argmin",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 68,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.div",
     "replacement_api": "tensorflow.divide",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 69,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.initialize_all_variables",
     "replacement_api": "tensorflow.global_variables_initializer",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 70,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.initializers.uniform_unit_scaling",
     "replacement_api": "tensorflow.initializers.variance_scaling",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 71,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.metrics.auc",
     "replacement_api": "tensorflow.keras.metrics.AUC",
-    "deprecated_version": "2.1.0"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 72,
@@ -515,112 +515,112 @@
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.multinomial",
     "replacement_api": "tensorflow.random.categorical",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 77,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.random.multinomial",
     "replacement_api": "tensorflow.random.categorical",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 78,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.saved_model.load",
     "replacement_api": "tensorflow.saved_model.load",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 79,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.saved_model.loader.load",
     "replacement_api": "tensorflow.saved_model.load",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 80,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.sparse_to_dense",
     "replacement_api": "tensorflow.sparse.to_dense",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 81,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.substr",
     "replacement_api": "tensorflow.strings.substr",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 82,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.to_bfloat16",
     "replacement_api": "tensorflow.cast",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 83,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.to_complex128",
     "replacement_api": "tensorflow.cast",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 84,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.to_complex64",
     "replacement_api": "tensorflow.cast",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 85,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.to_double",
     "replacement_api": "tensorflow.cast",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 86,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.to_float",
     "replacement_api": "tensorflow.cast",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 87,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.to_int32",
     "replacement_api": "tensorflow.cast",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 88,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.to_int64",
     "replacement_api": "tensorflow.cast",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 89,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.train.experimental.DynamicLossScale",
     "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer",
-    "deprecated_version": "2.1.0"
+    "deprecated_version": "2.4.0"
   },
   {
     "id": 90,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.train.experimental.FixedLossScale",
     "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer",
-    "deprecated_version": "2.1.0"
+    "deprecated_version": "2.4.0"
   },
   {
     "id": 91,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.compat.v1.uniform_unit_scaling_initializer",
     "replacement_api": "tensorflow.initializers.variance_scaling",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 92,
@@ -641,21 +641,42 @@
     "library": "tensorflow",
     "deprecated_api": "tensorflow.div",
     "replacement_api": "tensorflow.divide",
-    "deprecated_version": "1.13.1"
+    "deprecated_version": "1.0.0"
   },
   {
     "id": 95,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.initialize_all_variables",
     "replacement_api": "tensorflow.global_variables_initializer",
-    "deprecated_version": "0.12.0"
+    "deprecated_version": "1.13.1"
   },
   {
     "id": 96,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.initializers.uniform_unit_scaling",
     "replacement_api": "tensorflow.initializers.variance_scaling",
-    "deprecated_version": "1.4.0"
+    "deprecated_version": "2.0.0"
+  },
+  {
+    "id": 97,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.metrics.auc",
+    "replacement_api": "tensorflow.keras.metrics.AUC",
+    "deprecated_version": "2.0.0"
+  },
+  {
+    "id": 98,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.mixed_precision.experimental.DynamicLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer",
+    "deprecated_version": "2.4.0"
+  },
+  {
+    "id": 99,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.mixed_precision.experimental.FixedLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer",
+    "deprecated_version": "2.4.0"
   },
   {
     "id": 100,
@@ -697,7 +718,7 @@
     "library": "tensorflow",
     "deprecated_api": "tensorflow.sparse_to_dense",
     "replacement_api": "tensorflow.sparse.to_dense",
-    "deprecated_version": "1.12.0"
+    "deprecated_version": "2.0.0"
   },
   {
     "id": 106,
@@ -760,77 +781,77 @@
     "library": "tensorflow",
     "deprecated_api": "tensorflow.train.experimental.DynamicLossScale",
     "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer",
-    "deprecated_version": "2.1.0"
+    "deprecated_version": "2.4.0"
   },
   {
     "id": 115,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.train.experimental.FixedLossScale",
     "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer",
-    "deprecated_version": "2.1.0"
+    "deprecated_version": "2.4.0"
   },
   {
     "id": 116,
     "library": "tensorflow",
     "deprecated_api": "tensorflow.uniform_unit_scaling_initializer",
     "replacement_api": "tensorflow.initializers.variance_scaling",
-    "deprecated_version": "1.4.0"
+    "deprecated_version": "1.13.1"
   },
   {
     "id": 117,
     "library": "transformers",
     "deprecated_api": "transformers.BeitFeatureExtractor",
     "replacement_api": "transformers.BeitImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 118,
     "library": "transformers",
     "deprecated_api": "transformers.ConditionalDetrFeatureExtractor",
     "replacement_api": "transformers.ConditionalDetrImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 119,
     "library": "transformers",
     "deprecated_api": "transformers.ConvNextFeatureExtractor",
     "replacement_api": "transformers.ConvNextImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 120,
     "library": "transformers",
     "deprecated_api": "transformers.DPTFeatureExtractor",
     "replacement_api": "transformers.DPTImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 121,
     "library": "transformers",
     "deprecated_api": "transformers.DeformableDetrFeatureExtractor",
     "replacement_api": "transformers.DeformableDetrImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 122,
     "library": "transformers",
     "deprecated_api": "transformers.DetrFeatureExtractor",
     "replacement_api": "transformers.DetrImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 123,
     "library": "transformers",
     "deprecated_api": "transformers.DonutFeatureExtractor",
     "replacement_api": "transformers.DonutImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 124,
     "library": "transformers",
     "deprecated_api": "transformers.GLPNFeatureExtractor",
     "replacement_api": "transformers.GLPNImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 125,
@@ -844,49 +865,49 @@
     "library": "transformers",
     "deprecated_api": "transformers.LayoutLMv2FeatureExtractor",
     "replacement_api": "transformers.LayoutLMv2ImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 127,
     "library": "transformers",
     "deprecated_api": "transformers.MaskFormerFeatureExtractor",
     "replacement_api": "transformers.MaskFormerImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 128,
     "library": "transformers",
     "deprecated_api": "transformers.MobileNetV1FeatureExtractor",
     "replacement_api": "transformers.MobileNetV1ImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 129,
     "library": "transformers",
     "deprecated_api": "transformers.MobileViTFeatureExtractor",
     "replacement_api": "transformers.MobileViTImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 130,
     "library": "transformers",
     "deprecated_api": "transformers.OwlViTFeatureExtractor",
     "replacement_api": "transformers.OwlViTImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 131,
     "library": "transformers",
     "deprecated_api": "transformers.PerceiverFeatureExtractor",
     "replacement_api": "transformers.PerceiverImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 132,
     "library": "transformers",
     "deprecated_api": "transformers.PoolFormerFeatureExtractor",
     "replacement_api": "transformers.PoolFormerImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 133,
@@ -903,11 +924,18 @@
     "deprecated_version": "4.16.0"
   },
   {
+    "id": 135,
+    "library": "transformers",
+    "deprecated_api": "transformers.SEWForSequenceClassification.freeze_feature_extractor",
+    "replacement_api": "transformers.SEWForSequenceClassification.freeze_feature_encoder",
+    "deprecated_version": "4.16.0"
+  },
+  {
     "id": 136,
     "library": "transformers",
     "deprecated_api": "transformers.SegformerFeatureExtractor",
     "replacement_api": "transformers.SegformerImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 137,
@@ -942,14 +970,14 @@
     "library": "transformers",
     "deprecated_api": "transformers.ViTFeatureExtractor",
     "replacement_api": "transformers.ViTImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 142,
     "library": "transformers",
     "deprecated_api": "transformers.VideoMAEFeatureExtractor",
     "replacement_api": "transformers.VideoMAEImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   },
   {
     "id": 143,
@@ -970,6 +998,6 @@
     "library": "transformers",
     "deprecated_api": "transformers.YolosFeatureExtractor",
     "replacement_api": "transformers.YolosImageProcessor",
-    "deprecated_version": "4.26.0"
+    "deprecated_version": "4.25.1"
   }
 ]
