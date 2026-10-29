@@ -1,0 +1,872 @@
+[
+  {
+    "id": 1,
+    "library": "numpy",
+    "deprecated_api": "numpy.alltrue",
+    "replacement_api": "numpy.all"
+  },
+  {
+    "id": 2,
+    "library": "numpy",
+    "deprecated_api": "numpy.cumproduct",
+    "replacement_api": "numpy.cumprod"
+  },
+  {
+    "id": 3,
+    "library": "numpy",
+    "deprecated_api": "numpy.product",
+    "replacement_api": "numpy.prod"
+  },
+  {
+    "id": 4,
+    "library": "pandas",
+    "deprecated_api": "pandas.DataFrame.applymap",
+    "replacement_api": "pandas.DataFrame.map"
+  },
+  {
+    "id": 5,
+    "library": "pandas",
+    "deprecated_api": "pandas.DataFrame.first",
+    "replacement_api": "pandas.DataFrame.loc"
+  },
+  {
+    "id": 6,
+    "library": "pandas",
+    "deprecated_api": "pandas.DataFrame.iteritems",
+    "replacement_api": "pandas.DataFrame.items"
+  },
+  {
+    "id": 7,
+    "library": "pandas",
+    "deprecated_api": "pandas.DataFrame.last",
+    "replacement_api": "pandas.DataFrame.loc"
+  },
+  {
+    "id": 8,
+    "library": "pandas",
+    "deprecated_api": "pandas.DataFrame.pad",
+    "replacement_api": "pandas.DataFrame.ffill"
+  },
+  {
+    "id": 9,
+    "library": "pandas",
+    "deprecated_api": "pandas.DataFrame.select",
+    "replacement_api": "pandas.DataFrame.loc"
+  },
+  {
+    "id": 10,
+    "library": "pandas",
+    "deprecated_api": "pandas.DataFrame.swapaxes",
+    "replacement_api": "pandas.DataFrame.transpose"
+  },
+  {
+    "id": 11,
+    "library": "pandas",
+    "deprecated_api": "pandas.Series.iteritems",
+    "replacement_api": "pandas.Series.items"
+  },
+  {
+    "id": 12,
+    "library": "pandas",
+    "deprecated_api": "pandas.Series.pad",
+    "replacement_api": "pandas.Series.ffill"
+  },
+  {
+    "id": 13,
+    "library": "pandas",
+    "deprecated_api": "pandas.io.formats.style.Styler.render",
+    "replacement_api": "pandas.io.formats.style.Styler.to_html"
+  },
+  {
+    "id": 14,
+    "library": "pytorch",
+    "deprecated_api": "torch.btriunpack",
+    "replacement_api": "torch.lu_unpack"
+  },
+  {
+    "id": 15,
+    "library": "pytorch",
+    "deprecated_api": "torch.chain_matmul",
+    "replacement_api": "torch.linalg.multi_dot"
+  },
+  {
+    "id": 16,
+    "library": "pytorch",
+    "deprecated_api": "torch.cholesky",
+    "replacement_api": "torch.linalg.cholesky"
+  },
+  {
+    "id": 17,
+    "library": "pytorch",
+    "deprecated_api": "torch.eig",
+    "replacement_api": "torch.linalg.eig"
+  },
+  {
+    "id": 18,
+    "library": "pytorch",
+    "deprecated_api": "torch.lstsq",
+    "replacement_api": "torch.linalg.lstsq"
+  },
+  {
+    "id": 19,
+    "library": "pytorch",
+    "deprecated_api": "torch.lu",
+    "replacement_api": "torch.linalg.lu_factor"
+  },
+  {
+    "id": 20,
+    "library": "pytorch",
+    "deprecated_api": "torch.lu_solve",
+    "replacement_api": "torch.linalg.lu_solve"
+  },
+  {
+    "id": 21,
+    "library": "pytorch",
+    "deprecated_api": "torch.matrix_rank",
+    "replacement_api": "torch.linalg.matrix_rank"
+  },
+  {
+    "id": 22,
+    "library": "pytorch",
+    "deprecated_api": "torch.nn.functional.upsample",
+    "replacement_api": "torch.nn.functional.interpolate"
+  },
+  {
+    "id": 23,
+    "library": "pytorch",
+    "deprecated_api": "torch.nn.functional.upsample_bilinear",
+    "replacement_api": "torch.nn.functional.interpolate"
+  },
+  {
+    "id": 24,
+    "library": "pytorch",
+    "deprecated_api": "torch.nn.functional.upsample_nearest",
+    "replacement_api": "torch.nn.functional.interpolate"
+  },
+  {
+    "id": 25,
+    "library": "pytorch",
+    "deprecated_api": "torch.nn.modules.module.register_module_backward_hook",
+    "replacement_api": "torch.nn.modules.module.register_module_full_backward_hook"
+  },
+  {
+    "id": 26,
+    "library": "pytorch",
+    "deprecated_api": "torch.nn.utils.stateless.functional_call",
+    "replacement_api": "torch.func.functional_call"
+  },
+  {
+    "id": 27,
+    "library": "pytorch",
+    "deprecated_api": "torch.nn.utils.weight_norm",
+    "replacement_api": "torch.nn.utils.parametrizations.weight_norm"
+  },
+  {
+    "id": 28,
+    "library": "pytorch",
+    "deprecated_api": "torch.norm",
+    "replacement_api": "torch.linalg.norm"
+  },
+  {
+    "id": 29,
+    "library": "pytorch",
+    "deprecated_api": "torch.qr",
+    "replacement_api": "torch.linalg.qr"
+  },
+  {
+    "id": 30,
+    "library": "pytorch",
+    "deprecated_api": "torch.solve",
+    "replacement_api": "torch.linalg.solve"
+  },
+  {
+    "id": 31,
+    "library": "pytorch",
+    "deprecated_api": "torch.svd",
+    "replacement_api": "torch.linalg.svd"
+  },
+  {
+    "id": 32,
+    "library": "pytorch",
+    "deprecated_api": "torch.symeig",
+    "replacement_api": "torch.linalg.eigh"
+  },
+  {
+    "id": 33,
+    "library": "pytorch",
+    "deprecated_api": "torch.testing.assert_allclose",
+    "replacement_api": "torch.testing.assert_close"
+  },
+  {
+    "id": 34,
+    "library": "pytorch",
+    "deprecated_api": "torch.triangular_solve",
+    "replacement_api": "torch.linalg.solve_triangular"
+  },
+  {
+    "id": 35,
+    "library": "scipy",
+    "deprecated_api": "scipy.integrate.cumtrapz",
+    "replacement_api": "scipy.integrate.cumulative_trapezoid"
+  },
+  {
+    "id": 36,
+    "library": "scipy",
+    "deprecated_api": "scipy.integrate.simps",
+    "replacement_api": "scipy.integrate.simpson"
+  },
+  {
+    "id": 37,
+    "library": "scipy",
+    "deprecated_api": "scipy.integrate.trapz",
+    "replacement_api": "scipy.integrate.trapezoid"
+  },
+  {
+    "id": 38,
+    "library": "scipy",
+    "deprecated_api": "scipy.interpolate.interp2d",
+    "replacement_api": "scipy.interpolate.bisplev"
+  },
+  {
+    "id": 39,
+    "library": "scipy",
+    "deprecated_api": "scipy.linalg.pinv2",
+    "replacement_api": "scipy.linalg.pinv"
+  },
+  {
+    "id": 40,
+    "library": "scipy",
+    "deprecated_api": "scipy.misc.comb",
+    "replacement_api": "scipy.special.comb"
+  },
+  {
+    "id": 41,
+    "library": "scipy",
+    "deprecated_api": "scipy.misc.face",
+    "replacement_api": "scipy.datasets.face"
+  },
+  {
+    "id": 42,
+    "library": "scipy",
+    "deprecated_api": "scipy.misc.factorial",
+    "replacement_api": "scipy.special.factorial"
+  },
+  {
+    "id": 43,
+    "library": "scipy",
+    "deprecated_api": "scipy.misc.factorial2",
+    "replacement_api": "scipy.special.factorial2"
+  },
+  {
+    "id": 44,
+    "library": "scipy",
+    "deprecated_api": "scipy.misc.logsumexp",
+    "replacement_api": "scipy.special.logsumexp"
+  },
+  {
+    "id": 45,
+    "library": "scipy",
+    "deprecated_api": "scipy.signal.hanning",
+    "replacement_api": "scipy.signal.windows.hann"
+  },
+  {
+    "id": 46,
+    "library": "scipy",
+    "deprecated_api": "scipy.special.errprint",
+    "replacement_api": "scipy.special.seterr"
+  },
+  {
+    "id": 47,
+    "library": "scipy",
+    "deprecated_api": "scipy.special.sph_jn",
+    "replacement_api": "scipy.special.spherical_jn"
+  },
+  {
+    "id": 48,
+    "library": "scipy",
+    "deprecated_api": "scipy.special.sph_yn",
+    "replacement_api": "scipy.special.spherical_yn"
+  },
+  {
+    "id": 49,
+    "library": "scipy",
+    "deprecated_api": "scipy.stats.betai",
+    "replacement_api": "scipy.special.betainc"
+  },
+  {
+    "id": 50,
+    "library": "scipy",
+    "deprecated_api": "scipy.stats.chisqprob",
+    "replacement_api": "scipy.stats.chi2.sf"
+  },
+  {
+    "id": 51,
+    "library": "scipy",
+    "deprecated_api": "scipy.stats.itemfreq",
+    "replacement_api": "scipy.stats.binned_statistic"
+  },
+  {
+    "id": 52,
+    "library": "scipy",
+    "deprecated_api": "scipy.stats.rvs_ratio_uniforms",
+    "replacement_api": "scipy.stats.sampling.RatioUniforms"
+  },
+  {
+    "id": 53,
+    "library": "seaborn",
+    "deprecated_api": "seaborn.despine",
+    "replacement_api": "seaborn.utils.despine"
+  },
+  {
+    "id": 54,
+    "library": "seaborn",
+    "deprecated_api": "seaborn.factorplot",
+    "replacement_api": "seaborn.catplot"
+  },
+  {
+    "id": 55,
+    "library": "seaborn",
+    "deprecated_api": "seaborn.tsplot",
+    "replacement_api": "seaborn.lineplot"
+  },
+  {
+    "id": 56,
+    "library": "scikit-learn",
+    "deprecated_api": "sklearn.datasets.fetch_mldata",
+    "replacement_api": "sklearn.datasets.fetch_openml"
+  },
+  {
+    "id": 57,
+    "library": "scikit-learn",
+    "deprecated_api": "sklearn.metrics.jaccard_similarity_score",
+    "replacement_api": "sklearn.metrics.jaccard_score"
+  },
+  {
+    "id": 58,
+    "library": "scikit-learn",
+    "deprecated_api": "sklearn.mixture.GMM",
+    "replacement_api": "sklearn.mixture.GaussianMixture"
+  },
+  {
+    "id": 59,
+    "library": "scikit-learn",
+    "deprecated_api": "sklearn.preprocessing.Imputer",
+    "replacement_api": "sklearn.impute.SimpleImputer"
+  },
+  {
+    "id": 60,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.Print",
+    "replacement_api": "tensorflow.print"
+  },
+  {
+    "id": 61,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.all_variables",
+    "replacement_api": "tensorflow.global_variables"
+  },
+  {
+    "id": 62,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.arg_max",
+    "replacement_api": "tensorflow.math.argmax"
+  },
+  {
+    "id": 63,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.arg_min",
+    "replacement_api": "tensorflow.math.argmin"
+  },
+  {
+    "id": 64,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.Print",
+    "replacement_api": "tensorflow.print"
+  },
+  {
+    "id": 65,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.all_variables",
+    "replacement_api": "tensorflow.global_variables"
+  },
+  {
+    "id": 66,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.arg_max",
+    "replacement_api": "tensorflow.math.argmax"
+  },
+  {
+    "id": 67,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.arg_min",
+    "replacement_api": "tensorflow.math.argmin"
+  },
+  {
+    "id": 68,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.div",
+    "replacement_api": "tensorflow.divide"
+  },
+  {
+    "id": 69,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.initialize_all_variables",
+    "replacement_api": "tensorflow.global_variables_initializer"
+  },
+  {
+    "id": 70,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.initializers.uniform_unit_scaling",
+    "replacement_api": "tensorflow.initializers.variance_scaling"
+  },
+  {
+    "id": 71,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.metrics.auc",
+    "replacement_api": "tensorflow.keras.metrics.AUC"
+  },
+  {
+    "id": 72,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.mixed_precision.DynamicLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 73,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.mixed_precision.FixedLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 74,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.mixed_precision.experimental.DynamicLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 75,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.mixed_precision.experimental.FixedLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 76,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.multinomial",
+    "replacement_api": "tensorflow.random.categorical"
+  },
+  {
+    "id": 77,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.random.multinomial",
+    "replacement_api": "tensorflow.random.categorical"
+  },
+  {
+    "id": 78,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.saved_model.load",
+    "replacement_api": "tensorflow.saved_model.load"
+  },
+  {
+    "id": 79,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.saved_model.loader.load",
+    "replacement_api": "tensorflow.saved_model.load"
+  },
+  {
+    "id": 80,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.sparse_to_dense",
+    "replacement_api": "tensorflow.sparse.to_dense"
+  },
+  {
+    "id": 81,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.substr",
+    "replacement_api": "tensorflow.strings.substr"
+  },
+  {
+    "id": 82,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.to_bfloat16",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 83,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.to_complex128",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 84,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.to_complex64",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 85,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.to_double",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 86,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.to_float",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 87,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.to_int32",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 88,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.to_int64",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 89,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.train.experimental.DynamicLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 90,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.train.experimental.FixedLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 91,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.compat.v1.uniform_unit_scaling_initializer",
+    "replacement_api": "tensorflow.initializers.variance_scaling"
+  },
+  {
+    "id": 92,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.config.experimental_run_functions_eagerly",
+    "replacement_api": "tensorflow.config.run_functions_eagerly"
+  },
+  {
+    "id": 93,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.distribute.experimental.MultiWorkerMirroredStrategy",
+    "replacement_api": "tensorflow.distribute.MultiWorkerMirroredStrategy"
+  },
+  {
+    "id": 94,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.div",
+    "replacement_api": "tensorflow.divide"
+  },
+  {
+    "id": 95,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.initialize_all_variables",
+    "replacement_api": "tensorflow.global_variables_initializer"
+  },
+  {
+    "id": 96,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.initializers.uniform_unit_scaling",
+    "replacement_api": "tensorflow.initializers.variance_scaling"
+  },
+  {
+    "id": 97,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.metrics.auc",
+    "replacement_api": "tensorflow.keras.metrics.AUC"
+  },
+  {
+    "id": 98,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.mixed_precision.DynamicLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 99,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.mixed_precision.FixedLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 100,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.mixed_precision.experimental.DynamicLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 101,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.mixed_precision.experimental.FixedLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 102,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.multinomial",
+    "replacement_api": "tensorflow.random.categorical"
+  },
+  {
+    "id": 103,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.random.multinomial",
+    "replacement_api": "tensorflow.random.categorical"
+  },
+  {
+    "id": 104,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.saved_model.loader.load",
+    "replacement_api": "tensorflow.saved_model.load"
+  },
+  {
+    "id": 105,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.sparse_to_dense",
+    "replacement_api": "tensorflow.sparse.to_dense"
+  },
+  {
+    "id": 106,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.substr",
+    "replacement_api": "tensorflow.strings.substr"
+  },
+  {
+    "id": 107,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.to_bfloat16",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 108,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.to_complex128",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 109,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.to_complex64",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 110,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.to_double",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 111,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.to_float",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 112,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.to_int32",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 113,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.to_int64",
+    "replacement_api": "tensorflow.cast"
+  },
+  {
+    "id": 114,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.train.experimental.DynamicLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 115,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.train.experimental.FixedLossScale",
+    "replacement_api": "tensorflow.keras.mixed_precision.LossScaleOptimizer"
+  },
+  {
+    "id": 116,
+    "library": "tensorflow",
+    "deprecated_api": "tensorflow.uniform_unit_scaling_initializer",
+    "replacement_api": "tensorflow.initializers.variance_scaling"
+  },
+  {
+    "id": 117,
+    "library": "transformers",
+    "deprecated_api": "transformers.BeitFeatureExtractor",
+    "replacement_api": "transformers.BeitImageProcessor"
+  },
+  {
+    "id": 118,
+    "library": "transformers",
+    "deprecated_api": "transformers.ConditionalDetrFeatureExtractor",
+    "replacement_api": "transformers.ConditionalDetrImageProcessor"
+  },
+  {
+    "id": 119,
+    "library": "transformers",
+    "deprecated_api": "transformers.ConvNextFeatureExtractor",
+    "replacement_api": "transformers.ConvNextImageProcessor"
+  },
+  {
+    "id": 120,
+    "library": "transformers",
+    "deprecated_api": "transformers.DPTFeatureExtractor",
+    "replacement_api": "transformers.DPTImageProcessor"
+  },
+  {
+    "id": 121,
+    "library": "transformers",
+    "deprecated_api": "transformers.DeformableDetrFeatureExtractor",
+    "replacement_api": "transformers.DeformableDetrImageProcessor"
+  },
+  {
+    "id": 122,
+    "library": "transformers",
+    "deprecated_api": "transformers.DetrFeatureExtractor",
+    "replacement_api": "transformers.DetrImageProcessor"
+  },
+  {
+    "id": 123,
+    "library": "transformers",
+    "deprecated_api": "transformers.DonutFeatureExtractor",
+    "replacement_api": "transformers.DonutImageProcessor"
+  },
+  {
+    "id": 124,
+    "library": "transformers",
+    "deprecated_api": "transformers.GLPNFeatureExtractor",
+    "replacement_api": "transformers.GLPNImageProcessor"
+  },
+  {
+    "id": 125,
+    "library": "transformers",
+    "deprecated_api": "transformers.HubertForCTC.freeze_feature_extractor",
+    "replacement_api": "transformers.HubertForCTC.freeze_feature_encoder"
+  },
+  {
+    "id": 126,
+    "library": "transformers",
+    "deprecated_api": "transformers.LayoutLMv2FeatureExtractor",
+    "replacement_api": "transformers.LayoutLMv2ImageProcessor"
+  },
+  {
+    "id": 127,
+    "library": "transformers",
+    "deprecated_api": "transformers.MaskFormerFeatureExtractor",
+    "replacement_api": "transformers.MaskFormerImageProcessor"
+  },
+  {
+    "id": 128,
+    "library": "transformers",
+    "deprecated_api": "transformers.MobileNetV1FeatureExtractor",
+    "replacement_api": "transformers.MobileNetV1ImageProcessor"
+  },
+  {
+    "id": 129,
+    "library": "transformers",
+    "deprecated_api": "transformers.MobileViTFeatureExtractor",
+    "replacement_api": "transformers.MobileViTImageProcessor"
+  },
+  {
+    "id": 130,
+    "library": "transformers",
+    "deprecated_api": "transformers.OwlViTFeatureExtractor",
+    "replacement_api": "transformers.OwlViTImageProcessor"
+  },
+  {
+    "id": 131,
+    "library": "transformers",
+    "deprecated_api": "transformers.PerceiverFeatureExtractor",
+    "replacement_api": "transformers.PerceiverImageProcessor"
+  },
+  {
+    "id": 132,
+    "library": "transformers",
+    "deprecated_api": "transformers.PoolFormerFeatureExtractor",
+    "replacement_api": "transformers.PoolFormerImageProcessor"
+  },
+  {
+    "id": 133,
+    "library": "transformers",
+    "deprecated_api": "transformers.SEWDForCTC.freeze_feature_extractor",
+    "replacement_api": "transformers.SEWDForCTC.freeze_feature_encoder"
+  },
+  {
+    "id": 134,
+    "library": "transformers",
+    "deprecated_api": "transformers.SEWForCTC.freeze_feature_extractor",
+    "replacement_api": "transformers.SEWForCTC.freeze_feature_encoder"
+  },
+  {
+    "id": 135,
+    "library": "transformers",
+    "deprecated_api": "transformers.SEWForSequenceClassification.freeze_feature_extractor",
+    "replacement_api": "transformers.SEWForCTC.freeze_feature_encoder"
+  },
+  {
+    "id": 136,
+    "library": "transformers",
+    "deprecated_api": "transformers.SegformerFeatureExtractor",
+    "replacement_api": "transformers.SegformerImageProcessor"
+  },
+  {
+    "id": 137,
+    "library": "transformers",
+    "deprecated_api": "transformers.TFHubertForCTC.freeze_feature_extractor",
+    "replacement_api": "transformers.TFHubertForCTC.freeze_feature_encoder"
+  },
+  {
+    "id": 138,
+    "library": "transformers",
+    "deprecated_api": "transformers.TFWav2Vec2ForCTC.freeze_feature_extractor",
+    "replacement_api": "transformers.TFWav2Vec2ForCTC.freeze_feature_encoder"
+  },
+  {
+    "id": 139,
+    "library": "transformers",
+    "deprecated_api": "transformers.UniSpeechForCTC.freeze_feature_extractor",
+    "replacement_api": "transformers.UniSpeechForCTC.freeze_feature_encoder"
+  },
+  {
+    "id": 140,
+    "library": "transformers",
+    "deprecated_api": "transformers.UniSpeechSatForCTC.freeze_feature_extractor",
+    "replacement_api": "transformers.UniSpeechSatForCTC.freeze_feature_encoder"
+  },
+  {
+    "id": 141,
+    "library": "transformers",
+    "deprecated_api": "transformers.ViTFeatureExtractor",
+    "replacement_api": "transformers.ViTImageProcessor"
+  },
+  {
+    "id": 142,
+    "library": "transformers",
+    "deprecated_api": "transformers.VideoMAEFeatureExtractor",
+    "replacement_api": "transformers.VideoMAEImageProcessor"
+  },
+  {
+    "id": 143,
+    "library": "transformers",
+    "deprecated_api": "transformers.Wav2Vec2ForCTC.freeze_feature_extractor",
+    "replacement_api": "transformers.Wav2Vec2ForCTC.freeze_feature_encoder"
+  },
+  {
+    "id": 144,
+    "library": "transformers",
+    "deprecated_api": "transformers.WavLMForCTC.freeze_feature_extractor",
+    "replacement_api": "transformers.WavLMForCTC.freeze_feature_encoder"
+  },
+  {
+    "id": 145,
+    "library": "transformers",
+    "deprecated_api": "transformers.YolosFeatureExtractor",
+    "replacement_api": "transformers.YolosImageProcessor"
+  }
+]

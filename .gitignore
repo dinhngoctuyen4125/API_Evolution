@@ -1,0 +1,15 @@
+/__pycache__/
+**/__pycache__/
+/tests/
+/.github/
+
+/data/**/*.json
+!/data/**/*_diy.json
+!/data/api_mapping_*.json
+!expected_step_*.json
+!expected_step_*_new.json
+!/data/**/api_source_tracks_v2.json
+!/data/**/migration_evolution_v2.json
+/cache/
+/.env
+/data/**/*.progress.jsonl

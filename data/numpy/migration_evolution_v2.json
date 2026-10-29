@@ -1,0 +1,2658 @@
+[
+  {
+    "mapping_id": 1,
+    "library": "numpy",
+    "seed": {
+      "deprecated_api": "numpy.alltrue",
+      "replacement_api": "numpy.all"
+    },
+    "deprecated_version": "1.25.0",
+    "milestones": [
+      {
+        "version": "1.0",
+        "compared_to_version": null,
+        "api_states": [
+          {
+            "name": "numpy.alltrue",
+            "status": "active",
+            "signature": "numpy.alltrue(x, axis=None, out=None)",
+            "effective_signature": "numpy.alltrue(x, axis=None, out=None)"
+          },
+          {
+            "name": "numpy.all",
+            "status": "active",
+            "signature": "numpy.all(x, axis=None, out=None)",
+            "effective_signature": "numpy.all(x, axis=None, out=None)"
+          }
+        ],
+        "changes": []
+      },
+      {
+        "version": "1.0.4",
+        "compared_to_version": "1.0",
+        "api_states": [
+          {
+            "name": "numpy.alltrue",
+            "status": "active",
+            "signature": "numpy.alltrue(a, axis=None, out=None)",
+            "effective_signature": "numpy.alltrue(a, axis=None, out=None)"
+          },
+          {
+            "name": "numpy.all",
+            "status": "active",
+            "signature": "numpy.all(a, axis=None, out=None)",
+            "effective_signature": "numpy.all(a, axis=None, out=None)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.all",
+            "type": "parameter_rename",
+            "parameter": "x",
+            "old_value": "x",
+            "new_value": "a",
+            "from_version": "1.0.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.0.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 669,
+                "line_end": 676
+              },
+              {
+                "type": "source",
+                "version": "1.0.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 969,
+                "line_end": 983
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.0.3",
+                "to_version": "1.0.4",
+                "from_commit_sha": "2be238df5e6682083c448264e52d2d8df0055e9c",
+                "to_commit_sha": "cd8db12913c9bd7323b77a03a8fa11667634b1a9"
+              }
+            ]
+          },
+          {
+            "api": "numpy.all",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.0.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.0.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 669,
+                "line_end": 676
+              },
+              {
+                "type": "source",
+                "version": "1.0.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 969,
+                "line_end": 983
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.0.3",
+                "to_version": "1.0.4",
+                "from_commit_sha": "2be238df5e6682083c448264e52d2d8df0055e9c",
+                "to_commit_sha": "cd8db12913c9bd7323b77a03a8fa11667634b1a9"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "parameter_rename",
+            "parameter": "x",
+            "old_value": "x",
+            "new_value": "a",
+            "from_version": "1.0.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.0.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 652,
+                "line_end": 658
+              },
+              {
+                "type": "source",
+                "version": "1.0.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 937,
+                "line_end": 951
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.0.3",
+                "to_version": "1.0.4",
+                "from_commit_sha": "2be238df5e6682083c448264e52d2d8df0055e9c",
+                "to_commit_sha": "cd8db12913c9bd7323b77a03a8fa11667634b1a9"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.0.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.0.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 652,
+                "line_end": 658
+              },
+              {
+                "type": "source",
+                "version": "1.0.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 937,
+                "line_end": 951
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.0.3",
+                "to_version": "1.0.4",
+                "from_commit_sha": "2be238df5e6682083c448264e52d2d8df0055e9c",
+                "to_commit_sha": "cd8db12913c9bd7323b77a03a8fa11667634b1a9"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.7.0",
+        "compared_to_version": "1.0.4",
+        "api_states": [
+          {
+            "name": "numpy.alltrue",
+            "status": "active",
+            "signature": "numpy.alltrue(a, axis=None, out=None, keepdims=False)",
+            "effective_signature": "numpy.alltrue(a, axis=None, out=None, keepdims=False)"
+          },
+          {
+            "name": "numpy.all",
+            "status": "active",
+            "signature": "numpy.all(a, axis=None, out=None, keepdims=False)",
+            "effective_signature": "numpy.all(a, axis=None, out=None, keepdims=False)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.all",
+            "type": "parameter_added",
+            "parameter": "keepdims",
+            "old_value": null,
+            "new_value": "False",
+            "from_version": "1.6.2",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.6.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1579,
+                "line_end": 1640
+              },
+              {
+                "type": "source",
+                "version": "1.7.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1643,
+                "line_end": 1714
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.6.2",
+                "to_version": "1.7.0",
+                "from_commit_sha": "ca07bce202ae26b6f0a73870eb2ef0b88e0210c5",
+                "to_commit_sha": "0c5a166183764aeb3fd1fba799caea489f20682f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.all",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.6.2",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.6.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1579,
+                "line_end": 1640
+              },
+              {
+                "type": "source",
+                "version": "1.7.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1643,
+                "line_end": 1714
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.6.2",
+                "to_version": "1.7.0",
+                "from_commit_sha": "ca07bce202ae26b6f0a73870eb2ef0b88e0210c5",
+                "to_commit_sha": "0c5a166183764aeb3fd1fba799caea489f20682f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "parameter_added",
+            "parameter": "keepdims",
+            "old_value": null,
+            "new_value": "False",
+            "from_version": "1.6.2",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.6.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1492,
+                "line_end": 1505
+              },
+              {
+                "type": "source",
+                "version": "1.7.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1547,
+                "line_end": 1561
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.6.2",
+                "to_version": "1.7.0",
+                "from_commit_sha": "ca07bce202ae26b6f0a73870eb2ef0b88e0210c5",
+                "to_commit_sha": "0c5a166183764aeb3fd1fba799caea489f20682f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.6.2",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.6.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1492,
+                "line_end": 1505
+              },
+              {
+                "type": "source",
+                "version": "1.7.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1547,
+                "line_end": 1561
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.6.2",
+                "to_version": "1.7.0",
+                "from_commit_sha": "ca07bce202ae26b6f0a73870eb2ef0b88e0210c5",
+                "to_commit_sha": "0c5a166183764aeb3fd1fba799caea489f20682f"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.11.2",
+        "compared_to_version": "1.7.0",
+        "api_states": [
+          {
+            "name": "numpy.alltrue",
+            "status": "active",
+            "signature": "numpy.alltrue(a, axis=None, out=None, keepdims=np._NoValue)",
+            "effective_signature": "numpy.alltrue(a, axis=None, out=None, keepdims=np._NoValue)"
+          },
+          {
+            "name": "numpy.all",
+            "status": "active",
+            "signature": "numpy.all(a, axis=None, out=None, keepdims=np._NoValue)",
+            "effective_signature": "numpy.all(a, axis=None, out=None, keepdims=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.all",
+            "type": "default_changed",
+            "parameter": "keepdims",
+            "old_value": "False",
+            "new_value": "np._NoValue",
+            "from_version": "1.11.1",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.1",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1973,
+                "line_end": 2044
+              },
+              {
+                "type": "source",
+                "version": "1.11.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1987,
+                "line_end": 2064
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.1",
+                "to_version": "1.11.2",
+                "from_commit_sha": "ccc6b8d8fcf92cc6dc19f7e14d91fc6c127114a6",
+                "to_commit_sha": "bb6e3dc30016b89bf154f7d7fce4248e760bd40f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.all",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.11.1",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.1",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1973,
+                "line_end": 2044
+              },
+              {
+                "type": "source",
+                "version": "1.11.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1987,
+                "line_end": 2064
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.1",
+                "to_version": "1.11.2",
+                "from_commit_sha": "ccc6b8d8fcf92cc6dc19f7e14d91fc6c127114a6",
+                "to_commit_sha": "bb6e3dc30016b89bf154f7d7fce4248e760bd40f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "default_changed",
+            "parameter": "keepdims",
+            "old_value": "False",
+            "new_value": "np._NoValue",
+            "from_version": "1.11.1",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.1",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1875,
+                "line_end": 1889
+              },
+              {
+                "type": "source",
+                "version": "1.11.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1884,
+                "line_end": 1897
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.1",
+                "to_version": "1.11.2",
+                "from_commit_sha": "ccc6b8d8fcf92cc6dc19f7e14d91fc6c127114a6",
+                "to_commit_sha": "bb6e3dc30016b89bf154f7d7fce4248e760bd40f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.11.1",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.1",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1875,
+                "line_end": 1889
+              },
+              {
+                "type": "source",
+                "version": "1.11.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1884,
+                "line_end": 1897
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.1",
+                "to_version": "1.11.2",
+                "from_commit_sha": "ccc6b8d8fcf92cc6dc19f7e14d91fc6c127114a6",
+                "to_commit_sha": "bb6e3dc30016b89bf154f7d7fce4248e760bd40f"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.15.0",
+        "compared_to_version": "1.11.2",
+        "api_states": [
+          {
+            "name": "numpy.alltrue",
+            "status": "active",
+            "signature": "numpy.alltrue(*args, **kwargs)",
+            "effective_signature": "numpy.alltrue(a, axis=None, out=None, keepdims=np._NoValue)"
+          },
+          {
+            "name": "numpy.all",
+            "status": "active",
+            "signature": "numpy.all(a, axis=None, out=None, keepdims=np._NoValue)",
+            "effective_signature": "numpy.all(a, axis=None, out=None, keepdims=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.all",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.14.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2021,
+                "line_end": 2098
+              },
+              {
+                "type": "source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2016,
+                "line_end": 2089
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.14.6",
+                "to_version": "1.15.0",
+                "from_commit_sha": "8706d48bd9918fca93ee50cb8bdc04d8ed16cbbd",
+                "to_commit_sha": "ccfbcc1cd9a4035a467f2e982a565ab27de25b6b"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.14.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1918,
+                "line_end": 1931
+              },
+              {
+                "type": "source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3198,
+                "line_end": 3206
+              },
+              {
+                "type": "effective_source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2016,
+                "line_end": 2089
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.14.6",
+                "to_version": "1.15.0",
+                "from_commit_sha": "8706d48bd9918fca93ee50cb8bdc04d8ed16cbbd",
+                "to_commit_sha": "ccfbcc1cd9a4035a467f2e982a565ab27de25b6b"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "effective_target_changed",
+            "parameter": null,
+            "old_value": "numpy.core.fromnumeric.alltrue",
+            "new_value": "numpy.core.fromnumeric.all",
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.14.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1918,
+                "line_end": 1931
+              },
+              {
+                "type": "source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3198,
+                "line_end": 3206
+              },
+              {
+                "type": "effective_source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2016,
+                "line_end": 2089
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.14.6",
+                "to_version": "1.15.0",
+                "from_commit_sha": "8706d48bd9918fca93ee50cb8bdc04d8ed16cbbd",
+                "to_commit_sha": "ccfbcc1cd9a4035a467f2e982a565ab27de25b6b"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "wrapper_changed",
+            "parameter": null,
+            "old_value": "numpy.alltrue(a, axis=None, out=None, keepdims=np._NoValue)",
+            "new_value": "numpy.alltrue(*args, **kwargs)",
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": "numpy.all",
+            "source_evidence": [
+              {
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2016,
+                "line_end": 2089
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.20.0",
+        "compared_to_version": "1.15.0",
+        "api_states": [
+          {
+            "name": "numpy.alltrue",
+            "status": "active",
+            "signature": "numpy.alltrue(*args, **kwargs)",
+            "effective_signature": "numpy.alltrue(a, axis=None, out=None, keepdims=np._NoValue, *, where=np._NoValue)"
+          },
+          {
+            "name": "numpy.all",
+            "status": "active",
+            "signature": "numpy.all(a, axis=None, out=None, keepdims=np._NoValue, *, where=np._NoValue)",
+            "effective_signature": "numpy.all(a, axis=None, out=None, keepdims=np._NoValue, *, where=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.all",
+            "type": "parameter_added",
+            "parameter": "where",
+            "old_value": null,
+            "new_value": "np._NoValue",
+            "from_version": "1.19.5",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.19.5",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2338,
+                "line_end": 2411
+              },
+              {
+                "type": "source",
+                "version": "1.20.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2356,
+                "line_end": 2439
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.19.5",
+                "to_version": "1.20.0",
+                "from_commit_sha": "8f4b73a0d04f7bebb06a154b43e5ef5b5980052f",
+                "to_commit_sha": "fb215c76967739268de71aa4bda55dd1b062bc2e"
+              }
+            ]
+          },
+          {
+            "api": "numpy.all",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.19.5",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.19.5",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2338,
+                "line_end": 2411
+              },
+              {
+                "type": "source",
+                "version": "1.20.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2356,
+                "line_end": 2439
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.19.5",
+                "to_version": "1.20.0",
+                "from_commit_sha": "8f4b73a0d04f7bebb06a154b43e5ef5b5980052f",
+                "to_commit_sha": "fb215c76967739268de71aa4bda55dd1b062bc2e"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "parameter_added",
+            "parameter": "where",
+            "old_value": null,
+            "new_value": "np._NoValue",
+            "from_version": "1.19.5",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.19.5",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3679,
+                "line_end": 3687
+              },
+              {
+                "type": "effective_source",
+                "version": "1.19.5",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2338,
+                "line_end": 2411
+              },
+              {
+                "type": "source",
+                "version": "1.20.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3760,
+                "line_end": 3768
+              },
+              {
+                "type": "effective_source",
+                "version": "1.20.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2356,
+                "line_end": 2439
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.19.5",
+                "to_version": "1.20.0",
+                "from_commit_sha": "8f4b73a0d04f7bebb06a154b43e5ef5b5980052f",
+                "to_commit_sha": "fb215c76967739268de71aa4bda55dd1b062bc2e"
+              }
+            ]
+          },
+          {
+            "api": "numpy.alltrue",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.19.5",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.19.5",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3679,
+                "line_end": 3687
+              },
+              {
+                "type": "effective_source",
+                "version": "1.19.5",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2338,
+                "line_end": 2411
+              },
+              {
+                "type": "source",
+                "version": "1.20.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3760,
+                "line_end": 3768
+              },
+              {
+                "type": "effective_source",
+                "version": "1.20.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2356,
+                "line_end": 2439
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.19.5",
+                "to_version": "1.20.0",
+                "from_commit_sha": "8f4b73a0d04f7bebb06a154b43e5ef5b5980052f",
+                "to_commit_sha": "fb215c76967739268de71aa4bda55dd1b062bc2e"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.25.0",
+        "compared_to_version": "1.20.0",
+        "api_states": [
+          {
+            "name": "numpy.alltrue",
+            "status": "deprecated",
+            "signature": "numpy.alltrue(*args, **kwargs)",
+            "effective_signature": "numpy.alltrue(a, axis=None, out=None, keepdims=np._NoValue, *, where=np._NoValue)"
+          },
+          {
+            "name": "numpy.all",
+            "status": "active",
+            "signature": "numpy.all(a, axis=None, out=None, keepdims=np._NoValue, *, where=np._NoValue)",
+            "effective_signature": "numpy.all(a, axis=None, out=None, keepdims=np._NoValue, *, where=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.alltrue",
+            "type": "deprecated",
+            "parameter": null,
+            "old_value": null,
+            "new_value": "numpy.all",
+            "from_version": null,
+            "source": "data/api_mapping_versions.json#id=1",
+            "delegates_to": null,
+            "source_evidence": []
+          }
+        ]
+      },
+      {
+        "version": "2.0.0",
+        "compared_to_version": "1.25.0",
+        "api_states": [
+          {
+            "name": "numpy.alltrue",
+            "status": "removed",
+            "signature": null,
+            "effective_signature": null
+          },
+          {
+            "name": "numpy.all",
+            "status": "active",
+            "signature": "numpy.all(a, axis=None, out=None, keepdims=np._NoValue, *, where=np._NoValue)",
+            "effective_signature": "numpy.all(a, axis=None, out=None, keepdims=np._NoValue, *, where=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.alltrue",
+            "type": "removed",
+            "parameter": null,
+            "old_value": "present",
+            "new_value": "absent",
+            "from_version": "1.26.4",
+            "source": "data/numpy/api_source_tracks_v2.json",
+            "delegates_to": "numpy.all",
+            "source_evidence": []
+          },
+          {
+            "api": "numpy.all",
+            "type": "public_binding_changed",
+            "parameter": null,
+            "old_value": "{\"kind\": \"wildcard_import\", \"path\": \"numpy/__init__.py\", \"target\": \"numpy.core.fromnumeric.all\"}",
+            "new_value": "{\"kind\": \"import\", \"path\": \"numpy/__init__.py\", \"target\": \"numpy._core.all\"}",
+            "from_version": "1.26.4",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.26.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2422,
+                "line_end": 2505
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "numpy/_core/fromnumeric.py",
+                "line_start": 2514,
+                "line_end": 2602
+              },
+              {
+                "type": "public_binding",
+                "version": "2.0.0",
+                "path": "numpy/__init__.py",
+                "line_start": 122,
+                "line_end": 170
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.26.4",
+                "to_version": "2.0.0",
+                "from_commit_sha": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+                "to_commit_sha": "1d49c7f7ff527c696fc26ab2278ad51632a66660"
+              }
+            ]
+          },
+          {
+            "api": "numpy.all",
+            "type": "source_path_changed",
+            "parameter": null,
+            "old_value": "numpy/core/fromnumeric.py",
+            "new_value": "numpy/_core/fromnumeric.py",
+            "from_version": "1.26.4",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.26.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2422,
+                "line_end": 2505
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "numpy/_core/fromnumeric.py",
+                "line_start": 2514,
+                "line_end": 2602
+              },
+              {
+                "type": "public_binding",
+                "version": "2.0.0",
+                "path": "numpy/__init__.py",
+                "line_start": 122,
+                "line_end": 170
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.26.4",
+                "to_version": "2.0.0",
+                "from_commit_sha": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+                "to_commit_sha": "1d49c7f7ff527c696fc26ab2278ad51632a66660"
+              }
+            ]
+          },
+          {
+            "api": "numpy.all",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.26.4",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.26.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2422,
+                "line_end": 2505
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "numpy/_core/fromnumeric.py",
+                "line_start": 2514,
+                "line_end": 2602
+              },
+              {
+                "type": "public_binding",
+                "version": "2.0.0",
+                "path": "numpy/__init__.py",
+                "line_start": 122,
+                "line_end": 170
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.26.4",
+                "to_version": "2.0.0",
+                "from_commit_sha": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+                "to_commit_sha": "1d49c7f7ff527c696fc26ab2278ad51632a66660"
+              }
+            ]
+          },
+          {
+            "api": "numpy.all",
+            "type": "effective_target_changed",
+            "parameter": null,
+            "old_value": "numpy.core.fromnumeric.all",
+            "new_value": "numpy._core.fromnumeric.all",
+            "from_version": "1.26.4",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.26.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2422,
+                "line_end": 2505
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "numpy/_core/fromnumeric.py",
+                "line_start": 2514,
+                "line_end": 2602
+              },
+              {
+                "type": "public_binding",
+                "version": "2.0.0",
+                "path": "numpy/__init__.py",
+                "line_start": 122,
+                "line_end": 170
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.26.4",
+                "to_version": "2.0.0",
+                "from_commit_sha": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+                "to_commit_sha": "1d49c7f7ff527c696fc26ab2278ad51632a66660"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "model": "openai/gpt-6-luna",
+    "input_digest": "be54886cc31a1000cb2c4dc565bf2dec9880bbd1ad60f25920e3da4fd04a11ee"
+  },
+  {
+    "mapping_id": 2,
+    "library": "numpy",
+    "seed": {
+      "deprecated_api": "numpy.cumproduct",
+      "replacement_api": "numpy.cumprod"
+    },
+    "deprecated_version": "1.25.0",
+    "milestones": [
+      {
+        "version": "1.0",
+        "compared_to_version": null,
+        "api_states": [
+          {
+            "name": "numpy.cumproduct",
+            "status": "active",
+            "signature": "numpy.cumproduct(x, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.cumproduct(x, axis=None, dtype=None, out=None)"
+          },
+          {
+            "name": "numpy.cumprod",
+            "status": "active",
+            "signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)"
+          }
+        ],
+        "changes": []
+      },
+      {
+        "version": "1.0.4",
+        "compared_to_version": "1.0",
+        "api_states": [
+          {
+            "name": "numpy.cumproduct",
+            "status": "active",
+            "signature": "numpy.cumproduct(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.cumproduct(a, axis=None, dtype=None, out=None)"
+          },
+          {
+            "name": "numpy.cumprod",
+            "status": "active",
+            "signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.cumproduct",
+            "type": "parameter_rename",
+            "parameter": "x",
+            "old_value": "x",
+            "new_value": "a",
+            "from_version": "1.0.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.0.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 686,
+                "line_end": 692
+              },
+              {
+                "type": "source",
+                "version": "1.0.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 999,
+                "line_end": 1009
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.0.3",
+                "to_version": "1.0.4",
+                "from_commit_sha": "2be238df5e6682083c448264e52d2d8df0055e9c",
+                "to_commit_sha": "cd8db12913c9bd7323b77a03a8fa11667634b1a9"
+              }
+            ]
+          },
+          {
+            "api": "numpy.cumproduct",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.0.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.0.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 686,
+                "line_end": 692
+              },
+              {
+                "type": "source",
+                "version": "1.0.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 999,
+                "line_end": 1009
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.0.3",
+                "to_version": "1.0.4",
+                "from_commit_sha": "2be238df5e6682083c448264e52d2d8df0055e9c",
+                "to_commit_sha": "cd8db12913c9bd7323b77a03a8fa11667634b1a9"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.12.0",
+        "compared_to_version": "1.0.4",
+        "api_states": [
+          {
+            "name": "numpy.cumproduct",
+            "status": "active",
+            "signature": "numpy.cumproduct(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.cumproduct(a, axis=None, dtype=None, out=None)"
+          },
+          {
+            "name": "numpy.cumprod",
+            "status": "active",
+            "signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.cumprod",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.11.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2546,
+                "line_end": 2610
+              },
+              {
+                "type": "source",
+                "version": "1.12.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2501,
+                "line_end": 2561
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.3",
+                "to_version": "1.12.0",
+                "from_commit_sha": "bfc9a059c48c57c4ef20bebe88d6f6ce363d1464",
+                "to_commit_sha": "561f1accf861ad8606ea2dd723d2be2b09a2dffa"
+              }
+            ]
+          },
+          {
+            "api": "numpy.cumproduct",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.11.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2138,
+                "line_end": 2152
+              },
+              {
+                "type": "source",
+                "version": "1.12.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2100,
+                "line_end": 2110
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.3",
+                "to_version": "1.12.0",
+                "from_commit_sha": "bfc9a059c48c57c4ef20bebe88d6f6ce363d1464",
+                "to_commit_sha": "561f1accf861ad8606ea2dd723d2be2b09a2dffa"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.15.0",
+        "compared_to_version": "1.12.0",
+        "api_states": [
+          {
+            "name": "numpy.cumproduct",
+            "status": "active",
+            "signature": "numpy.cumproduct(*args, **kwargs)",
+            "effective_signature": "numpy.cumproduct(a, axis=None, dtype=None, out=None)"
+          },
+          {
+            "name": "numpy.cumprod",
+            "status": "active",
+            "signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.cumproduct",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.14.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2168,
+                "line_end": 2178
+              },
+              {
+                "type": "source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3174,
+                "line_end": 3182
+              },
+              {
+                "type": "effective_source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2588,
+                "line_end": 2648
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.14.6",
+                "to_version": "1.15.0",
+                "from_commit_sha": "8706d48bd9918fca93ee50cb8bdc04d8ed16cbbd",
+                "to_commit_sha": "ccfbcc1cd9a4035a467f2e982a565ab27de25b6b"
+              }
+            ]
+          },
+          {
+            "api": "numpy.cumproduct",
+            "type": "effective_target_changed",
+            "parameter": null,
+            "old_value": "numpy.core.fromnumeric.cumproduct",
+            "new_value": "numpy.core.fromnumeric.cumprod",
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.14.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2168,
+                "line_end": 2178
+              },
+              {
+                "type": "source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3174,
+                "line_end": 3182
+              },
+              {
+                "type": "effective_source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2588,
+                "line_end": 2648
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.14.6",
+                "to_version": "1.15.0",
+                "from_commit_sha": "8706d48bd9918fca93ee50cb8bdc04d8ed16cbbd",
+                "to_commit_sha": "ccfbcc1cd9a4035a467f2e982a565ab27de25b6b"
+              }
+            ]
+          },
+          {
+            "api": "numpy.cumproduct",
+            "type": "wrapper_changed",
+            "parameter": null,
+            "old_value": "numpy.cumproduct(a, axis=None, dtype=None, out=None)",
+            "new_value": "numpy.cumproduct(*args, **kwargs)",
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": "numpy.cumprod",
+            "source_evidence": [
+              {
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2588,
+                "line_end": 2648
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.25.0",
+        "compared_to_version": "1.15.0",
+        "api_states": [
+          {
+            "name": "numpy.cumproduct",
+            "status": "deprecated",
+            "signature": "numpy.cumproduct(*args, **kwargs)",
+            "effective_signature": "numpy.cumproduct(a, axis=None, dtype=None, out=None)"
+          },
+          {
+            "name": "numpy.cumprod",
+            "status": "active",
+            "signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.cumproduct",
+            "type": "deprecated",
+            "parameter": null,
+            "old_value": null,
+            "new_value": "numpy.cumprod",
+            "from_version": null,
+            "source": "data/api_mapping_versions.json#id=2",
+            "delegates_to": null,
+            "source_evidence": []
+          }
+        ]
+      },
+      {
+        "version": "2.0.0",
+        "compared_to_version": "1.25.0",
+        "api_states": [
+          {
+            "name": "numpy.cumproduct",
+            "status": "removed",
+            "signature": null,
+            "effective_signature": null
+          },
+          {
+            "name": "numpy.cumprod",
+            "status": "active",
+            "signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.cumprod(a, axis=None, dtype=None, out=None)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.cumproduct",
+            "type": "removed",
+            "parameter": null,
+            "old_value": "present",
+            "new_value": "absent",
+            "from_version": "1.26.4",
+            "source": "data/numpy/api_source_tracks_v2.json",
+            "delegates_to": "numpy.cumprod",
+            "source_evidence": []
+          },
+          {
+            "api": "numpy.cumprod",
+            "type": "public_binding_changed",
+            "parameter": null,
+            "old_value": "{\"kind\": \"wildcard_import\", \"path\": \"numpy/__init__.py\", \"target\": \"numpy.core.fromnumeric.cumprod\"}",
+            "new_value": "{\"kind\": \"import\", \"path\": \"numpy/__init__.py\", \"target\": \"numpy._core.cumprod\"}",
+            "from_version": "1.26.4",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.26.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3109,
+                "line_end": 3169
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "numpy/_core/fromnumeric.py",
+                "line_start": 3200,
+                "line_end": 3260
+              },
+              {
+                "type": "public_binding",
+                "version": "2.0.0",
+                "path": "numpy/__init__.py",
+                "line_start": 122,
+                "line_end": 170
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.26.4",
+                "to_version": "2.0.0",
+                "from_commit_sha": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+                "to_commit_sha": "1d49c7f7ff527c696fc26ab2278ad51632a66660"
+              }
+            ]
+          },
+          {
+            "api": "numpy.cumprod",
+            "type": "source_path_changed",
+            "parameter": null,
+            "old_value": "numpy/core/fromnumeric.py",
+            "new_value": "numpy/_core/fromnumeric.py",
+            "from_version": "1.26.4",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.26.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3109,
+                "line_end": 3169
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "numpy/_core/fromnumeric.py",
+                "line_start": 3200,
+                "line_end": 3260
+              },
+              {
+                "type": "public_binding",
+                "version": "2.0.0",
+                "path": "numpy/__init__.py",
+                "line_start": 122,
+                "line_end": 170
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.26.4",
+                "to_version": "2.0.0",
+                "from_commit_sha": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+                "to_commit_sha": "1d49c7f7ff527c696fc26ab2278ad51632a66660"
+              }
+            ]
+          },
+          {
+            "api": "numpy.cumprod",
+            "type": "effective_target_changed",
+            "parameter": null,
+            "old_value": "numpy.core.fromnumeric.cumprod",
+            "new_value": "numpy._core.fromnumeric.cumprod",
+            "from_version": "1.26.4",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.26.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3109,
+                "line_end": 3169
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "numpy/_core/fromnumeric.py",
+                "line_start": 3200,
+                "line_end": 3260
+              },
+              {
+                "type": "public_binding",
+                "version": "2.0.0",
+                "path": "numpy/__init__.py",
+                "line_start": 122,
+                "line_end": 170
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.26.4",
+                "to_version": "2.0.0",
+                "from_commit_sha": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+                "to_commit_sha": "1d49c7f7ff527c696fc26ab2278ad51632a66660"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "model": "openai/gpt-6-luna",
+    "input_digest": "f44e85c4da526497562b5e3ee567a810f9ae1f7c3441a9583bb04d990ac3049a"
+  },
+  {
+    "mapping_id": 3,
+    "library": "numpy",
+    "seed": {
+      "deprecated_api": "numpy.product",
+      "replacement_api": "numpy.prod"
+    },
+    "deprecated_version": "1.25.0",
+    "milestones": [
+      {
+        "version": "1.0",
+        "compared_to_version": null,
+        "api_states": [
+          {
+            "name": "numpy.product",
+            "status": "active",
+            "signature": "numpy.product(x, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.product(x, axis=None, dtype=None, out=None)"
+          },
+          {
+            "name": "numpy.prod",
+            "status": "active",
+            "signature": "numpy.prod(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None)"
+          }
+        ],
+        "changes": []
+      },
+      {
+        "version": "1.0.4",
+        "compared_to_version": "1.0",
+        "api_states": [
+          {
+            "name": "numpy.product",
+            "status": "active",
+            "signature": "numpy.product(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None)"
+          },
+          {
+            "name": "numpy.prod",
+            "status": "active",
+            "signature": "numpy.prod(a, axis=None, dtype=None, out=None)",
+            "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.product",
+            "type": "parameter_rename",
+            "parameter": "x",
+            "old_value": "x",
+            "new_value": "a",
+            "from_version": "1.0.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.0.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 636,
+                "line_end": 642
+              },
+              {
+                "type": "source",
+                "version": "1.0.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 869,
+                "line_end": 919
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.0.3",
+                "to_version": "1.0.4",
+                "from_commit_sha": "2be238df5e6682083c448264e52d2d8df0055e9c",
+                "to_commit_sha": "cd8db12913c9bd7323b77a03a8fa11667634b1a9"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.0.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.0.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 636,
+                "line_end": 642
+              },
+              {
+                "type": "source",
+                "version": "1.0.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 869,
+                "line_end": 919
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.0.3",
+                "to_version": "1.0.4",
+                "from_commit_sha": "2be238df5e6682083c448264e52d2d8df0055e9c",
+                "to_commit_sha": "cd8db12913c9bd7323b77a03a8fa11667634b1a9"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.7.0",
+        "compared_to_version": "1.0.4",
+        "api_states": [
+          {
+            "name": "numpy.product",
+            "status": "active",
+            "signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=False)",
+            "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=False)"
+          },
+          {
+            "name": "numpy.prod",
+            "status": "active",
+            "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=False)",
+            "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=False)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.prod",
+            "type": "parameter_added",
+            "parameter": "keepdims",
+            "old_value": null,
+            "new_value": "False",
+            "from_version": "1.6.2",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.6.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1931,
+                "line_end": 2009
+              },
+              {
+                "type": "source",
+                "version": "1.7.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2022,
+                "line_end": 2116
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.6.2",
+                "to_version": "1.7.0",
+                "from_commit_sha": "ca07bce202ae26b6f0a73870eb2ef0b88e0210c5",
+                "to_commit_sha": "0c5a166183764aeb3fd1fba799caea489f20682f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.prod",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.6.2",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.6.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1931,
+                "line_end": 2009
+              },
+              {
+                "type": "source",
+                "version": "1.7.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2022,
+                "line_end": 2116
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.6.2",
+                "to_version": "1.7.0",
+                "from_commit_sha": "ca07bce202ae26b6f0a73870eb2ef0b88e0210c5",
+                "to_commit_sha": "0c5a166183764aeb3fd1fba799caea489f20682f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "parameter_added",
+            "parameter": "keepdims",
+            "old_value": null,
+            "new_value": "False",
+            "from_version": "1.6.2",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.6.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1458,
+                "line_end": 1471
+              },
+              {
+                "type": "source",
+                "version": "1.7.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1517,
+                "line_end": 1526
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.6.2",
+                "to_version": "1.7.0",
+                "from_commit_sha": "ca07bce202ae26b6f0a73870eb2ef0b88e0210c5",
+                "to_commit_sha": "0c5a166183764aeb3fd1fba799caea489f20682f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.6.2",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.6.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1458,
+                "line_end": 1471
+              },
+              {
+                "type": "source",
+                "version": "1.7.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1517,
+                "line_end": 1526
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.6.2",
+                "to_version": "1.7.0",
+                "from_commit_sha": "ca07bce202ae26b6f0a73870eb2ef0b88e0210c5",
+                "to_commit_sha": "0c5a166183764aeb3fd1fba799caea489f20682f"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.8.0",
+        "compared_to_version": "1.7.0",
+        "api_states": [
+          {
+            "name": "numpy.product",
+            "status": "active",
+            "signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=False)",
+            "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=False)"
+          },
+          {
+            "name": "numpy.prod",
+            "status": "active",
+            "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=False)",
+            "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=False)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.prod",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.7.2",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.7.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2022,
+                "line_end": 2116
+              },
+              {
+                "type": "source",
+                "version": "1.8.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2249,
+                "line_end": 2343
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.7.2",
+                "to_version": "1.8.0",
+                "from_commit_sha": "4322701029c8bf1d87203cafe781a0128dd86a62",
+                "to_commit_sha": "a60b3901cd635d28bef8328e83bafd35ce631e08"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.11.2",
+        "compared_to_version": "1.8.0",
+        "api_states": [
+          {
+            "name": "numpy.product",
+            "status": "active",
+            "signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=np._NoValue)",
+            "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=np._NoValue)"
+          },
+          {
+            "name": "numpy.prod",
+            "status": "active",
+            "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue)",
+            "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.prod",
+            "type": "default_changed",
+            "parameter": "keepdims",
+            "old_value": "False",
+            "new_value": "np._NoValue",
+            "from_version": "1.11.1",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.1",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2395,
+                "line_end": 2496
+              },
+              {
+                "type": "source",
+                "version": "1.11.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2433,
+                "line_end": 2543
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.1",
+                "to_version": "1.11.2",
+                "from_commit_sha": "ccc6b8d8fcf92cc6dc19f7e14d91fc6c127114a6",
+                "to_commit_sha": "bb6e3dc30016b89bf154f7d7fce4248e760bd40f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.prod",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.11.1",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.1",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2395,
+                "line_end": 2496
+              },
+              {
+                "type": "source",
+                "version": "1.11.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2433,
+                "line_end": 2543
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.1",
+                "to_version": "1.11.2",
+                "from_commit_sha": "ccc6b8d8fcf92cc6dc19f7e14d91fc6c127114a6",
+                "to_commit_sha": "bb6e3dc30016b89bf154f7d7fce4248e760bd40f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "default_changed",
+            "parameter": "keepdims",
+            "old_value": "False",
+            "new_value": "np._NoValue",
+            "from_version": "1.11.1",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.1",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1843,
+                "line_end": 1853
+              },
+              {
+                "type": "source",
+                "version": "1.11.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1851,
+                "line_end": 1863
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.1",
+                "to_version": "1.11.2",
+                "from_commit_sha": "ccc6b8d8fcf92cc6dc19f7e14d91fc6c127114a6",
+                "to_commit_sha": "bb6e3dc30016b89bf154f7d7fce4248e760bd40f"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.11.1",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.1",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1843,
+                "line_end": 1853
+              },
+              {
+                "type": "source",
+                "version": "1.11.2",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1851,
+                "line_end": 1863
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.1",
+                "to_version": "1.11.2",
+                "from_commit_sha": "ccc6b8d8fcf92cc6dc19f7e14d91fc6c127114a6",
+                "to_commit_sha": "bb6e3dc30016b89bf154f7d7fce4248e760bd40f"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.12.0",
+        "compared_to_version": "1.11.2",
+        "api_states": [
+          {
+            "name": "numpy.product",
+            "status": "active",
+            "signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=np._NoValue)",
+            "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=np._NoValue)"
+          },
+          {
+            "name": "numpy.prod",
+            "status": "active",
+            "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue)",
+            "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.prod",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.11.3",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.11.3",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2433,
+                "line_end": 2543
+              },
+              {
+                "type": "source",
+                "version": "1.12.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2388,
+                "line_end": 2498
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.11.3",
+                "to_version": "1.12.0",
+                "from_commit_sha": "bfc9a059c48c57c4ef20bebe88d6f6ce363d1464",
+                "to_commit_sha": "561f1accf861ad8606ea2dd723d2be2b09a2dffa"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.15.0",
+        "compared_to_version": "1.12.0",
+        "api_states": [
+          {
+            "name": "numpy.product",
+            "status": "active",
+            "signature": "numpy.product(*args, **kwargs)",
+            "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue)"
+          },
+          {
+            "name": "numpy.prod",
+            "status": "active",
+            "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue)",
+            "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.prod",
+            "type": "parameter_added",
+            "parameter": "initial",
+            "old_value": null,
+            "new_value": "np._NoValue",
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.14.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2456,
+                "line_end": 2566
+              },
+              {
+                "type": "source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2478,
+                "line_end": 2585
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.14.6",
+                "to_version": "1.15.0",
+                "from_commit_sha": "8706d48bd9918fca93ee50cb8bdc04d8ed16cbbd",
+                "to_commit_sha": "ccfbcc1cd9a4035a467f2e982a565ab27de25b6b"
+              }
+            ]
+          },
+          {
+            "api": "numpy.prod",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.14.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2456,
+                "line_end": 2566
+              },
+              {
+                "type": "source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2478,
+                "line_end": 2585
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.14.6",
+                "to_version": "1.15.0",
+                "from_commit_sha": "8706d48bd9918fca93ee50cb8bdc04d8ed16cbbd",
+                "to_commit_sha": "ccfbcc1cd9a4035a467f2e982a565ab27de25b6b"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "parameter_added",
+            "parameter": "initial",
+            "old_value": null,
+            "new_value": "np._NoValue",
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.14.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1885,
+                "line_end": 1897
+              },
+              {
+                "type": "source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3163,
+                "line_end": 3171
+              },
+              {
+                "type": "effective_source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2478,
+                "line_end": 2585
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.14.6",
+                "to_version": "1.15.0",
+                "from_commit_sha": "8706d48bd9918fca93ee50cb8bdc04d8ed16cbbd",
+                "to_commit_sha": "ccfbcc1cd9a4035a467f2e982a565ab27de25b6b"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.14.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1885,
+                "line_end": 1897
+              },
+              {
+                "type": "source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3163,
+                "line_end": 3171
+              },
+              {
+                "type": "effective_source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2478,
+                "line_end": 2585
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.14.6",
+                "to_version": "1.15.0",
+                "from_commit_sha": "8706d48bd9918fca93ee50cb8bdc04d8ed16cbbd",
+                "to_commit_sha": "ccfbcc1cd9a4035a467f2e982a565ab27de25b6b"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "effective_target_changed",
+            "parameter": null,
+            "old_value": "numpy.core.fromnumeric.product",
+            "new_value": "numpy.core.fromnumeric.prod",
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.14.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 1885,
+                "line_end": 1897
+              },
+              {
+                "type": "source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3163,
+                "line_end": 3171
+              },
+              {
+                "type": "effective_source",
+                "version": "1.15.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2478,
+                "line_end": 2585
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.14.6",
+                "to_version": "1.15.0",
+                "from_commit_sha": "8706d48bd9918fca93ee50cb8bdc04d8ed16cbbd",
+                "to_commit_sha": "ccfbcc1cd9a4035a467f2e982a565ab27de25b6b"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "wrapper_changed",
+            "parameter": null,
+            "old_value": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=np._NoValue)",
+            "new_value": "numpy.product(*args, **kwargs)",
+            "from_version": "1.14.6",
+            "source": null,
+            "delegates_to": "numpy.prod",
+            "source_evidence": [
+              {
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2478,
+                "line_end": 2585
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.17.0",
+        "compared_to_version": "1.15.0",
+        "api_states": [
+          {
+            "name": "numpy.product",
+            "status": "active",
+            "signature": "numpy.product(*args, **kwargs)",
+            "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue, where=np._NoValue)"
+          },
+          {
+            "name": "numpy.prod",
+            "status": "active",
+            "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue, where=np._NoValue)",
+            "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue, where=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.prod",
+            "type": "parameter_added",
+            "parameter": "where",
+            "old_value": null,
+            "new_value": "np._NoValue",
+            "from_version": "1.16.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.16.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2665,
+                "line_end": 2772
+              },
+              {
+                "type": "source",
+                "version": "1.17.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2793,
+                "line_end": 2911
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.16.6",
+                "to_version": "1.17.0",
+                "from_commit_sha": "3dec7099ce38cb189880f6f69df318f35ff9a5ea",
+                "to_commit_sha": "d9b1e32cb8ef90d6b4a47853241db2a28146a57d"
+              }
+            ]
+          },
+          {
+            "api": "numpy.prod",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.16.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.16.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2665,
+                "line_end": 2772
+              },
+              {
+                "type": "source",
+                "version": "1.17.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2793,
+                "line_end": 2911
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.16.6",
+                "to_version": "1.17.0",
+                "from_commit_sha": "3dec7099ce38cb189880f6f69df318f35ff9a5ea",
+                "to_commit_sha": "d9b1e32cb8ef90d6b4a47853241db2a28146a57d"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "parameter_added",
+            "parameter": "where",
+            "old_value": null,
+            "new_value": "np._NoValue",
+            "from_version": "1.16.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.16.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3386,
+                "line_end": 3394
+              },
+              {
+                "type": "effective_source",
+                "version": "1.16.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2665,
+                "line_end": 2772
+              },
+              {
+                "type": "source",
+                "version": "1.17.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3525,
+                "line_end": 3533
+              },
+              {
+                "type": "effective_source",
+                "version": "1.17.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2793,
+                "line_end": 2911
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.16.6",
+                "to_version": "1.17.0",
+                "from_commit_sha": "3dec7099ce38cb189880f6f69df318f35ff9a5ea",
+                "to_commit_sha": "d9b1e32cb8ef90d6b4a47853241db2a28146a57d"
+              }
+            ]
+          },
+          {
+            "api": "numpy.product",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "1.16.6",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.16.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3386,
+                "line_end": 3394
+              },
+              {
+                "type": "effective_source",
+                "version": "1.16.6",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2665,
+                "line_end": 2772
+              },
+              {
+                "type": "source",
+                "version": "1.17.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 3525,
+                "line_end": 3533
+              },
+              {
+                "type": "effective_source",
+                "version": "1.17.0",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2793,
+                "line_end": 2911
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.16.6",
+                "to_version": "1.17.0",
+                "from_commit_sha": "3dec7099ce38cb189880f6f69df318f35ff9a5ea",
+                "to_commit_sha": "d9b1e32cb8ef90d6b4a47853241db2a28146a57d"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "1.25.0",
+        "compared_to_version": "1.17.0",
+        "api_states": [
+          {
+            "name": "numpy.product",
+            "status": "deprecated",
+            "signature": "numpy.product(*args, **kwargs)",
+            "effective_signature": "numpy.product(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue, where=np._NoValue)"
+          },
+          {
+            "name": "numpy.prod",
+            "status": "active",
+            "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue, where=np._NoValue)",
+            "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue, where=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.product",
+            "type": "deprecated",
+            "parameter": null,
+            "old_value": null,
+            "new_value": "numpy.prod",
+            "from_version": null,
+            "source": "data/api_mapping_versions.json#id=3",
+            "delegates_to": null,
+            "source_evidence": []
+          }
+        ]
+      },
+      {
+        "version": "2.0.0",
+        "compared_to_version": "1.25.0",
+        "api_states": [
+          {
+            "name": "numpy.product",
+            "status": "removed",
+            "signature": null,
+            "effective_signature": null
+          },
+          {
+            "name": "numpy.prod",
+            "status": "active",
+            "signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue, where=np._NoValue)",
+            "effective_signature": "numpy.prod(a, axis=None, dtype=None, out=None, keepdims=np._NoValue, initial=np._NoValue, where=np._NoValue)"
+          }
+        ],
+        "changes": [
+          {
+            "api": "numpy.product",
+            "type": "removed",
+            "parameter": null,
+            "old_value": "present",
+            "new_value": "absent",
+            "from_version": "1.26.4",
+            "source": "data/numpy/api_source_tracks_v2.json",
+            "delegates_to": "numpy.prod",
+            "source_evidence": []
+          },
+          {
+            "api": "numpy.prod",
+            "type": "public_binding_changed",
+            "parameter": null,
+            "old_value": "{\"kind\": \"wildcard_import\", \"path\": \"numpy/__init__.py\", \"target\": \"numpy.core.fromnumeric.prod\"}",
+            "new_value": "{\"kind\": \"import\", \"path\": \"numpy/__init__.py\", \"target\": \"numpy._core.prod\"}",
+            "from_version": "1.26.4",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.26.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2980,
+                "line_end": 3101
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "numpy/_core/fromnumeric.py",
+                "line_start": 3069,
+                "line_end": 3192
+              },
+              {
+                "type": "public_binding",
+                "version": "2.0.0",
+                "path": "numpy/__init__.py",
+                "line_start": 122,
+                "line_end": 170
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.26.4",
+                "to_version": "2.0.0",
+                "from_commit_sha": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+                "to_commit_sha": "1d49c7f7ff527c696fc26ab2278ad51632a66660"
+              }
+            ]
+          },
+          {
+            "api": "numpy.prod",
+            "type": "source_path_changed",
+            "parameter": null,
+            "old_value": "numpy/core/fromnumeric.py",
+            "new_value": "numpy/_core/fromnumeric.py",
+            "from_version": "1.26.4",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.26.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2980,
+                "line_end": 3101
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "numpy/_core/fromnumeric.py",
+                "line_start": 3069,
+                "line_end": 3192
+              },
+              {
+                "type": "public_binding",
+                "version": "2.0.0",
+                "path": "numpy/__init__.py",
+                "line_start": 122,
+                "line_end": 170
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.26.4",
+                "to_version": "2.0.0",
+                "from_commit_sha": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+                "to_commit_sha": "1d49c7f7ff527c696fc26ab2278ad51632a66660"
+              }
+            ]
+          },
+          {
+            "api": "numpy.prod",
+            "type": "effective_target_changed",
+            "parameter": null,
+            "old_value": "numpy.core.fromnumeric.prod",
+            "new_value": "numpy._core.fromnumeric.prod",
+            "from_version": "1.26.4",
+            "source": null,
+            "delegates_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.26.4",
+                "path": "numpy/core/fromnumeric.py",
+                "line_start": 2980,
+                "line_end": 3101
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "numpy/_core/fromnumeric.py",
+                "line_start": 3069,
+                "line_end": 3192
+              },
+              {
+                "type": "public_binding",
+                "version": "2.0.0",
+                "path": "numpy/__init__.py",
+                "line_start": 122,
+                "line_end": 170
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.26.4",
+                "to_version": "2.0.0",
+                "from_commit_sha": "9815c16f449e12915ef35a8255329ba26dacd5c0",
+                "to_commit_sha": "1d49c7f7ff527c696fc26ab2278ad51632a66660"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "model": "openai/gpt-6-luna",
+    "input_digest": "a3d08c9ed77d806e8781cb908a3c2f435277d1b75cb7f50b6d7b782a5c4ea813"
+  }
+]
