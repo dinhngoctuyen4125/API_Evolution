@@ -173,18 +173,20 @@ def compact_timeline(timeline, target):
                       if item["name"] == target), None)
         if state is None:
             raise ValueError(f"Timeline {timeline['mapping_id']} lacks state for {target}")
+        if state["status"] not in CALLABLE_STATUSES:
+            continue
         milestones.append({
             "version": milestone["version"],
-            "api_states": milestone["api_states"],
+            "compared_to_version": milestone.get("compared_to_version"),
+            "api_states": [{key: state.get(key) for key in
+                            ("name", "status", "signature", "effective_signature")}],
             "changes": [
                 {key: change.get(key) for key in
                  ("api", "type", "parameter", "old_value", "new_value",
-                  "delegates_to")}
-                for change in milestone["changes"]],
+                  "from_version", "delegates_to")}
+                for change in milestone["changes"] if change["api"] == target],
         })
-    return {"mapping_id": timeline["mapping_id"], "seed": timeline["seed"],
-            "deprecated_version": timeline.get("deprecated_version"),
-            "milestones": milestones}
+    return {"mapping_id": timeline["mapping_id"], "milestones": milestones}
 
 
 def candidate_versions(timelines, target):
