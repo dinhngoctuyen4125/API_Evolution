@@ -190,14 +190,28 @@ python build_api_source_tracks_v2.py --library numpy --mapping-id 3 --from-versi
 
 **Mô tả:** dùng LLM ghép `deprecated_version` và đường tiến hóa của hai API ở bước 5 thành đường tiến hóa hoàn chỉnh cho từng cặp migration.
 
-**Chạy từng thư viện:**
+**Chọn API gọi model (chọn một):**
+
+OpenRouter:
 
 ```powershell
 $env:OPENROUTER_API_KEY = "sk-or-v1-..."
+$provider = "openrouter"
+```
 
-python build_migration_evolution_v2.py --library numpy --mapping-id 1 --dry-run
-python build_migration_evolution_v2.py --library numpy
-python build_migration_evolution_v2.py --library numpy --resume
+OpenAI trực tiếp:
+
+```powershell
+$env:OPENAI_API_KEY = "sk-..."
+$provider = "openai"
+```
+
+**Chạy từng thư viện:**
+
+```powershell
+python build_migration_evolution_v2.py --library numpy --mapping-id 1 --provider $provider --dry-run
+python build_migration_evolution_v2.py --library numpy --provider $provider
+python build_migration_evolution_v2.py --library numpy --provider $provider --resume
 ```
 
 **Output:** `data/{library}/migration_evolution_v2.json`. Khi chọn `--mapping-id`, script ghi `migration_evolution_v2_mapping_{id}.json` để không ghi đè output toàn thư viện.
