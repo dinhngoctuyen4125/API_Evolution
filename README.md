@@ -254,6 +254,9 @@ python build_callsite_versions.py --library numpy --file U
 # Hoặc chạy thử 10 mẫu O rồi tiếp tục (thay cho lệnh O đầy đủ ở trên).
 python build_callsite_versions.py --library numpy --file O --max-samples 10
 python build_callsite_versions.py --library numpy --file O --resume
+
+# Mặc định tối đa 8 lời gọi model đồng thời; giảm nếu chạm giới hạn API.
+python build_callsite_versions.py --library numpy --file O --provider openai --workers 4 --resume
 ```
 
 **Output:** `data/{library}/O_with_versions.json` hoặc `U_with_versions.json`.

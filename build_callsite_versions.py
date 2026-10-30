@@ -5,8 +5,11 @@ Chạy:     python build_callsite_versions.py --library numpy --file O
 """
 
 import argparse
+from collections import deque
+from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import io
+from itertools import islice
 import json
 import os
 import socket
@@ -361,6 +364,27 @@ def render_output(selected, completed, file_kind):
             for (_, sample), versions in zip(selected, completed)]
 
 
+def evaluate_sample(sample, source_index, file_kind, timelines, client, prompt,
+                    model, provider):
+    matches = matching_timelines(sample, timelines)
+    api_call = extract_api_call(sample, file_kind)
+    if not matches:
+        return [], "migration_timeline_missing"
+    if not api_call:
+        return [], "api_call_not_found_after_probe"
+    candidates = candidate_versions(matches, target_api(sample, file_kind))
+    if not candidates:
+        return [], "no_callable_milestone"
+    facts = model_input(sample, source_index, file_kind, matches, candidates,
+                        api_call)
+    try:
+        versions = validate_versions(call_model(
+            client, prompt, facts, model, provider), candidates)
+    except (ValueError, RuntimeError) as exc:
+        raise ValueError(f"Sample {source_index}: {exc}") from exc
+    return versions, (None if versions else "model_found_no_compatible_milestone")
+
+
 # 6. Điều phối pipeline cho một thư viện và tập O/U.
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
@@ -371,6 +395,8 @@ def main(argv=None):
     parser.add_argument("--output", type=Path)
     parser.add_argument("--max-samples", type=int,
                         help="Process at most this many library samples in this run")
+    parser.add_argument("--workers", type=int, default=8,
+                        help="Maximum concurrent model requests (default: 8)")
     parser.add_argument("--dry-run", action="store_true",
                         help="Print one model input without calling the API")
     parser.add_argument("--resume", action="store_true",
@@ -381,6 +407,8 @@ def main(argv=None):
     try:
         if args.max_samples is not None and args.max_samples < 1:
             raise ValueError("--max-samples must be positive")
+        if args.workers < 1:
+            raise ValueError("--workers must be positive")
         if args.resume and args.overwrite:
             raise ValueError("Choose either --resume or --overwrite")
         # Nạp mẫu, timeline và cấu hình model.
@@ -463,41 +491,32 @@ def main(argv=None):
         if not args.resume:
             journal.write_text(json.dumps({"digest": digest, "count": len(selected)})
                                + "\n", encoding="utf-8")
-        # Đánh giá từng mẫu và ghi tiến độ ngay sau mỗi kết quả.
+        # Chạy đồng thời, nhưng chỉ luồng chính ghi journal theo thứ tự mẫu.
         no_timeline = missing_call = 0
-        for index in range(len(completed), stop):
-            source_index, sample = selected[index]
-            matches = matching_timelines(sample, timelines)
-            api_call = extract_api_call(sample, args.file)
-            reason = None
-            if not matches:
-                versions = []
-                reason = "migration_timeline_missing"
-                no_timeline += 1
-            elif not api_call:
-                versions = []
-                reason = "api_call_not_found_after_probe"
-                missing_call += 1
-            else:
-                candidates = candidate_versions(matches, target_api(sample, args.file))
-                if candidates:
-                    facts = model_input(sample, source_index, args.file,
-                                        matches, candidates, api_call)
-                    try:
-                        versions = validate_versions(call_model(
-                            client, prompt, facts, model, provider), candidates)
-                    except (ValueError, RuntimeError) as exc:
-                        raise ValueError(f"Sample {source_index}: {exc}") from exc
-                else:
-                    versions = []
-                    reason = "no_callable_milestone"
-            if not versions and reason is None:
-                reason = "model_found_no_compatible_milestone"
-            append_progress(journal, index, source_index, versions, reason)
-            completed.append(versions)
-            if (index + 1) % 25 == 0 or index + 1 == stop:
-                print(f"{args.library} {args.file}: {index + 1}/{len(selected)} samples",
-                      file=sys.stderr, flush=True)
+        with ThreadPoolExecutor(max_workers=args.workers) as pool:
+            indices = iter(range(len(completed), stop))
+
+            def submit(index):
+                source_index, sample = selected[index]
+                return index, pool.submit(evaluate_sample, sample, source_index,
+                                          args.file, timelines, client, prompt,
+                                          model, provider)
+
+            pending = deque(submit(index) for index in islice(indices, args.workers))
+            while pending:
+                index, future = pending.popleft()
+                versions, reason = future.result()
+                source_index = selected[index][0]
+                no_timeline += reason == "migration_timeline_missing"
+                missing_call += reason == "api_call_not_found_after_probe"
+                append_progress(journal, index, source_index, versions, reason)
+                completed.append(versions)
+                if (index + 1) % 25 == 0 or index + 1 == stop:
+                    print(f"{args.library} {args.file}: {index + 1}/{len(selected)} samples",
+                          file=sys.stderr, flush=True)
+                next_index = next(indices, None)
+                if next_index is not None:
+                    pending.append(submit(next_index))
 
         # Gộp bản ghi gốc với danh sách version đã chọn.
         result = render_output(selected, completed, args.file)
