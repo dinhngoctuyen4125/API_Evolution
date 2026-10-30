@@ -392,7 +392,7 @@ class RateLimitGate:
 
     def limited(self, error, delay):
         match = re.search(
-            r"tokens per min \(TPM\): Limit ([\d,]+), Used [\d,]+, Requested ([\d,]+)",
+            r"\bTPM\)?:\s*Limit ([\d,]+),\s*Used [\d,]+,\s*Requested ([\d,]+)",
             str(error), re.IGNORECASE)
         limit = int(match.group(1).replace(",", "")) if match else 0
         floor = (60 * int(match.group(2).replace(",", "")) / limit * 1.2
