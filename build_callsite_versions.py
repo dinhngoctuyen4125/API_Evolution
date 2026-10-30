@@ -7,13 +7,19 @@ Chạy:     python build_callsite_versions.py --library numpy --file O
 import argparse
 from collections import deque
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 import hashlib
 import io
 from itertools import islice
 import json
+import math
 import os
+import random
+import re
 import socket
 import sys
+import threading
 import time
 import tokenize
 from urllib.error import HTTPError, URLError
@@ -364,8 +370,77 @@ def render_output(selected, completed, file_kind):
             for (_, sample), versions in zip(selected, completed)]
 
 
+class RateLimitGate:
+    """Space OpenAI requests and pause all workers after a temporary 429."""
+
+    def __init__(self):
+        self.condition = threading.Condition()
+        self.next_start = 0.0
+        self.cooldown = 0.0
+        self.interval = 0.0
+        self.last_limit = 0.0
+
+    def wait(self):
+        with self.condition:
+            while True:
+                now = time.monotonic()
+                delay = max(self.next_start, self.cooldown) - now
+                if delay <= 0:
+                    self.next_start = now + self.interval
+                    return
+                self.condition.wait(timeout=delay)
+
+    def limited(self, error, delay):
+        match = re.search(
+            r"tokens per min \(TPM\): Limit ([\d,]+), Used [\d,]+, Requested ([\d,]+)",
+            str(error), re.IGNORECASE)
+        limit = int(match.group(1).replace(",", "")) if match else 0
+        floor = (60 * int(match.group(2).replace(",", "")) / limit * 1.2
+                 if limit else 0.5)
+        with self.condition:
+            now = time.monotonic()
+            previous_interval = self.interval
+            if now - self.last_limit >= 1:
+                self.interval = max(floor, self.interval * 1.25)
+                self.last_limit = now
+            else:
+                self.interval = max(floor, self.interval)
+            self.cooldown = max(self.cooldown, now + delay + random.uniform(0.05, 0.2))
+            self.condition.notify_all()
+            if self.interval > previous_interval:
+                print(f"OpenAI 429: spacing requests by {self.interval:.2f}s; "
+                      f"retrying after at least {delay:.2f}s",
+                      file=sys.stderr, flush=True)
+
+
+def retry_after_seconds(error, attempt):
+    headers = error.response.headers
+    for name, divisor in (("retry-after-ms", 1000), ("retry-after", 1)):
+        value = headers.get(name)
+        if value is None:
+            continue
+        try:
+            delay = float(value) / divisor
+        except ValueError:
+            if name != "retry-after":
+                continue
+            try:
+                delay = (parsedate_to_datetime(value) -
+                         datetime.now(timezone.utc)).total_seconds()
+            except (TypeError, ValueError, OverflowError):
+                continue
+        if math.isfinite(delay) and delay >= 0:
+            return delay
+    match = re.search(r"try again in ([\d.]+)\s*(ms|s|m)\b", str(error),
+                      re.IGNORECASE)
+    if match:
+        return float(match.group(1)) * {"ms": 0.001, "s": 1, "m": 60}[
+            match.group(2).lower()]
+    return min(2 ** attempt, 60)
+
+
 def evaluate_sample(sample, source_index, file_kind, timelines, client, prompt,
-                    model, provider):
+                    model, provider, gate):
     matches = matching_timelines(sample, timelines)
     api_call = extract_api_call(sample, file_kind)
     if not matches:
@@ -378,8 +453,30 @@ def evaluate_sample(sample, source_index, file_kind, timelines, client, prompt,
     facts = model_input(sample, source_index, file_kind, matches, candidates,
                         api_call)
     try:
-        versions = validate_versions(call_model(
-            client, prompt, facts, model, provider), candidates)
+        if provider == "openai":
+            from openai import APIConnectionError, InternalServerError, RateLimitError
+            deadline = time.monotonic() + 300
+            for attempt in range(12):
+                gate.wait()
+                try:
+                    answer = call_model(client, prompt, facts, model, provider)
+                    break
+                except RateLimitError as exc:
+                    if exc.code in {"insufficient_quota", "billing_hard_limit_reached",
+                                    "usage_limit_reached"} \
+                            or exc.type == "insufficient_quota":
+                        raise
+                    delay = retry_after_seconds(exc, attempt)
+                    if attempt == 11 or delay > deadline - time.monotonic():
+                        raise RuntimeError("OpenAI rate limit persisted; use --resume later") from exc
+                    gate.limited(exc, delay)
+                except (APIConnectionError, InternalServerError):
+                    if attempt == 11:
+                        raise
+                    time.sleep(min(2 ** attempt, 30) + random.uniform(0, 0.5))
+        else:
+            answer = call_model(client, prompt, facts, model, provider)
+        versions = validate_versions(answer, candidates)
     except (ValueError, RuntimeError) as exc:
         raise ValueError(f"Sample {source_index}: {exc}") from exc
     return versions, (None if versions else "model_found_no_compatible_milestone")
@@ -485,7 +582,9 @@ def main(argv=None):
                     from openai import OpenAI
                 except ImportError as exc:
                     raise ValueError("Install requirements.txt to use the OpenAI API") from exc
-                client = OpenAI(api_key=api_key, timeout=180, max_retries=2)
+                client = OpenAI(api_key=api_key, timeout=180, max_retries=0)
+
+        gate = RateLimitGate() if provider == "openai" else None
 
         output.parent.mkdir(parents=True, exist_ok=True)
         if not args.resume:
@@ -500,7 +599,7 @@ def main(argv=None):
                 source_index, sample = selected[index]
                 return index, pool.submit(evaluate_sample, sample, source_index,
                                           args.file, timelines, client, prompt,
-                                          model, provider)
+                                          model, provider, gate)
 
             pending = deque(submit(index) for index in islice(indices, args.workers))
             while pending:

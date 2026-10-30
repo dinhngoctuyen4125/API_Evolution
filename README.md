@@ -255,7 +255,7 @@ python build_callsite_versions.py --library numpy --file U
 python build_callsite_versions.py --library numpy --file O --max-samples 10
 python build_callsite_versions.py --library numpy --file O --resume
 
-# Mặc định tối đa 8 lời gọi model đồng thời; giảm nếu chạm giới hạn API.
+# Mặc định tối đa 8 lời gọi model đồng thời; OpenAI tự giãn nhịp và thử lại khi gặp 429 tạm thời.
 python build_callsite_versions.py --library numpy --file O --provider openai --workers 4 --resume
 ```
 
