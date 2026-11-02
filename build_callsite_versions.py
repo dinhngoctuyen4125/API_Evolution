@@ -5,6 +5,7 @@ Chạy:     python build_callsite_versions.py --library numpy --file O
 """
 
 import argparse
+import ast
 from collections import deque
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
@@ -162,6 +163,22 @@ def extract_api_call(sample, file_kind):
                    and significant[start - 2].type == tokenize.NAME):
                 start -= 2
             return complete_call(significant[start], index + 1)
+    # Python 3.11 coi cả f-string là STRING; đọc lời gọi trong biểu thức {...}.
+    for token in tokens:
+        if token.type != tokenize.STRING or not re.match(r"(?i)^(?:f|fr|rf)['\"]", token.string):
+            continue
+        try:
+            expression = ast.parse(token.string, mode="eval")
+        except SyntaxError:
+            continue
+        calls = sorted((node for node in ast.walk(expression) if isinstance(node, ast.Call)),
+                       key=lambda node: (node.lineno, node.col_offset))
+        for node in calls:
+            name = ast.unparse(node.func)
+            if (tuple(name.split(".")) in name_tokens
+                    or (len(parts) >= 2 and parts[-2][:1].isupper()
+                        and name.endswith("." + parts[-1]))):
+                return ast.get_source_segment(token.string, node)
     return None
 
 
