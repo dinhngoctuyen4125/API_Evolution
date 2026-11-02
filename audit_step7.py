@@ -303,16 +303,16 @@ def main():
             stats.append((library, kind, counts))
     # 6. Ghi bốn bảng không trùng nhau và in thống kê ngắn.
     fields = ["library", "set", "index", "target_api", "api_call",
-              "version", "category", "detail", "effective_signatures"]
+              "effective_signatures", "version", "category", "detail"]
     write_csv("invalid_selected_versions.csv", issues, fields)
     write_csv("accessor_needs_review.csv", manual_review, fields)
     write_csv("possible_omitted_versions.csv", possible_omissions, [
         "library", "set", "index", "target_api", "api_call",
-        "version", "basis", "effective_signature"])
+        "effective_signature", "version", "basis"])
     write_csv("empty_samples_audit.csv", empty_audit, [
         "library", "set", "index", "target_api", "api_call",
-        "reference", "reason", "classification", "candidate_versions",
-        "compatible_versions", "uncertain_versions", "incompatible_versions"])
+        "reference", "candidate_versions", "compatible_versions",
+        "uncertain_versions", "incompatible_versions", "reason", "classification"])
     for library, kind, counts in stats:
         print(library, kind, dict(counts))
     print("TOTAL", len(issues), "invalid selected versions;", len(empty_audit), "unresolved samples;",
