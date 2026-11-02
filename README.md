@@ -11,6 +11,8 @@ API_Evolution/
 ├── build_api_source_tracks_v2.py                # Bước 5: truy source và chữ ký hiệu dụng
 ├── build_migration_evolution_v2.py              # Bước 6: tổng hợp đường tiến hóa cặp API
 ├── build_callsite_versions.py                   # Bước 7: gán mốc version cho mẫu gọi API O/U
+├── audit_step7.py                                # Bước 8: rà soát version đã gán
+├── build_step7_modified.py                       # Bước 8: tạo bộ mẫu đã sửa
 ├── source_evolution_rules.py                    # Quy tắc phân giải public API và AST
 ├── export_rules/                                # Quy tắc export chung và theo thư viện
 │   ├── __init__.py
@@ -38,7 +40,10 @@ API_Evolution/
 │       ├── migration_evolution_v2.json          # Kết quả bước 6
 │       ├── O_with_versions.json                 # Kết quả bước 7 (tập O)
 │       ├── U_with_versions.json                 # Kết quả bước 7 (tập U)
+│       ├── O_modified.json                      # Kết quả bước 8 (tập O)
+│       ├── U_modified.json                      # Kết quả bước 8 (tập U)
 │       └── *.progress.jsonl                     # Tiến độ bước 7 khi chạy
+├── reports/step7/                               # Báo cáo rà soát bước 8
 ├── cache/{library}/                             # Dữ liệu tải về, không đưa vào Git
 │   ├── docs/{version}/release_notes.html
 │   └── source/                                  # Một Git repository cho mỗi thư viện
@@ -263,3 +268,19 @@ python build_callsite_versions.py --library numpy --file O --provider openai --w
 
 - Mỗi mẫu giữ nguyên các trường đầu vào, thêm `api_call` (lời gọi API cùng đầy đủ tham số, hoặc `null` nếu không tìm thấy) ngay trước `versions[]`. Model dùng `api_call` thay cho `reference` để chọn các **mốc của timeline** phù hợp.
 - `--max-samples` tạo output một phần; `--resume` dùng file tiến độ cùng phiên bản prompt để xử lý các mẫu còn lại. File tiến độ tạo trước thay đổi này cần chạy lại bằng `--overwrite`.
+
+## Bước 8 — Rà soát và sửa version
+
+**Mô tả:**
+
+- `audit_step7.py` đối chiếu kết quả bước 7 với migration path (xem [báo cáo](reports/step7/README.md)).
+- `build_step7_modified.py` dùng ba CSV đã rà soát `invalid_selected_versions.csv`, `possible_omitted_versions_diy.csv`, `empty_samples_reassessed.csv` để xóa/thêm `versions` và điền 4 `api_call` còn null.
+
+**Chạy:**
+
+```powershell
+python audit_step7.py
+python build_step7_modified.py
+```
+
+**Output:** các CSV trong `reports/step7/output/` và `data/{library}/O_modified.json`, `U_modified.json`.

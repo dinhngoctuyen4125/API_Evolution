@@ -1,0 +1,9 @@
+﻿library,set,index,target_api,api_call,versions
+numpy,U,1157,numpy.prod,numpy.prod(self.cropped_image[0].shape),1.0;1.0.4;1.7.0;1.8.0;1.11.2;1.12.0;1.15.0;1.17.0;1.25.0;2.0.0
+pytorch,O,3487,torch.norm,torch.norm(C2x2-tC2x2),1.0.0;1.1.0;1.2.0;1.5.0;1.6.0;1.7.0;1.8.0;1.9.0;1.10.0;1.12.0;2.0.0;2.1.0;2.2.0;2.5.0;2.8.0;2.10.0;2.13.0;2.14.0
+pytorch,O,3488,torch.norm,torch.norm(C2x2-tC2x2),1.0.0;1.1.0;1.2.0;1.5.0;1.6.0;1.7.0;1.8.0;1.9.0;1.10.0;1.12.0;2.0.0;2.1.0;2.2.0;2.5.0;2.8.0;2.10.0;2.13.0;2.14.0
+scikit-learn,O,148,sklearn.preprocessing.Imputer,"SimpleImputer(strategy=""most_frequent"")",0.14;0.15.0;0.16.0;0.17;0.18;0.19.0;0.20.0;0.21.0;0.21.3
+scikit-learn,O,149,sklearn.preprocessing.Imputer,SimpleImputer(),0.14;0.15.0;0.16.0;0.17;0.18;0.19.0;0.20.0;0.21.0;0.21.3
+scikit-learn,O,150,sklearn.preprocessing.Imputer,SimpleImputer(),0.14;0.15.0;0.16.0;0.17;0.18;0.19.0;0.20.0;0.21.0;0.21.3
+scipy,O,904,scipy.integrate.trapz,"integrate.trapz(lad, z)",1.6.0;1.10.1;1.12.0
+tensorflow,U,4656,tensorflow.saved_model.load,"tf.saved_model.load(model_path, tags=tag)",2.0.0;2.3.0;2.4.0;2.6.0;2.7.0;2.9.0
