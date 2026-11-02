@@ -7,7 +7,7 @@
 **Cơ chế:**
 
 1. Đọc hai file `O/U_with_versions.json` và migration path của từng thư viện.
-2. Duyệt từng mẫu; O xét API cũ, U xét API thay thế, rồi ghép timeline theo cặp API.
+2. Duyệt từng mẫu; O xét API cũ, U xét API thay thế, rồi ghép timeline theo cặp API. Nếu `alias dict` có tên lời gọi, kiểm tra nó trỏ đúng API đang xét trước khi so chữ ký.
 3. Với `versions=[]`, suy ra nguyên nhân và thử `api_call` với `effective_signature` của các mốc callable.
 4. Với mẫu đã có version, thử mọi mốc callable chưa chọn; nếu `effective_signature` nhận `api_call`, ghi là **nghi bỏ sót**, không tự thêm vào `versions`.
 5. Với từng version đã chọn, kiểm tra trạng thái API và ghép đối số của `api_call` vào `effective_signature`; ghi mốc có mâu thuẫn.
@@ -73,7 +73,7 @@ Có **1.817 mẫu** với `versions=[]`. Bảng dưới đây đếm mẫu; nguy
 - **numpy:** U có 1 lời gọi trong f-string bị bước trích `api_call` bỏ sót.
 - **pandas, transformers:** không có mẫu rỗng.
 - **pytorch:** O có 13 lời gọi không khớp chữ ký và 2 lời gọi f-string bị bỏ sót; U có 42 mẫu thiếu thông tin chữ ký để kết luận.
-- **scikit-learn:** O có 3 mẫu `SimpleImputer` bị alias gán thành API cũ `Imputer` và 1 lời gọi không khớp chữ ký; U có 1 lời gọi không khớp chữ ký.
+- **scikit-learn:** O có 3 mẫu `SimpleImputer` nghi bỏ sót version theo ánh xạ alias tới `Imputer` và 1 lời gọi không khớp chữ ký; U có 1 lời gọi không khớp chữ ký.
 - **scipy:** O có 14 mẫu thiếu timeline, 2 lời gọi không khớp chữ ký, 1 lời gọi f-string bị bỏ sót; U có 81 mẫu thiếu timeline và 3 mẫu không có milestone callable.
 - **seaborn:** O có 570, U có 12 mẫu thiếu timeline cho cặp API.
 - **tensorflow:** O có 971 mẫu không có milestone callable; U có 96 mẫu tương tự, 3 lời gọi không khớp chữ ký và 1 mẫu model bỏ sót: `index=4656` trong `U_with_versions.json`, `tf.saved_model.load(model_path, tags=tag)` khớp các mốc 2.0.0, 2.3.0, 2.4.0, 2.6.0, 2.7.0, 2.9.0.

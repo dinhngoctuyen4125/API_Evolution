@@ -102,13 +102,16 @@ def binding_modes(signature, callee, target):
     return [signature]
 
 
-def incompatibility(call, signature_text, target):
+def incompatibility(call, signature_text, target, aliases=None):
     """Thử bind: '' = khớp, chuỗi lỗi = sai cú pháp, None = chưa đủ dữ kiện."""
     parsed = parse_call(call)
     signature = parse_signature(signature_text)
     if parsed is None or signature is None:
         return None
     positional, keywords, uncertain, callee = parsed
+    # Chỉ so chữ ký API mà alias dict thực sự trỏ tới (nếu có ánh xạ).
+    if aliases and aliases.get(callee, target) != target:
+        return None
     if uncertain:
         # f(*args) hoặc f(**kwargs): không biết số/tên đối số lúc chạy.
         return None
@@ -132,7 +135,8 @@ def classify_empty(row, reason, kind, target, states_by_version, call):
         if not usable:
             continue
         candidate.append(version)
-        results = [incompatibility(call, state.get("effective_signature"), target)
+        results = [incompatibility(call, state.get("effective_signature"), target,
+                                   row.get("alias dict"))
                    for state in usable]
         if target == "pandas.DataFrame.loc":
             uncertain.append(version)
@@ -160,16 +164,12 @@ def classify_empty(row, reason, kind, target, states_by_version, call):
                     for name in names)
         classification = "api_call_extraction_miss" if found else "api_call_missing"
     elif reason == "model_found_no_compatible_milestone":
-        if compatible:
-            parsed = parse_call(call)
-            replacement_name = row["replacement api"].split(".")[-1]
-            target_name = target.split(".")[-1]
-            # O gọi SimpleImputer nhưng alias dict lại gán thành Imputer.
-            alias_conflict = (kind == "O" and parsed is not None
-                              and parsed[3].split(".")[-1] == replacement_name
-                              and replacement_name != target_name)
-            classification = ("alias_target_conflict" if alias_conflict
-                              else "possible_false_negative")
+        parsed = parse_call(call)
+        aliases = row.get("alias dict", {})
+        if parsed and parsed[3] in aliases and aliases[parsed[3]] != target:
+            classification = "alias_target_conflict"
+        elif compatible:
+            classification = "possible_false_negative"
         elif uncertain:
             classification = "insufficient_signature_evidence"
         else:
@@ -251,7 +251,8 @@ def main():
                         effective_signature = state.get("effective_signature")
                         if not effective_signature:
                             continue
-                        if incompatibility(call, effective_signature, target) == "":
+                        if incompatibility(call, effective_signature, target,
+                                           row.get("alias dict")) == "":
                             possible_omissions.append(dict(
                                 library=library, set=kind, index=index,
                                 target_api=target,
@@ -279,7 +280,8 @@ def main():
                         if not effective_signature:
                             compatible = True  # Thiếu chữ ký thì chưa thể chứng minh version sai.
                             continue
-                        result = incompatibility(call, effective_signature, target)
+                        result = incompatibility(call, effective_signature, target,
+                                                 row.get("alias dict"))
                         if result in (None, ""):
                             compatible = True
                         evidence.append((effective_signature, result))
