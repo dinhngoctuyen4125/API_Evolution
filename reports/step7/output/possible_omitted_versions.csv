@@ -1,0 +1,185 @@
+﻿library,set,index,target_api,api_call,version,basis,signature
+pytorch,U,2854,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.11.0,same_signature_as_selected_version,"torch.nn.functional.interpolate(input: Tensor, size: Optional[int]=None, scale_factor: Optional[List[float]]=None, mode: str='nearest', align_corners: Optional[bool]=None, recompute_scale_factor: Optional[bool]=None, antialias: bool=False)"
+pytorch,U,2854,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.13.0,same_signature_as_selected_version,"torch.nn.functional.interpolate(input: Tensor, size: Optional[int]=None, scale_factor: Optional[List[float]]=None, mode: str='nearest', align_corners: Optional[bool]=None, recompute_scale_factor: Optional[bool]=None, antialias: bool=False)"
+pytorch,U,2854,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",2.0.0,same_signature_as_selected_version,"torch.nn.functional.interpolate(input: Tensor, size: Optional[int]=None, scale_factor: Optional[List[float]]=None, mode: str='nearest', align_corners: Optional[bool]=None, recompute_scale_factor: Optional[bool]=None, antialias: bool=False)"
+scikit-learn,O,3,sklearn.mixture.GMM,"mixture.GMM(n_components, covariance_type, random_state=rng)",0.9,same_signature_as_selected_version,"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,78,sklearn.mixture.GMM,"GMM(n_mix, random_state=self.random_state)",0.9,same_signature_as_selected_version,"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,85,sklearn.mixture.GMM,"GMM(n_components=k,covariance_type=covar_type, init_params='wc', n_iter=n_iter)",0.13,same_signature_as_selected_version,"sklearn.mixture.GMM(n_components=1, covariance_type='diag', random_state=None, thresh=0.01, min_covar=0.001, n_iter=100, n_init=1, params='wmc', init_params='wmc')"
+scikit-learn,O,85,sklearn.mixture.GMM,"GMM(n_components=k,covariance_type=covar_type, init_params='wc', n_iter=n_iter)",0.14,same_signature_as_selected_version,"sklearn.mixture.GMM(n_components=1, covariance_type='diag', random_state=None, thresh=0.01, min_covar=0.001, n_iter=100, n_init=1, params='wmc', init_params='wmc')"
+scikit-learn,O,152,sklearn.preprocessing.Imputer,"SimpleImputer(strategy=""most_frequent"")",0.14,same_signature_as_selected_version,"sklearn.preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0, verbose=0, copy=True)"
+scikit-learn,O,152,sklearn.preprocessing.Imputer,"SimpleImputer(strategy=""most_frequent"")",0.15.0,same_signature_as_selected_version,"sklearn.preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0, verbose=0, copy=True)"
+scikit-learn,O,152,sklearn.preprocessing.Imputer,"SimpleImputer(strategy=""most_frequent"")",0.16.0,same_signature_as_selected_version,"sklearn.preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0, verbose=0, copy=True)"
+scikit-learn,O,152,sklearn.preprocessing.Imputer,"SimpleImputer(strategy=""most_frequent"")",0.17,same_signature_as_selected_version,"sklearn.preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0, verbose=0, copy=True)"
+scikit-learn,O,152,sklearn.preprocessing.Imputer,"SimpleImputer(strategy=""most_frequent"")",0.18,same_signature_as_selected_version,"sklearn.preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0, verbose=0, copy=True)"
+scikit-learn,O,152,sklearn.preprocessing.Imputer,"SimpleImputer(strategy=""most_frequent"")",0.19.0,same_signature_as_selected_version,"sklearn.preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0, verbose=0, copy=True)"
+scipy,O,238,scipy.interpolate.interp2d,"interp2d(x, y, z)",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,238,scipy.interpolate.interp2d,"interp2d(x, y, z)",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,238,scipy.interpolate.interp2d,"interp2d(x, y, z)",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,238,scipy.interpolate.interp2d,"interp2d(x, y, z)",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,248,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(Ydata, Xdata, Zdata, kind='linear')",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,248,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(Ydata, Xdata, Zdata, kind='linear')",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,248,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(Ydata, Xdata, Zdata, kind='linear')",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,248,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(Ydata, Xdata, Zdata, kind='linear')",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,251,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(pix, idx[start:end+1], I[idx[start:end+1], :], kind='linear')",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,251,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(pix, idx[start:end+1], I[idx[start:end+1], :], kind='linear')",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,251,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(pix, idx[start:end+1], I[idx[start:end+1], :], kind='linear')",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,251,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(pix, idx[start:end+1], I[idx[start:end+1], :], kind='linear')",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,257,scipy.interpolate.interp2d,"interp2d(x, y, z)",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,257,scipy.interpolate.interp2d,"interp2d(x, y, z)",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,257,scipy.interpolate.interp2d,"interp2d(x, y, z)",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,257,scipy.interpolate.interp2d,"interp2d(x, y, z)",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,263,scipy.interpolate.interp2d,"interpolate.interp2d(model_lambda, time_steps, sim_flux)",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,263,scipy.interpolate.interp2d,"interpolate.interp2d(model_lambda, time_steps, sim_flux)",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,263,scipy.interpolate.interp2d,"interpolate.interp2d(model_lambda, time_steps, sim_flux)",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,270,scipy.interpolate.interp2d,"inter.interp2d(CPF100_F_px, CPF100_u, CPF100_F, fill_value=None)",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,270,scipy.interpolate.interp2d,"inter.interp2d(CPF100_F_px, CPF100_u, CPF100_F, fill_value=None)",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,270,scipy.interpolate.interp2d,"inter.interp2d(CPF100_F_px, CPF100_u, CPF100_F, fill_value=None)",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,270,scipy.interpolate.interp2d,"inter.interp2d(CPF100_F_px, CPF100_u, CPF100_F, fill_value=None)",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,280,scipy.interpolate.interp2d,"interpolate.interp2d(rib_mat, shell_mat, weight, kind='linear')",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,280,scipy.interpolate.interp2d,"interpolate.interp2d(rib_mat, shell_mat, weight, kind='linear')",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,280,scipy.interpolate.interp2d,"interpolate.interp2d(rib_mat, shell_mat, weight, kind='linear')",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,280,scipy.interpolate.interp2d,"interpolate.interp2d(rib_mat, shell_mat, weight, kind='linear')",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,282,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x, x, fextracted, kind='cubic')",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,282,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x, x, fextracted, kind='cubic')",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,282,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x, x, fextracted, kind='cubic')",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,282,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x, x, fextracted, kind='cubic')",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,287,scipy.interpolate.interp2d,"interpolate.interp2d(ay_table_flat, ym_table_flat, z_table_flat)",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,287,scipy.interpolate.interp2d,"interpolate.interp2d(ay_table_flat, ym_table_flat, z_table_flat)",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,287,scipy.interpolate.interp2d,"interpolate.interp2d(ay_table_flat, ym_table_flat, z_table_flat)",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,287,scipy.interpolate.interp2d,"interpolate.interp2d(ay_table_flat, ym_table_flat, z_table_flat)",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,296,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x, y, z, kind=mode)",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,296,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x, y, z, kind=mode)",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,296,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x, y, z, kind=mode)",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,296,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x, y, z, kind=mode)",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,302,scipy.interpolate.interp2d,"interp.interp2d(dt, ang, dV.T, kind=""linear"")",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,302,scipy.interpolate.interp2d,"interp.interp2d(dt, ang, dV.T, kind=""linear"")",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,302,scipy.interpolate.interp2d,"interp.interp2d(dt, ang, dV.T, kind=""linear"")",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,302,scipy.interpolate.interp2d,"interp.interp2d(dt, ang, dV.T, kind=""linear"")",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,303,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(y, x, np.reshape(imvec, (self.ydim, self.xdim)),
+                                                    kind=interp)",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,303,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(y, x, np.reshape(imvec, (self.ydim, self.xdim)),
+                                                    kind=interp)",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,303,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(y, x, np.reshape(imvec, (self.ydim, self.xdim)),
+                                                    kind=interp)",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,321,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(self.xg, self.yg, self.sg)",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,321,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(self.xg, self.yg, self.sg)",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,321,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(self.xg, self.yg, self.sg)",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,321,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(self.xg, self.yg, self.sg)",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,325,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(ys, xs, imarr, kind='linear')",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,325,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(ys, xs, imarr, kind='linear')",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,325,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(ys, xs, imarr, kind='linear')",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,335,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(self.lam, self.amax, \
+                    numpy.log10(self.kabs))",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,335,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(self.lam, self.amax, \
+                    numpy.log10(self.kabs))",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,335,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(self.lam, self.amax, \
+                    numpy.log10(self.kabs))",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,335,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(self.lam, self.amax, \
+                    numpy.log10(self.kabs))",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,338,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(t,r,psi4T_real,kind='cubic')",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,338,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(t,r,psi4T_real,kind='cubic')",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,338,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(t,r,psi4T_real,kind='cubic')",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,338,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(t,r,psi4T_real,kind='cubic')",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,344,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(
+            self.Mach_grid, self.alpha_grid, self.CA_grid
+        )",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,344,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(
+            self.Mach_grid, self.alpha_grid, self.CA_grid
+        )",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,344,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(
+            self.Mach_grid, self.alpha_grid, self.CA_grid
+        )",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,344,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(
+            self.Mach_grid, self.alpha_grid, self.CA_grid
+        )",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,349,scipy.interpolate.interp2d,"inte.interp2d(yy,xx,self.temp[tt,:,:,kk], kind='linear')",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,349,scipy.interpolate.interp2d,"inte.interp2d(yy,xx,self.temp[tt,:,:,kk], kind='linear')",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,349,scipy.interpolate.interp2d,"inte.interp2d(yy,xx,self.temp[tt,:,:,kk], kind='linear')",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,349,scipy.interpolate.interp2d,"inte.interp2d(yy,xx,self.temp[tt,:,:,kk], kind='linear')",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,362,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(waves,apps,ee_arr)",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,362,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(waves,apps,ee_arr)",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,362,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(waves,apps,ee_arr)",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,362,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(waves,apps,ee_arr)",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,368,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(Ydata, Xdata, Zdata, kind='cubic')",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,368,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(Ydata, Xdata, Zdata, kind='cubic')",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,368,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(Ydata, Xdata, Zdata, kind='cubic')",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,368,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(Ydata, Xdata, Zdata, kind='cubic')",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,384,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x1, y1, D, kind=kind)",1.14.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,384,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x1, y1, D, kind=kind)",1.16.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,384,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x1, y1, D, kind=kind)",1.17.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,O,384,scipy.interpolate.interp2d,"scipy.interpolate.interp2d(x1, y1, D, kind=kind)",1.18.0,same_signature_as_selected_version,"scipy.interpolate.interp2d(x, y, z, kind='linear', copy=True, bounds_error=False, fill_value=None)"
+scipy,U,92,scipy.special.comb,"misc.comb(len_target, n_subs)",1.3.0,same_signature_as_selected_version,"scipy.special.comb(N, k, exact=False, repetition=False)"
+scipy,U,92,scipy.special.comb,"misc.comb(len_target, n_subs)",1.4.0,same_signature_as_selected_version,"scipy.special.comb(N, k, exact=False, repetition=False)"
+seaborn,O,736,seaborn.factorplot,"sns.factorplot(self.factorcol,'read count', data=m, col='name', kind=kind,
+                                col_wrap=5, size=3, aspect=.9,
+                                legend_out=True,sharey=False, order=xorder)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,760,seaborn.factorplot,"sns.factorplot(""Sex"", ""Age"", ""Survived"", data=train_df, kind=""box"")",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,763,seaborn.factorplot,"sns.factorplot(x='day',y='total_bill',data=tips, kind='bar')",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,766,seaborn.factorplot,"sns.factorplot(
+        ax=ax,
+        x=""type"",
+        y=""accuracy"",
+        hue=""experiment"",
+        data=df,
+        kind=""bar"",
+        order=classes,
+        legend_out=True,
+    )",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,772,seaborn.factorplot,"sns.factorplot(x='age', y='embark_town', 
+                   hue='sex', data=titanic,
+                   row='class', col='sex', 
+                   col_wrap=None, estimator=np.mean, ci=95, 
+                   n_boot=1000, units=None, order=None, 
+                   hue_order=None, row_order=None, 
+                   col_order=None, kind=""box"", size=4, 
+                   aspect=1, orient=None, color=None, 
+                   palette=None, legend=True, 
+                   legend_out=True, sharex=True, 
+                   sharey=True, margin_titles=False, 
+                   facet_kws=None)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,773,seaborn.factorplot,"sns.factorplot(x=""Survived"", hue=""Sex"", data=titanic_train, kind=""count"", size=6)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,782,seaborn.factorplot,"sns.factorplot(y = 'value', data = df, kind = 'bar', col = 'variable', sharey = False, col_wrap = 3)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,795,seaborn.factorplot,"sns.factorplot(x='Quality', y='pH', data=wine_data, hue=""Alcohol"", size=5, aspect=2)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,796,seaborn.factorplot,"sns.factorplot('Embarked', 'Survived', data=train, size=4, aspect=3)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,797,seaborn.factorplot,"sns.factorplot(x='n_neighbors', y='score', 
+    data=cv_score_df, kind='violin', size=4, aspect=1)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,802,seaborn.factorplot,"sns.factorplot(
+        y=""result"",
+        x=""score"",
+        col=""experiment"",
+        data=rows,
+        kind=""bar"",
+        ci=None,
+        order=ANSWER_PLOT_ORDER,
+        size=4,
+        col_wrap=4,
+        sharex=False,
+    )",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,805,seaborn.factorplot,"sns.factorplot(x=""SibSp"",y=""Survived"",data=train,
+                   kind=""bar"", size = 6 , palette = ""Blues"")",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,827,seaborn.factorplot,"sns.factorplot(""day"", ""total_bill"", ""sex"", data=tips, kind=""box"")",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,856,seaborn.factorplot,"sns.factorplot('Sex', 'Age', 'Survived', data=df_train, col='Pclass')",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,862,seaborn.factorplot,"sns.factorplot(x=""Pclass"", y=""Age"", hue='Survived', data=df_train,
+               col=""Sex"", kind=""swarm"", dodge=True, size=5, aspect=1)",0.6.0,same_signature_as_selected_version,"seaborn.factorplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, order=None, hue_order=None, row_order=None, col_order=None, kind='point', size=4, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,O,871,seaborn.factorplot,"sns.factorplot(x='l1_ratio', y='score', col='alpha',
+    data=cv_score_df, kind='violin', size=4, aspect=1)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,873,seaborn.factorplot,"sns.factorplot('Pclass','Survived',hue='Sex',data=data)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,874,seaborn.factorplot,"sns.factorplot(x=x, y=""Score"", hue=hue, col=col, data=df, kind='bar',
+                       size=5, aspect=1, col_wrap=col_wrap, legend=False)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,O,890,seaborn.factorplot,"sns.factorplot(x=x,y='value',data=t, hue=hue, col=col, row=row,
+                            col_wrap=wrap, kind=kind,size=3, aspect=float(aspect),
+                            legend_out=False, sharey='all', palette=palette, order=order,
+                            ci=ci)",0.11.0,same_signature_as_selected_version,"seaborn.factorplot(*args, **kwargs)"
+seaborn,U,20,seaborn.lineplot,"sns.lineplot(real_time, data_dict[key] + 1, linewidth=2, palette=""bright"", color='indigo')",0.10.0,same_signature_as_selected_version,"seaborn.lineplot(x=None, y=None, hue=None, size=None, style=None, data=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, units=None, estimator='mean', ci=95, n_boot=1000, seed=None, sort=True, err_style='band', err_kws=None, legend='brief', ax=None, **kwargs)"
+tensorflow,O,1132,tensorflow.div,"tf.div(1.0, tf.multiply(2.0, self._sigmas_sq[0]))",1.13.1,same_signature_as_selected_version,"tensorflow.div(x, y, name=None)"
+tensorflow,O,1145,tensorflow.div,"tf.div(residual, total)",1.13.1,same_signature_as_selected_version,"tensorflow.div(x, y, name=None)"
+tensorflow,O,1151,tensorflow.div,"tf.div(config['rate'], tf.pow(tf.abs(ls_slope) + 1, config['sharpness']), name='full_curriculum_increment')",1.13.1,same_signature_as_selected_version,"tensorflow.div(x, y, name=None)"
+tensorflow,O,1152,tensorflow.div,"tf.div(intersection, union)",1.13.1,same_signature_as_selected_version,"tensorflow.div(x, y, name=None)"
+tensorflow,O,1460,tensorflow.uniform_unit_scaling_initializer,tf.uniform_unit_scaling_initializer(),1.14.0,same_signature_as_selected_version,"tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
+tensorflow,U,3448,tensorflow.print,"tf.print(message, [gs] + [mean.clear() for mean in means])",1.12.0,same_signature_as_selected_version,"tensorflow.print(*inputs, **kwargs)"

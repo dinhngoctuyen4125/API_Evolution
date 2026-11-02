@@ -1,0 +1,751 @@
+﻿library,set,index,target_api,api_call,version,category,detail,signatures
+pytorch,O,801,torch.svd,torch.svd(input=svd_data),1.8.0,signature_mismatch,missing a required argument: 'self',"torch.svd(self: Tensor, some: bool=True, compute_uv: bool=True)"
+pytorch,O,801,torch.svd,torch.svd(input=svd_data),1.9.0,signature_mismatch,missing a required argument: 'self',"torch.svd(self: Tensor, some: bool=True, compute_uv: bool=True)"
+pytorch,O,801,torch.svd,torch.svd(input=svd_data),1.10.0,signature_mismatch,missing a required argument: 'self',"torch.svd(self: Tensor, some: bool=True, compute_uv: bool=True)"
+pytorch,O,801,torch.svd,torch.svd(input=svd_data),1.11.0,signature_mismatch,missing a required argument: 'self',"torch.svd(self: Tensor, some: bool=True, compute_uv: bool=True)"
+pytorch,O,801,torch.svd,torch.svd(input=svd_data),1.13.0,signature_mismatch,missing a required argument: 'self',"torch.svd(self: Tensor, some: bool=True, compute_uv: bool=True)"
+pytorch,O,801,torch.svd,torch.svd(input=svd_data),2.4.0,signature_mismatch,missing a required argument: 'self',"torch.svd(self: Tensor, some: bool=True, compute_uv: bool=True)"
+pytorch,O,801,torch.svd,torch.svd(input=svd_data),2.6.0,signature_mismatch,missing a required argument: 'self',"torch.svd(self: Tensor, some: bool=True, compute_uv: bool=True)"
+pytorch,O,2875,torch.norm,"torch.norm(self, p, dim, keepdim, dtype=dtype)",1.0.0,signature_mismatch,got an unexpected keyword argument 'dtype',"torch.norm(input, p='fro', dim=None, keepdim=False, out=None)"
+pytorch,O,3923,torch.triangular_solve,"torch.triangular_solve(input=k_tr_te, A=l_low, upper=False)",1.8.0,signature_mismatch,missing a required argument: 'self',"torch.triangular_solve(self: Tensor, A: Tensor, upper: bool=True, transpose: bool=False, unitriangular: bool=False)"
+pytorch,O,3923,torch.triangular_solve,"torch.triangular_solve(input=k_tr_te, A=l_low, upper=False)",1.11.0,signature_mismatch,missing a required argument: 'self',"torch.triangular_solve(self: Tensor, A: Tensor, upper: bool=True, transpose: bool=False, unitriangular: bool=False)"
+pytorch,O,3923,torch.triangular_solve,"torch.triangular_solve(input=k_tr_te, A=l_low, upper=False)",2.2.0,signature_mismatch,missing a required argument: 'self',"torch.triangular_solve(self: Tensor, A: Tensor, upper: bool=True, transpose: bool=False, unitriangular: bool=False)"
+pytorch,O,3923,torch.triangular_solve,"torch.triangular_solve(input=k_tr_te, A=l_low, upper=False)",2.5.0,signature_mismatch,missing a required argument: 'self',"torch.triangular_solve(self: Tensor, A: Tensor, upper: bool=True, transpose: bool=False, unitriangular: bool=False)"
+pytorch,U,2364,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.0.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)"
+pytorch,U,2364,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)"
+pytorch,U,2364,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)"
+pytorch,U,2364,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)"
+scikit-learn,O,8,sklearn.mixture.GMM,"mixture.GMM(n_components=n_comps, n_iter=0)",0.9,signature_mismatch,got an unexpected keyword argument 'n_iter',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,8,sklearn.mixture.GMM,"mixture.GMM(n_components=n_comps, n_iter=0)",0.10,signature_mismatch,got an unexpected keyword argument 'n_iter',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,10,sklearn.mixture.GMM,"mixture.GMM(2, params=""wc"", covariance_type=covariance_type,
+                      min_covar=1e-3)",0.10,signature_mismatch,got an unexpected keyword argument 'params',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,15,sklearn.mixture.GMM,"GMM(len(clusters), covariance_type='full')",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,18,sklearn.mixture.GMM,"skl_GMM(n_components = cond_xdgmm.n_components,
+                covariance_type = 'full')",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,21,sklearn.mixture.GMM,"GMM(n_components=self.ncomponents, covariance_type='full')",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,27,sklearn.mixture.GMM,"GMM(n_components = 16, n_iter = 200, covariance_type='diag',n_init = 10)",0.10,signature_mismatch,got an unexpected keyword argument 'n_iter',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,29,sklearn.mixture.GMM,"sklearn.mixture.GMM(n_components=k, covariance_type='full')",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,32,sklearn.mixture.GMM,"GMM(n_components=n_classes,
+                    covariance_type=covar_type, init_params='wc', n_iter=20)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,37,sklearn.mixture.GMM,"GMM(n_components=n_classes, covariance_type=covar_type,
+                       init_params='wc', n_iter=20)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,39,sklearn.mixture.GMM,"GMM(n_components=n_states, params='mc', 
+            covariance_type=covariance_type, n_init=n_init)",0.10,signature_mismatch,got an unexpected keyword argument 'params',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,48,sklearn.mixture.GMM,"GMM(n_components=n_classes,
+                                    covariance_type=covar_type, init_params='wc', n_iter=5)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,59,sklearn.mixture.GMM,"SKGMM(nr_mixture, n_iter = nr_iteration)",0.9,signature_mismatch,got an unexpected keyword argument 'n_iter',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,59,sklearn.mixture.GMM,"SKGMM(nr_mixture, n_iter = nr_iteration)",0.10,signature_mismatch,got an unexpected keyword argument 'n_iter',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,67,sklearn.mixture.GMM,"GMM(n_components=K, covariance_type='diag')",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,70,sklearn.mixture.GMM,"GMM(n_components=num_clusters,
+                    covariance_type=""tied"", init_params='wc', n_iter=10)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,75,sklearn.mixture.GMM,"GMM(n_components=K, covariance_type='full', n_iter=500)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,79,sklearn.mixture.GMM,"GMM(g.n_components, covariance_type=g.covariance_type)",0.9,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,79,sklearn.mixture.GMM,"GMM(g.n_components, covariance_type=g.covariance_type)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,80,sklearn.mixture.GMM,"GMM(n_components=n_components, covariance_type='spherical', min_covar=0.01)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,81,sklearn.mixture.GMM,"mixture.GMM(n_components=2, covariance_type='full', init_params='')",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,86,sklearn.mixture.GMM,"GMM(n_components=K, covariance_type=covar_type, n_init=reps, params='wmc')",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,87,sklearn.mixture.GMM,"GMM(n_components=nc, covariance_type=""full"", min_covar=10e-8)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,92,sklearn.mixture.GMM,"GMM(n_mix, covariance_type=covariance_type)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,98,sklearn.mixture.GMM,"sklearn.mixture.GMM(n_components=k, covariance_type='full',
+                    min_covar=self.MIN_COVAR)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,99,sklearn.mixture.GMM,"GMM(n_components, 'full', n_init = 10)",0.10,signature_mismatch,got an unexpected keyword argument 'n_init',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,O,103,sklearn.mixture.GMM,"GMM(n_components = 16, n_iter = 200, covariance_type='diag',n_init = 3)",0.10,signature_mismatch,got an unexpected keyword argument 'n_iter',"sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),0.18,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),0.20.0,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),0.21.0,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),0.22,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),0.23.0,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, *, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),1.0.2,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, *, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),1.1.0,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, *, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),1.2.0,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, *, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),1.3.1,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, *, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),1.4.0,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, *, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),1.7.0,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, *, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scikit-learn,U,7,sklearn.mixture.GaussianMixture,GaussianMixture(n_clusters=n_clusters),1.8.0,signature_mismatch,got an unexpected keyword argument 'n_clusters',"sklearn.mixture.GaussianMixture(n_components=1, *, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weights_init=None, means_init=None, precisions_init=None, random_state=None, warm_start=False, verbose=0, verbose_interval=10)"
+scipy,U,1107,scipy.integrate.simpson,"integrate.simpson(tmp_y, tmp_x, tmp_x[1] - tmp_x[0])",1.15.0,signature_mismatch,too many positional arguments,"scipy.integrate.simpson(y, x=None, *, dx=1.0, axis=-1)"
+scipy,U,1107,scipy.integrate.simpson,"integrate.simpson(tmp_y, tmp_x, tmp_x[1] - tmp_x[0])",1.18.0,signature_mismatch,too many positional arguments,"scipy.integrate.simpson(y, x=None, *, dx=1.0, axis=-1)"
+scipy,U,1109,scipy.integrate.simpson,"integrate.simpson(R, C)",1.12.0,signature_mismatch,too many positional arguments,"scipy.integrate.simpson(y, *, x=None, dx=1.0, axis=-1, even=_NoValue)"
+scipy,U,1109,scipy.integrate.simpson,"integrate.simpson(R, C)",1.14.0,signature_mismatch,too many positional arguments,"scipy.integrate.simpson(y, *, x=None, dx=1.0, axis=-1)"
+scipy,U,1124,scipy.integrate.simpson,"integrate.simpson(F_func(z_), z_)",1.12.0,signature_mismatch,too many positional arguments,"scipy.integrate.simpson(y, *, x=None, dx=1.0, axis=-1, even=_NoValue)"
+scipy,U,1124,scipy.integrate.simpson,"integrate.simpson(F_func(z_), z_)",1.14.0,signature_mismatch,too many positional arguments,"scipy.integrate.simpson(y, *, x=None, dx=1.0, axis=-1)"
+scipy,U,1127,scipy.integrate.simpson,"scipy.integrate.simpson(spline_norms, xvec)",1.12.0,signature_mismatch,too many positional arguments,"scipy.integrate.simpson(y, *, x=None, dx=1.0, axis=-1, even=_NoValue)"
+scipy,U,1127,scipy.integrate.simpson,"scipy.integrate.simpson(spline_norms, xvec)",1.14.0,signature_mismatch,too many positional arguments,"scipy.integrate.simpson(y, *, x=None, dx=1.0, axis=-1)"
+seaborn,O,0,seaborn.tsplot,sns.tsplot(reward_average),0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,1,seaborn.tsplot,sns.tsplot(reward_average),0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,3,seaborn.tsplot,sns.tsplot(v_ego_list),0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,4,seaborn.tsplot,sns.tsplot(v_ego_list),0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,5,seaborn.tsplot,sns.tsplot(data=df[target]),0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,6,seaborn.tsplot,sns.tsplot(v_ego_list),0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,7,seaborn.tsplot,"sb.tsplot(data=data, condition=None, time=lengths, ax=ax)",0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,13,seaborn.tsplot,"sns.tsplot(sines, err_style=""ci_bars"", interpolate=False)",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,22,seaborn.tsplot,"sns.tsplot(all_vals_p,color='b')",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,23,seaborn.tsplot,"sns.tsplot( get_ts_df( N), time='time', unit='unit', value='value')",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,24,seaborn.tsplot,"sns.tsplot( X[y==yit,:], color=plt.cm.rainbow(yit/max(y)))",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,27,seaborn.tsplot,"sns.tsplot( X3_int[ np.where( y3==0)[0],:], color=""blue"")",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,28,seaborn.tsplot,"sns.tsplot( X3_int[ np.where( y3==0)[0],:], color=""blue"")",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,29,seaborn.tsplot,"sns.tsplot( X3_int[ np.where( y3==0)[0],:], color=""blue"")",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,30,seaborn.tsplot,"sns.tsplot( X3_int[ y3==i,:], color=plt.cm.rainbow(i/nc))",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,32,seaborn.tsplot,sns.tsplot(v_ego_list),0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,34,seaborn.tsplot,"sns.tsplot(time=range(n_itr), data=maml_data[:,:n_itr], color='g', linestyle='-', marker='o', condition='MAML (ours)', ci=95, legend=legend)",0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,45,seaborn.tsplot,"sns.tsplot(columns, ax=ax)",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,48,seaborn.tsplot,"seaborn.tsplot(time=x_axis, data=ep_rew_means)",0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,51,seaborn.tsplot,"sns.tsplot(irf_p, color='blue', linestyle='dashed', ax=ax)",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,56,seaborn.tsplot,"seaborn.tsplot(time=x_axis, data=ep_rew_means)",0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,61,seaborn.tsplot,"sns.tsplot(just_time_values.as_matrix(), color=""indianred"", err_style=""unit_traces"")",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,62,seaborn.tsplot,"sns.tsplot(
+            condition=str(num_actions), time=time, data=results_1, color=colors[c], linestyle='-', err_style='ci_bars', interpolate=True, legend=True)",0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,63,seaborn.tsplot,sns.tsplot(v_ego_list),0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,65,seaborn.tsplot,"sns.tsplot(time=self.x_name, value=self.val_name,
+                        unit=""unit"", condition=self.line_name,
+                        data=plot_table, err_style=""ci_bars"", interpolate=True)",0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,74,seaborn.tsplot,"sns.tsplot(y_hat, time=range(y_hat.shape[1]), ci=[75, 100], color=""#23aaff"")",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,77,seaborn.tsplot,sns.tsplot(x),0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,79,seaborn.tsplot,"sb.tsplot(data=firm['dead'], ax=ax2)",0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,105,seaborn.tsplot,"sns.tsplot(just_time_values.as_matrix(), color=""indianred"", err_style=""unit_traces"")",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,112,seaborn.tsplot,"sns.tsplot(sines, err_style=""boot_traces"", n_boot=500)",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,120,seaborn.tsplot,"seaborn.tsplot(
+                    data=plot_data,
+                    time='Time',
+                    value=parameter,
+                    condition='Experiment',
+                    unit='Index',
+                    err_style=self.err_style,
+                    err_palette=self.err_palette,
+                    err_kws=self.err_kws,
+                    estimator=self.estimator,
+                    n_boot=self.n_boot,
+                    ci=self.ci,
+                    legend=self.legend,
+                )",0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,123,seaborn.tsplot,"sns.tsplot(df.Close.values, time=df.Date_mpl.values, alpha=0.8, color=color[3], ax=ax)",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,124,seaborn.tsplot,"sns.tsplot(df[val].values, time=df.Date_mpl.values, alpha=0.8, color=color[3], ax=ax)",0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,137,seaborn.tsplot,sns.tsplot(potential.potential),0.1,signature_mismatch,missing a required argument: 'data',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,143,seaborn.tsplot,"sns.tsplot(time=x_data, data=y_data, color='m', condition='viewpoint with 1 action scale', err_style='ci_band', linestyle='-.', linewidth=line_width, estimator=np.median)",0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,147,seaborn.tsplot,"sns.tsplot(data=data, time=""Iteration"", value=value, unit=""Unit"", condition=""Condition"")",0.1,signature_mismatch,missing a required argument: 'x',"seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)"
+seaborn,O,723,seaborn.factorplot,"sns.factorplot(x=""item"", y=""consumption"", data=items, kind=""bar"", order=item_order)",0.3,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,723,seaborn.factorplot,"sns.factorplot(x=""item"", y=""consumption"", data=items, kind=""bar"", order=item_order)",0.3.1,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,723,seaborn.factorplot,"sns.factorplot(x=""item"", y=""consumption"", data=items, kind=""bar"", order=item_order)",0.4.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,723,seaborn.factorplot,"sns.factorplot(x=""item"", y=""consumption"", data=items, kind=""bar"", order=item_order)",0.5.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,725,seaborn.factorplot,"sns.factorplot(data=dataToPlot, x=""weekday"", y=""val"", col=""stats"",
+                       order=dayOfWeekOrder, kind=""point"", sharey=False, col_wrap=3)",0.3,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,725,seaborn.factorplot,"sns.factorplot(data=dataToPlot, x=""weekday"", y=""val"", col=""stats"",
+                       order=dayOfWeekOrder, kind=""point"", sharey=False, col_wrap=3)",0.3.1,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,725,seaborn.factorplot,"sns.factorplot(data=dataToPlot, x=""weekday"", y=""val"", col=""stats"",
+                       order=dayOfWeekOrder, kind=""point"", sharey=False, col_wrap=3)",0.4.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,725,seaborn.factorplot,"sns.factorplot(data=dataToPlot, x=""weekday"", y=""val"", col=""stats"",
+                       order=dayOfWeekOrder, kind=""point"", sharey=False, col_wrap=3)",0.5.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,728,seaborn.factorplot,"sns.factorplot(x=""Metric"", y=""Value"", hue=""Methods"",
+                               data=df, size=6, kind=""bar"",
+                               palette=""muted"", legend=False, ax=ax1)",0.3,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,728,seaborn.factorplot,"sns.factorplot(x=""Metric"", y=""Value"", hue=""Methods"",
+                               data=df, size=6, kind=""bar"",
+                               palette=""muted"", legend=False, ax=ax1)",0.3.1,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,728,seaborn.factorplot,"sns.factorplot(x=""Metric"", y=""Value"", hue=""Methods"",
+                               data=df, size=6, kind=""bar"",
+                               palette=""muted"", legend=False, ax=ax1)",0.4.0,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,728,seaborn.factorplot,"sns.factorplot(x=""Metric"", y=""Value"", hue=""Methods"",
+                               data=df, size=6, kind=""bar"",
+                               palette=""muted"", legend=False, ax=ax1)",0.5.0,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,733,seaborn.factorplot,"sns.factorplot(y=""brand"", data=df, kind=""count"",
+                   palette=""Reds_r"", size=7, aspect=1.5)",0.3,signature_mismatch,missing a required argument: 'x',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,733,seaborn.factorplot,"sns.factorplot(y=""brand"", data=df, kind=""count"",
+                   palette=""Reds_r"", size=7, aspect=1.5)",0.3.1,signature_mismatch,missing a required argument: 'x',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,733,seaborn.factorplot,"sns.factorplot(y=""brand"", data=df, kind=""count"",
+                   palette=""Reds_r"", size=7, aspect=1.5)",0.4.0,signature_mismatch,missing a required argument: 'x',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,733,seaborn.factorplot,"sns.factorplot(y=""brand"", data=df, kind=""count"",
+                   palette=""Reds_r"", size=7, aspect=1.5)",0.5.0,signature_mismatch,missing a required argument: 'x',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,734,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True, sharex=True, sharey=False,
+                          margin_titles=True, legend=False, palette=self.palette0)",0.3,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,734,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True, sharex=True, sharey=False,
+                          margin_titles=True, legend=False, palette=self.palette0)",0.3.1,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,734,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True, sharex=True, sharey=False,
+                          margin_titles=True, legend=False, palette=self.palette0)",0.4.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,734,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True, sharex=True, sharey=False,
+                          margin_titles=True, legend=False, palette=self.palette0)",0.5.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,735,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='segment', y=res_type,
+                              row='user_grp', col='cycle', hue='segment',
+                              kind='bar', alpha=0.8, dodge=False,
+                              legend=False, sharex=True, sharey=False,
+                              margin_titles=True, palette=self.palette1)",0.3,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,735,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='segment', y=res_type,
+                              row='user_grp', col='cycle', hue='segment',
+                              kind='bar', alpha=0.8, dodge=False,
+                              legend=False, sharex=True, sharey=False,
+                              margin_titles=True, palette=self.palette1)",0.3.1,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,735,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='segment', y=res_type,
+                              row='user_grp', col='cycle', hue='segment',
+                              kind='bar', alpha=0.8, dodge=False,
+                              legend=False, sharex=True, sharey=False,
+                              margin_titles=True, palette=self.palette1)",0.4.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,735,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='segment', y=res_type,
+                              row='user_grp', col='cycle', hue='segment',
+                              kind='bar', alpha=0.8, dodge=False,
+                              legend=False, sharex=True, sharey=False,
+                              margin_titles=True, palette=self.palette1)",0.5.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,736,seaborn.factorplot,"sns.factorplot(self.factorcol,'read count', data=m, col='name', kind=kind,
+                                col_wrap=5, size=3, aspect=.9,
+                                legend_out=True,sharey=False, order=xorder)",0.3,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,736,seaborn.factorplot,"sns.factorplot(self.factorcol,'read count', data=m, col='name', kind=kind,
+                                col_wrap=5, size=3, aspect=.9,
+                                legend_out=True,sharey=False, order=xorder)",0.3.1,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,736,seaborn.factorplot,"sns.factorplot(self.factorcol,'read count', data=m, col='name', kind=kind,
+                                col_wrap=5, size=3, aspect=.9,
+                                legend_out=True,sharey=False, order=xorder)",0.4.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,736,seaborn.factorplot,"sns.factorplot(self.factorcol,'read count', data=m, col='name', kind=kind,
+                                col_wrap=5, size=3, aspect=.9,
+                                legend_out=True,sharey=False, order=xorder)",0.5.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,753,seaborn.factorplot,"sns.factorplot(x='stimulus', y='rating', data=data, row='condition_id', kind='box', notch=True, size=size)",0.3,signature_mismatch,got an unexpected keyword argument 'notch',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,753,seaborn.factorplot,"sns.factorplot(x='stimulus', y='rating', data=data, row='condition_id', kind='box', notch=True, size=size)",0.3.1,signature_mismatch,got an unexpected keyword argument 'notch',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,753,seaborn.factorplot,"sns.factorplot(x='stimulus', y='rating', data=data, row='condition_id', kind='box', notch=True, size=size)",0.4.0,signature_mismatch,got an unexpected keyword argument 'notch',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,753,seaborn.factorplot,"sns.factorplot(x='stimulus', y='rating', data=data, row='condition_id', kind='box', notch=True, size=size)",0.5.0,signature_mismatch,got an unexpected keyword argument 'notch',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,755,seaborn.factorplot,"sns.factorplot(x='Month', y='million mwh', hue='Year', sharey=False,
+                           data=temp, col='nerc', col_wrap=3, col_order=order,
+                           palette='viridis_r', scale=0.5, size=2)",0.3,signature_mismatch,got an unexpected keyword argument 'scale',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,755,seaborn.factorplot,"sns.factorplot(x='Month', y='million mwh', hue='Year', sharey=False,
+                           data=temp, col='nerc', col_wrap=3, col_order=order,
+                           palette='viridis_r', scale=0.5, size=2)",0.3.1,signature_mismatch,got an unexpected keyword argument 'scale',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,755,seaborn.factorplot,"sns.factorplot(x='Month', y='million mwh', hue='Year', sharey=False,
+                           data=temp, col='nerc', col_wrap=3, col_order=order,
+                           palette='viridis_r', scale=0.5, size=2)",0.4.0,signature_mismatch,got an unexpected keyword argument 'scale',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,755,seaborn.factorplot,"sns.factorplot(x='Month', y='million mwh', hue='Year', sharey=False,
+                           data=temp, col='nerc', col_wrap=3, col_order=order,
+                           palette='viridis_r', scale=0.5, size=2)",0.5.0,signature_mismatch,got an unexpected keyword argument 'scale',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,761,seaborn.factorplot,"sns.factorplot(x=""pickup_hour"", y=""log_trip_duration"", data=train,color='gold',size=7)",0.3,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,761,seaborn.factorplot,"sns.factorplot(x=""pickup_hour"", y=""log_trip_duration"", data=train,color='gold',size=7)",0.3.1,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,761,seaborn.factorplot,"sns.factorplot(x=""pickup_hour"", y=""log_trip_duration"", data=train,color='gold',size=7)",0.4.0,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,761,seaborn.factorplot,"sns.factorplot(x=""pickup_hour"", y=""log_trip_duration"", data=train,color='gold',size=7)",0.5.0,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,766,seaborn.factorplot,"sns.factorplot(
+        ax=ax,
+        x=""type"",
+        y=""accuracy"",
+        hue=""experiment"",
+        data=df,
+        kind=""bar"",
+        order=classes,
+        legend_out=True,
+    )",0.3,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,766,seaborn.factorplot,"sns.factorplot(
+        ax=ax,
+        x=""type"",
+        y=""accuracy"",
+        hue=""experiment"",
+        data=df,
+        kind=""bar"",
+        order=classes,
+        legend_out=True,
+    )",0.3.1,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,766,seaborn.factorplot,"sns.factorplot(
+        ax=ax,
+        x=""type"",
+        y=""accuracy"",
+        hue=""experiment"",
+        data=df,
+        kind=""bar"",
+        order=classes,
+        legend_out=True,
+    )",0.4.0,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,766,seaborn.factorplot,"sns.factorplot(
+        ax=ax,
+        x=""type"",
+        y=""accuracy"",
+        hue=""experiment"",
+        data=df,
+        kind=""bar"",
+        order=classes,
+        legend_out=True,
+    )",0.5.0,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,782,seaborn.factorplot,"sns.factorplot(y = 'value', data = df, kind = 'bar', col = 'variable', sharey = False, col_wrap = 3)",0.3,signature_mismatch,missing a required argument: 'x',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,782,seaborn.factorplot,"sns.factorplot(y = 'value', data = df, kind = 'bar', col = 'variable', sharey = False, col_wrap = 3)",0.3.1,signature_mismatch,missing a required argument: 'x',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,782,seaborn.factorplot,"sns.factorplot(y = 'value', data = df, kind = 'bar', col = 'variable', sharey = False, col_wrap = 3)",0.4.0,signature_mismatch,missing a required argument: 'x',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,782,seaborn.factorplot,"sns.factorplot(y = 'value', data = df, kind = 'bar', col = 'variable', sharey = False, col_wrap = 3)",0.5.0,signature_mismatch,missing a required argument: 'x',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,788,seaborn.factorplot,"sns.factorplot(x='age', y='stroke', hue='gender', data=age_gender_stroke, fit_reg=False)",0.3,signature_mismatch,got an unexpected keyword argument 'fit_reg',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,788,seaborn.factorplot,"sns.factorplot(x='age', y='stroke', hue='gender', data=age_gender_stroke, fit_reg=False)",0.3.1,signature_mismatch,got an unexpected keyword argument 'fit_reg',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,788,seaborn.factorplot,"sns.factorplot(x='age', y='stroke', hue='gender', data=age_gender_stroke, fit_reg=False)",0.4.0,signature_mismatch,got an unexpected keyword argument 'fit_reg',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,788,seaborn.factorplot,"sns.factorplot(x='age', y='stroke', hue='gender', data=age_gender_stroke, fit_reg=False)",0.5.0,signature_mismatch,got an unexpected keyword argument 'fit_reg',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,792,seaborn.factorplot,"sns.factorplot(x=""time"", y=""pulse"", hue=""kind"", col=""diet"", data=df,
+                   capsize=.2, palette=""YlGnBu_d"", size=6, aspect=.75)",0.3,signature_mismatch,got an unexpected keyword argument 'capsize',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,792,seaborn.factorplot,"sns.factorplot(x=""time"", y=""pulse"", hue=""kind"", col=""diet"", data=df,
+                   capsize=.2, palette=""YlGnBu_d"", size=6, aspect=.75)",0.3.1,signature_mismatch,got an unexpected keyword argument 'capsize',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,792,seaborn.factorplot,"sns.factorplot(x=""time"", y=""pulse"", hue=""kind"", col=""diet"", data=df,
+                   capsize=.2, palette=""YlGnBu_d"", size=6, aspect=.75)",0.4.0,signature_mismatch,got an unexpected keyword argument 'capsize',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,792,seaborn.factorplot,"sns.factorplot(x=""time"", y=""pulse"", hue=""kind"", col=""diet"", data=df,
+                   capsize=.2, palette=""YlGnBu_d"", size=6, aspect=.75)",0.5.0,signature_mismatch,got an unexpected keyword argument 'capsize',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,802,seaborn.factorplot,"sns.factorplot(
+        y=""result"",
+        x=""score"",
+        col=""experiment"",
+        data=rows,
+        kind=""bar"",
+        ci=None,
+        order=ANSWER_PLOT_ORDER,
+        size=4,
+        col_wrap=4,
+        sharex=False,
+    )",0.3,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,802,seaborn.factorplot,"sns.factorplot(
+        y=""result"",
+        x=""score"",
+        col=""experiment"",
+        data=rows,
+        kind=""bar"",
+        ci=None,
+        order=ANSWER_PLOT_ORDER,
+        size=4,
+        col_wrap=4,
+        sharex=False,
+    )",0.3.1,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,802,seaborn.factorplot,"sns.factorplot(
+        y=""result"",
+        x=""score"",
+        col=""experiment"",
+        data=rows,
+        kind=""bar"",
+        ci=None,
+        order=ANSWER_PLOT_ORDER,
+        size=4,
+        col_wrap=4,
+        sharex=False,
+    )",0.4.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,802,seaborn.factorplot,"sns.factorplot(
+        y=""result"",
+        x=""score"",
+        col=""experiment"",
+        data=rows,
+        kind=""bar"",
+        ci=None,
+        order=ANSWER_PLOT_ORDER,
+        size=4,
+        col_wrap=4,
+        sharex=False,
+    )",0.5.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,803,seaborn.factorplot,"sns.factorplot(data=tidy, col=col, x='dataset',
+                       y=summary, kind='bar', size=3, zorder=-1)",0.3,signature_mismatch,got an unexpected keyword argument 'zorder',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,803,seaborn.factorplot,"sns.factorplot(data=tidy, col=col, x='dataset',
+                       y=summary, kind='bar', size=3, zorder=-1)",0.3.1,signature_mismatch,got an unexpected keyword argument 'zorder',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,803,seaborn.factorplot,"sns.factorplot(data=tidy, col=col, x='dataset',
+                       y=summary, kind='bar', size=3, zorder=-1)",0.4.0,signature_mismatch,got an unexpected keyword argument 'zorder',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,803,seaborn.factorplot,"sns.factorplot(data=tidy, col=col, x='dataset',
+                       y=summary, kind='bar', size=3, zorder=-1)",0.5.0,signature_mismatch,got an unexpected keyword argument 'zorder',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,811,seaborn.factorplot,"sns.factorplot(x=""ses"",hue=""gender"",y=""Proportion who chooses\neach career group"",
+                data=sesdata.rename(columns={""value"":""Proportion who chooses\neach career group""}),
+                col=""field"",
+                legend_out=False,
+                order=[""Low"",""Med"",""High""],col_wrap=2)",0.3,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,811,seaborn.factorplot,"sns.factorplot(x=""ses"",hue=""gender"",y=""Proportion who chooses\neach career group"",
+                data=sesdata.rename(columns={""value"":""Proportion who chooses\neach career group""}),
+                col=""field"",
+                legend_out=False,
+                order=[""Low"",""Med"",""High""],col_wrap=2)",0.3.1,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,811,seaborn.factorplot,"sns.factorplot(x=""ses"",hue=""gender"",y=""Proportion who chooses\neach career group"",
+                data=sesdata.rename(columns={""value"":""Proportion who chooses\neach career group""}),
+                col=""field"",
+                legend_out=False,
+                order=[""Low"",""Med"",""High""],col_wrap=2)",0.4.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,811,seaborn.factorplot,"sns.factorplot(x=""ses"",hue=""gender"",y=""Proportion who chooses\neach career group"",
+                data=sesdata.rename(columns={""value"":""Proportion who chooses\neach career group""}),
+                col=""field"",
+                legend_out=False,
+                order=[""Low"",""Med"",""High""],col_wrap=2)",0.5.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,816,seaborn.factorplot,"sns.factorplot(x = 'condition', y = col, data= stats, ax = ax, kind = 'box', 
+		order = ['Cluster', 'Row','XOR'])",0.3,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,816,seaborn.factorplot,"sns.factorplot(x = 'condition', y = col, data= stats, ax = ax, kind = 'box', 
+		order = ['Cluster', 'Row','XOR'])",0.3.1,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,816,seaborn.factorplot,"sns.factorplot(x = 'condition', y = col, data= stats, ax = ax, kind = 'box', 
+		order = ['Cluster', 'Row','XOR'])",0.4.0,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,816,seaborn.factorplot,"sns.factorplot(x = 'condition', y = col, data= stats, ax = ax, kind = 'box', 
+		order = ['Cluster', 'Row','XOR'])",0.5.0,signature_mismatch,got an unexpected keyword argument 'ax',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,821,seaborn.factorplot,"sns.factorplot(data = train_store, x = 'Month', y = ""Sales"", 
+               col = 'StoreType', 
+               palette = 'plasma',
+               hue = 'StoreType',
+               row = 'Promo', 
+               color = c)",0.3,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,821,seaborn.factorplot,"sns.factorplot(data = train_store, x = 'Month', y = ""Sales"", 
+               col = 'StoreType', 
+               palette = 'plasma',
+               hue = 'StoreType',
+               row = 'Promo', 
+               color = c)",0.3.1,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,821,seaborn.factorplot,"sns.factorplot(data = train_store, x = 'Month', y = ""Sales"", 
+               col = 'StoreType', 
+               palette = 'plasma',
+               hue = 'StoreType',
+               row = 'Promo', 
+               color = c)",0.4.0,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,821,seaborn.factorplot,"sns.factorplot(data = train_store, x = 'Month', y = ""Sales"", 
+               col = 'StoreType', 
+               palette = 'plasma',
+               hue = 'StoreType',
+               row = 'Promo', 
+               color = c)",0.5.0,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,824,seaborn.factorplot,"sns.factorplot(data= data, x=x, y=y, col=col, palette=palette, 
+                        hue=hue, col_order=col_order, title=title)",0.3,signature_mismatch,got an unexpected keyword argument 'title',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,824,seaborn.factorplot,"sns.factorplot(data= data, x=x, y=y, col=col, palette=palette, 
+                        hue=hue, col_order=col_order, title=title)",0.3.1,signature_mismatch,got an unexpected keyword argument 'title',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,824,seaborn.factorplot,"sns.factorplot(data= data, x=x, y=y, col=col, palette=palette, 
+                        hue=hue, col_order=col_order, title=title)",0.4.0,signature_mismatch,got an unexpected keyword argument 'title',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,824,seaborn.factorplot,"sns.factorplot(data= data, x=x, y=y, col=col, palette=palette, 
+                        hue=hue, col_order=col_order, title=title)",0.5.0,signature_mismatch,got an unexpected keyword argument 'title',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,849,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True,
+                          sharex=True, sharey=False, margin_titles=True, legend=False)",0.3,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,849,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True,
+                          sharex=True, sharey=False, margin_titles=True, legend=False)",0.3.1,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,849,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True,
+                          sharex=True, sharey=False, margin_titles=True, legend=False)",0.4.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,849,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True,
+                          sharex=True, sharey=False, margin_titles=True, legend=False)",0.5.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,850,seaborn.factorplot,"sn.factorplot(data=res_graph, x='segment', y='value', row='user_grp',
+                          col='type', kind='bar', sharey=False, alpha=0.8)",0.3,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,850,seaborn.factorplot,"sn.factorplot(data=res_graph, x='segment', y='value', row='user_grp',
+                          col='type', kind='bar', sharey=False, alpha=0.8)",0.3.1,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,850,seaborn.factorplot,"sn.factorplot(data=res_graph, x='segment', y='value', row='user_grp',
+                          col='type', kind='bar', sharey=False, alpha=0.8)",0.4.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,850,seaborn.factorplot,"sn.factorplot(data=res_graph, x='segment', y='value', row='user_grp',
+                          col='type', kind='bar', sharey=False, alpha=0.8)",0.5.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,851,seaborn.factorplot,"sn.factorplot(data=data_graph, x='segment', y=res_type,
+                              row='user_grp', col='cycle', hue='segment',
+                              kind='bar', alpha=0.8, dodge=False,
+                              legend=False, sharex=True, sharey=False, margin_titles=True)",0.3,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,851,seaborn.factorplot,"sn.factorplot(data=data_graph, x='segment', y=res_type,
+                              row='user_grp', col='cycle', hue='segment',
+                              kind='bar', alpha=0.8, dodge=False,
+                              legend=False, sharex=True, sharey=False, margin_titles=True)",0.3.1,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,851,seaborn.factorplot,"sn.factorplot(data=data_graph, x='segment', y=res_type,
+                              row='user_grp', col='cycle', hue='segment',
+                              kind='bar', alpha=0.8, dodge=False,
+                              legend=False, sharex=True, sharey=False, margin_titles=True)",0.4.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,851,seaborn.factorplot,"sn.factorplot(data=data_graph, x='segment', y=res_type,
+                              row='user_grp', col='cycle', hue='segment',
+                              kind='bar', alpha=0.8, dodge=False,
+                              legend=False, sharex=True, sharey=False, margin_titles=True)",0.5.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,852,seaborn.factorplot,"sns.factorplot(x = 'Embarked',y=""Survived"", data = titanic,color=""r"")",0.3,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,852,seaborn.factorplot,"sns.factorplot(x = 'Embarked',y=""Survived"", data = titanic,color=""r"")",0.3.1,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,852,seaborn.factorplot,"sns.factorplot(x = 'Embarked',y=""Survived"", data = titanic,color=""r"")",0.4.0,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,852,seaborn.factorplot,"sns.factorplot(x = 'Embarked',y=""Survived"", data = titanic,color=""r"")",0.5.0,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,854,seaborn.factorplot,"sns.factorplot(
+                    hue=needed[0],
+                    y='Per-Kernel Time (ms)',
+                    order=exes,
+                    x=needed[1],
+                    col=""arg"",
+                    data=__sel,
+                    kind='bar')",0.3,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,854,seaborn.factorplot,"sns.factorplot(
+                    hue=needed[0],
+                    y='Per-Kernel Time (ms)',
+                    order=exes,
+                    x=needed[1],
+                    col=""arg"",
+                    data=__sel,
+                    kind='bar')",0.3.1,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,854,seaborn.factorplot,"sns.factorplot(
+                    hue=needed[0],
+                    y='Per-Kernel Time (ms)',
+                    order=exes,
+                    x=needed[1],
+                    col=""arg"",
+                    data=__sel,
+                    kind='bar')",0.4.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,854,seaborn.factorplot,"sns.factorplot(
+                    hue=needed[0],
+                    y='Per-Kernel Time (ms)',
+                    order=exes,
+                    x=needed[1],
+                    col=""arg"",
+                    data=__sel,
+                    kind='bar')",0.5.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,872,seaborn.factorplot,"sns.factorplot(data = train_store, x = 'Month', y = ""Sales"", 
+               col = 'StoreType', 
+               palette = 'plasma',
+               hue = 'StoreType',
+               row = 'Promo', 
+               color = c)",0.3,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,872,seaborn.factorplot,"sns.factorplot(data = train_store, x = 'Month', y = ""Sales"", 
+               col = 'StoreType', 
+               palette = 'plasma',
+               hue = 'StoreType',
+               row = 'Promo', 
+               color = c)",0.3.1,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,872,seaborn.factorplot,"sns.factorplot(data = train_store, x = 'Month', y = ""Sales"", 
+               col = 'StoreType', 
+               palette = 'plasma',
+               hue = 'StoreType',
+               row = 'Promo', 
+               color = c)",0.4.0,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,872,seaborn.factorplot,"sns.factorplot(data = train_store, x = 'Month', y = ""Sales"", 
+               col = 'StoreType', 
+               palette = 'plasma',
+               hue = 'StoreType',
+               row = 'Promo', 
+               color = c)",0.5.0,signature_mismatch,got an unexpected keyword argument 'color',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,890,seaborn.factorplot,"sns.factorplot(x=x,y='value',data=t, hue=hue, col=col, row=row,
+                            col_wrap=wrap, kind=kind,size=3, aspect=float(aspect),
+                            legend_out=False, sharey='all', palette=palette, order=order,
+                            ci=ci)",0.3,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,890,seaborn.factorplot,"sns.factorplot(x=x,y='value',data=t, hue=hue, col=col, row=row,
+                            col_wrap=wrap, kind=kind,size=3, aspect=float(aspect),
+                            legend_out=False, sharey='all', palette=palette, order=order,
+                            ci=ci)",0.3.1,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,890,seaborn.factorplot,"sns.factorplot(x=x,y='value',data=t, hue=hue, col=col, row=row,
+                            col_wrap=wrap, kind=kind,size=3, aspect=float(aspect),
+                            legend_out=False, sharey='all', palette=palette, order=order,
+                            ci=ci)",0.4.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,890,seaborn.factorplot,"sns.factorplot(x=x,y='value',data=t, hue=hue, col=col, row=row,
+                            col_wrap=wrap, kind=kind,size=3, aspect=float(aspect),
+                            legend_out=False, sharey='all', palette=palette, order=order,
+                            ci=ci)",0.5.0,signature_mismatch,got an unexpected keyword argument 'order',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,891,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True,
+                          sharex=True, sharey=False, margin_titles=True, legend=False)",0.3,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,891,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True,
+                          sharex=True, sharey=False, margin_titles=True, legend=False)",0.3.1,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,891,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True,
+                          sharex=True, sharey=False, margin_titles=True, legend=False)",0.4.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,891,seaborn.factorplot,"sn.factorplot(data=data_graph_melted, x='user_grp', y='value', hue='cycle',
+                          kind='bar', alpha=0.3, dodge=True,
+                          sharex=True, sharey=False, margin_titles=True, legend=False)",0.5.0,signature_mismatch,got an unexpected keyword argument 'alpha',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,899,seaborn.factorplot,"sns.factorplot(x=""satisfaction_level"", y=""promotion_last_5years"",
+                   hue=""left"", row=""salary"",
+                    data=df,
+                    orient=""h"", size=2, aspect=3.5, palette=""Set3"",
+                    kind=""violin"", split=True, cut=0, bw=.2)",0.3,signature_mismatch,got an unexpected keyword argument 'orient',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,899,seaborn.factorplot,"sns.factorplot(x=""satisfaction_level"", y=""promotion_last_5years"",
+                   hue=""left"", row=""salary"",
+                    data=df,
+                    orient=""h"", size=2, aspect=3.5, palette=""Set3"",
+                    kind=""violin"", split=True, cut=0, bw=.2)",0.3.1,signature_mismatch,got an unexpected keyword argument 'orient',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,899,seaborn.factorplot,"sns.factorplot(x=""satisfaction_level"", y=""promotion_last_5years"",
+                   hue=""left"", row=""salary"",
+                    data=df,
+                    orient=""h"", size=2, aspect=3.5, palette=""Set3"",
+                    kind=""violin"", split=True, cut=0, bw=.2)",0.4.0,signature_mismatch,got an unexpected keyword argument 'orient',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,O,899,seaborn.factorplot,"sns.factorplot(x=""satisfaction_level"", y=""promotion_last_5years"",
+                   hue=""left"", row=""salary"",
+                    data=df,
+                    orient=""h"", size=2, aspect=3.5, palette=""Set3"",
+                    kind=""violin"", split=True, cut=0, bw=.2)",0.5.0,signature_mismatch,got an unexpected keyword argument 'orient',"seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)"
+seaborn,U,349,seaborn.lineplot,"sns.lineplot(self.history.epoch, self.history.history['accuracy'], label='train')",0.12.0,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,349,seaborn.lineplot,"sns.lineplot(self.history.epoch, self.history.history['accuracy'], label='train')",0.13.0,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,349,seaborn.lineplot,"sns.lineplot(self.history.epoch, self.history.history['accuracy'], label='train')",0.13.1,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, weights=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,365,seaborn.lineplot,"sns.lineplot(np.arange(0,sample.shape[1]/250, 1./250), sample[0], ax=axs[0])",0.12.0,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,365,seaborn.lineplot,"sns.lineplot(np.arange(0,sample.shape[1]/250, 1./250), sample[0], ax=axs[0])",0.13.0,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,365,seaborn.lineplot,"sns.lineplot(np.arange(0,sample.shape[1]/250, 1./250), sample[0], ax=axs[0])",0.13.1,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, weights=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,367,seaborn.lineplot,"sns.lineplot(
+        pt_df_anneal_schedules.epochs,
+        pt_df_anneal_schedules[""NDCG@100""],
+        hue=pt_df_anneal_schedules.architecture,
+        style=pt_df_anneal_schedules.architecture,
+        linewidth=2.0,
+        legend=""full"",
+    )",0.12.0,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,367,seaborn.lineplot,"sns.lineplot(
+        pt_df_anneal_schedules.epochs,
+        pt_df_anneal_schedules[""NDCG@100""],
+        hue=pt_df_anneal_schedules.architecture,
+        style=pt_df_anneal_schedules.architecture,
+        linewidth=2.0,
+        legend=""full"",
+    )",0.13.0,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,367,seaborn.lineplot,"sns.lineplot(
+        pt_df_anneal_schedules.epochs,
+        pt_df_anneal_schedules[""NDCG@100""],
+        hue=pt_df_anneal_schedules.architecture,
+        style=pt_df_anneal_schedules.architecture,
+        linewidth=2.0,
+        legend=""full"",
+    )",0.13.1,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, weights=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,617,seaborn.lineplot,"sns.lineplot(m, poly(m), ax=ax, color='red')",0.12.0,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,617,seaborn.lineplot,"sns.lineplot(m, poly(m), ax=ax, color='red')",0.13.0,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,617,seaborn.lineplot,"sns.lineplot(m, poly(m), ax=ax, color='red')",0.13.1,signature_mismatch,too many positional arguments,"seaborn.lineplot(data=None, *, x=None, y=None, hue=None, size=None, style=None, units=None, weights=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, estimator='mean', errorbar=('ci', 95), n_boot=1000, seed=None, orient='x', sort=True, err_style='band', err_kws=None, legend='auto', ci='deprecated', ax=None, **kwargs)"
+seaborn,U,639,seaborn.lineplot,"sns.lineplot(df, x=""task-count"", y=""duration"", hue=""environment"", marker=""o"")",0.9.0,signature_mismatch,multiple values for argument 'x',"seaborn.lineplot(x=None, y=None, hue=None, size=None, style=None, data=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, units=None, estimator='mean', ci=95, n_boot=1000, sort=True, err_style='band', err_kws=None, legend='brief', ax=None, **kwargs)"
+seaborn,U,639,seaborn.lineplot,"sns.lineplot(df, x=""task-count"", y=""duration"", hue=""environment"", marker=""o"")",0.9.1,signature_mismatch,multiple values for argument 'x',"seaborn.lineplot(x=None, y=None, hue=None, size=None, style=None, data=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, units=None, estimator='mean', ci=95, n_boot=1000, seed=None, sort=True, err_style='band', err_kws=None, legend='brief', ax=None, **kwargs)"
+seaborn,U,639,seaborn.lineplot,"sns.lineplot(df, x=""task-count"", y=""duration"", hue=""environment"", marker=""o"")",0.10.0,signature_mismatch,multiple values for argument 'x',"seaborn.lineplot(x=None, y=None, hue=None, size=None, style=None, data=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, units=None, estimator='mean', ci=95, n_boot=1000, seed=None, sort=True, err_style='band', err_kws=None, legend='brief', ax=None, **kwargs)"
+seaborn,U,811,seaborn.catplot,"sns.catplot(aux_df,
+                    row='game',
+                    row_order=utils.COLUMN_ORDER[1:],
+                    hue='model',
+                    sharey=False,
+                    sharex=False,
+                    x='experiment',
+                    y='value',
+                    kind='point',
+                    aspect=2.5)",0.9.0,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,811,seaborn.catplot,"sns.catplot(aux_df,
+                    row='game',
+                    row_order=utils.COLUMN_ORDER[1:],
+                    hue='model',
+                    sharey=False,
+                    sharex=False,
+                    x='experiment',
+                    y='value',
+                    kind='point',
+                    aspect=2.5)",0.9.1,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, seed=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,812,seaborn.catplot,"sns.catplot(act_df,
+                    row='metric',
+                    col='experiment',
+                    col_order=sorted(act_df.experiment.unique()),
+                    x='model',
+                    order=utils.ROW_ORDER[:-2],
+                    y='value',
+                    
+                    
+                    
+                    hue='model',
+                    dodge=False,
+                    kind='bar',
+                    sharey=False,
+                    sharex=False,
+                    aspect=1.4)",0.9.0,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,812,seaborn.catplot,"sns.catplot(act_df,
+                    row='metric',
+                    col='experiment',
+                    col_order=sorted(act_df.experiment.unique()),
+                    x='model',
+                    order=utils.ROW_ORDER[:-2],
+                    y='value',
+                    
+                    
+                    
+                    hue='model',
+                    dodge=False,
+                    kind='bar',
+                    sharey=False,
+                    sharex=False,
+                    aspect=1.4)",0.9.1,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, seed=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,813,seaborn.catplot,"sns.catplot(act_df,
+                    row='metric',
+                    hue='model',
+                    sharey=False,
+                    sharex=False,
+                    x='experiment',
+                    order=sorted(act_df.experiment.unique()),
+                    y='value',
+                    kind='point',
+                    aspect=1.5)",0.9.0,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,813,seaborn.catplot,"sns.catplot(act_df,
+                    row='metric',
+                    hue='model',
+                    sharey=False,
+                    sharex=False,
+                    x='experiment',
+                    order=sorted(act_df.experiment.unique()),
+                    y='value',
+                    kind='point',
+                    aspect=1.5)",0.9.1,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, seed=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,1064,seaborn.catplot,"sns.catplot(
+        complexity.melt([""article""], var_name=""complexity_type"", value_name=""complexity_value""),
+        x=""complexity_type"",
+        y=""complexity_value"",
+        kind=""box"",
+        width=0.25,
+    )",0.9.0,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,1064,seaborn.catplot,"sns.catplot(
+        complexity.melt([""article""], var_name=""complexity_type"", value_name=""complexity_value""),
+        x=""complexity_type"",
+        y=""complexity_value"",
+        kind=""box"",
+        width=0.25,
+    )",0.9.1,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, seed=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,1064,seaborn.catplot,"sns.catplot(
+        complexity.melt([""article""], var_name=""complexity_type"", value_name=""complexity_value""),
+        x=""complexity_type"",
+        y=""complexity_value"",
+        kind=""box"",
+        width=0.25,
+    )",0.11.0,signature_mismatch,too many positional arguments,"seaborn.catplot(*, x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, seed=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,1065,seaborn.catplot,"sns.catplot(
+        rouge_lsum.melt([""scraper"", ""article""], var_name=""Variant"", value_name=""ROUGE-LSum""),
+        x=""scraper"",
+        y=""ROUGE-LSum"",
+        col=""Variant"",
+        kind=""strip"",
+        alpha=0.4,
+        order=rouge_lsum.groupby(""scraper"")[""F1-Score""].mean().sort_values(ascending=False).index,
+    )",0.9.0,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,1065,seaborn.catplot,"sns.catplot(
+        rouge_lsum.melt([""scraper"", ""article""], var_name=""Variant"", value_name=""ROUGE-LSum""),
+        x=""scraper"",
+        y=""ROUGE-LSum"",
+        col=""Variant"",
+        kind=""strip"",
+        alpha=0.4,
+        order=rouge_lsum.groupby(""scraper"")[""F1-Score""].mean().sort_values(ascending=False).index,
+    )",0.9.1,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, seed=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,1065,seaborn.catplot,"sns.catplot(
+        rouge_lsum.melt([""scraper"", ""article""], var_name=""Variant"", value_name=""ROUGE-LSum""),
+        x=""scraper"",
+        y=""ROUGE-LSum"",
+        col=""Variant"",
+        kind=""strip"",
+        alpha=0.4,
+        order=rouge_lsum.groupby(""scraper"")[""F1-Score""].mean().sort_values(ascending=False).index,
+    )",0.11.0,signature_mismatch,too many positional arguments,"seaborn.catplot(*, x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, seed=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,1066,seaborn.catplot,"sns.catplot(
+        rouge_lsum[[""scraper"", ""article"", ""f1_score""]],
+        x=""scraper"",
+        y=""f1_score"",
+        kind=""strip"",
+        alpha=0.4,
+        order=rouge_lsum.groupby(""scraper"")[""f1_score""].mean().sort_values(ascending=False).index,
+    )",0.9.0,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+seaborn,U,1066,seaborn.catplot,"sns.catplot(
+        rouge_lsum[[""scraper"", ""article"", ""f1_score""]],
+        x=""scraper"",
+        y=""f1_score"",
+        kind=""strip"",
+        alpha=0.4,
+        order=rouge_lsum.groupby(""scraper"")[""f1_score""].mean().sort_values(ascending=False).index,
+    )",0.9.1,signature_mismatch,multiple values for argument 'x',"seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, seed=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)"
+tensorflow,U,3427,tensorflow.print,"tf.print(f""GPR with Adam: iteration {i + 1} likelihood {likelihood:.04f}"")",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3428,tensorflow.print,"tf.print(""Using `-1` to mask the loss for the token is deprecated. Please use `-100` instead."")",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3429,tensorflow.print,"tf.print(output, summarize=-1)",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3430,tensorflow.print,tf.print(image),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3432,tensorflow.print,"tf.print('Validation at epoch',epoch,'Step', step, '/', opts.steps_per_epoch,
+                 ': validation loss', val_loss,
+                 ': validation miou', val_miou.result().numpy(),
+                 ': validation auc', val_auc.result().numpy())",1.9.0,signature_mismatch,too many positional arguments,"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3443,tensorflow.print,"tf.print(f""raw_img_shape {tf.shape(raw_img)[:-1]}"")",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3444,tensorflow.print,tf.print(record),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3446,tensorflow.print,"tf.print(f""Epoch {epoch+1}/{epochs}"")",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3450,tensorflow.print,tf.print(inputs),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3451,tensorflow.print,tf.print(y),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3452,tensorflow.print,tf.print(x),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3455,tensorflow.print,tf.print(x),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3457,tensorflow.print,tf.print(traceback.format_exc(e)),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3462,tensorflow.print,"tf.print(strat.reduce('SUM', pr, axis=0))",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3463,tensorflow.print,tf.print(actual.edge_sets[edge_set_name]),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3464,tensorflow.print,tf.print(e),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3465,tensorflow.print,tf.print(e),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3466,tensorflow.print,"tf.print(""Total time: {:.1f}"".format(end - start))",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3467,tensorflow.print,tf.print(msg),1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3471,tensorflow.print,"tf.print(""Loading model"")",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3472,tensorflow.print,"tf.print(""Loading model"")",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3478,tensorflow.print,"tf.print(self.metrics(y_true, y_pred))",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3482,tensorflow.print,"tf.print(f""WARNING: you are using a Tensorflow Initializer for complex numbers. ""
+                         f""Using {self.init_technique} method."")",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3484,tensorflow.print,"tf.print(f""Warning: Expecting input dtype {self.my_dtype} but got {inputs.dtype}. ""
+                     f""Automatic cast will be done."")",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3487,tensorflow.print,"tf.print(thread_id, args[1], output_stream=f""file://{MASKS_SEEDS_PATH}"")",1.9.0,signature_mismatch,got an unexpected keyword argument 'output_stream',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3490,tensorflow.print,"tf.print(""Early stopping at Epoch {}"".format(i))",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3497,tensorflow.print,"tf.print(time_step, output_stream=sys.stdout)",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"
+tensorflow,U,3498,tensorflow.print,"tf.print(""A sequence with no special tokens has been passed to the RoBERTa model. ""
+                           ""This model requires special tokens in order to work. ""
+                           ""Please specify add_special_tokens=True in your encoding."")",1.9.0,signature_mismatch,missing a required argument: 'data',"tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)"

@@ -13,3 +13,4 @@
 /cache/
 /.env
 /data/**/*.progress.jsonl
+# /reports/step7/output/
