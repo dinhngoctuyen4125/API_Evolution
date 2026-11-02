@@ -242,7 +242,7 @@ python build_migration_evolution_v2.py --library numpy --provider $provider --re
 
 ## Bước 7 — Gán các mốc version khả dĩ cho lời gọi API
 
-**Mô tả:** với từng mẫu trong tập O (`data/icsme_data/O.json`) và tập U (`data/icsme_data/U.json`), trích lời gọi API cùng đầy đủ tham số, rồi dùng LLM chọn các mốc có trạng thái và signature phù hợp.
+**Mô tả:** với từng mẫu trong tập O (`data/icsme_data/O.json`) và tập U (`data/icsme_data/U.json`), trích lời gọi API cùng đầy đủ tham số, rồi dùng LLM chọn các mốc có trạng thái và `effective_signature` phù hợp.
 
 **Chạy từng thư viện:**
 

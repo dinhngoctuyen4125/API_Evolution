@@ -1,4 +1,4 @@
-﻿library,set,index,target_api,api_call,version,category,detail,signatures
+﻿library,set,index,target_api,api_call,version,category,detail,effective_signatures
 pandas,U,47,pandas.DataFrame.loc,df.loc(axis=0),1.0.0,signature_mismatch,got an unexpected keyword argument 'axis',pandas.DataFrame.loc(self)
 pandas,U,47,pandas.DataFrame.loc,df.loc(axis=0),1.1.0,signature_mismatch,got an unexpected keyword argument 'axis',pandas.DataFrame.loc(self)
 pandas,U,47,pandas.DataFrame.loc,df.loc(axis=0),1.3.0,signature_mismatch,got an unexpected keyword argument 'axis',pandas.DataFrame.loc(self)

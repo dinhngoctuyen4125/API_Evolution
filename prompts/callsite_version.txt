@@ -1,18 +1,22 @@
 You determine which recorded migration milestones can support one Python API call.
 
 The input contains a function, a probing-input prefix, the extracted api_call,
-alias/reference dictionaries, and the relevant migration timelines.
+alias/reference dictionaries, and the relevant migration milestones.
 The target API is the deprecated API for file O and the replacement API for
 file U. Analyze api_call, using the full function only for context. An expected
 replacement name is not evidence that the function already calls it.
 
-Return every candidate milestone version compatible with the target call's
-syntax, argument positions, keyword names, and the API state and changes in
-the supplied timelines. A deprecated API may still be callable. Exclude a
-version when the target is absent/removed or when a documented signature or
-source change proves the call incompatible. Do not exclude a version merely
-because runtime values or types cannot be inferred from static code. If the
-timelines cannot distinguish several candidate versions, return all of them.
+Evaluate each candidate milestone independently. Include it when the target
+state is active or deprecated and the arguments supplied by api_call can bind
+to its effective_signature. Positional arguments bind by position; keywords
+bind by name. Parameters with defaults may be omitted. A required parameter
+that is not supplied, an unexpected keyword, too many positional arguments,
+or a duplicate argument makes the milestone incompatible. Use only
+effective_signature for argument matching. If it is null or cannot be parsed,
+the milestone has insufficient signature evidence and must not be selected.
+Do not exclude a milestone because runtime values or types cannot be inferred
+from static code. Return every matching milestone, even if its effective
+signature differs from those of other matching milestones.
 
 candidate_versions contains only milestones where the target is confirmed
 active or deprecated; milestones with unknown availability are not included.

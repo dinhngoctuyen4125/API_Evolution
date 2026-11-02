@@ -132,11 +132,8 @@ def classify_empty(row, reason, kind, target, states_by_version, call):
         if not usable:
             continue
         candidate.append(version)
-        results = [incompatibility(call, sig, target)
-                   for state in usable
-                   for sig in dict.fromkeys(s for s in
-                                            (state.get("signature"),
-                                             state.get("effective_signature")) if s)]
+        results = [incompatibility(call, state.get("effective_signature"), target)
+                   for state in usable]
         if target == "pandas.DataFrame.loc":
             uncertain.append(version)
         elif "" in results:
@@ -244,30 +241,24 @@ def main():
                         api_call=call or "",
                         **classify_empty(row, reason, kind, target,
                                          states_by_version, call)))
-                # 4. Mốc chưa chọn có cùng chữ ký với mốc đã chọn: cần xem thêm.
-                selected_shapes = {
-                    (state.get("signature"), state.get("effective_signature"))
-                    for version in row["versions"]
-                    for state in states_by_version.get(version, [])
-                    if state["status"] in CALLABLE
-                }
+                # 4. Thử lời gọi với chữ ký hiệu lực của mọi mốc callable chưa chọn.
                 for version, states in states_by_version.items():
-                    if version in row["versions"] or not call:
+                    if not row["versions"] or version in row["versions"] or not call:
                         continue
                     for state in states:
                         if state["status"] not in CALLABLE:
                             continue
-                        shape = (state.get("signature"), state.get("effective_signature"))
-                        if not shape[0] or shape not in selected_shapes:
+                        effective_signature = state.get("effective_signature")
+                        if not effective_signature:
                             continue
-                        if incompatibility(call, shape[0], target) == "":
+                        if incompatibility(call, effective_signature, target) == "":
                             possible_omissions.append(dict(
                                 library=library, set=kind, index=index,
                                 target_api=target,
                                 api_call=call, version=version,
-                                basis="same_signature_as_selected_version",
-                                signature=shape[0]))
-                        break
+                                basis="effective_signature_accepts_call",
+                                effective_signature=effective_signature))
+                            break
                 # 5. Mốc đã chọn: kiểm tra trạng thái và cách truyền đối số.
                 for version in row["versions"]:
                     states = states_by_version.get(version, [])
@@ -276,7 +267,7 @@ def main():
                                      target_api=target,
                                      api_call=call or "", version=version, category="unavailable",
                                      detail="No matched timeline confirms active/deprecated at this milestone",
-                                     signatures="")
+                                     effective_signatures="")
                         issues.append(issue)
                         counts["unavailable"] += 1
                         continue
@@ -284,15 +275,14 @@ def main():
                     evidence = []
                     compatible = False
                     for state in usable:
-                        sigs = list(dict.fromkeys(s for s in
-                                                  (state.get("signature"), state.get("effective_signature")) if s))
-                        if not sigs:
+                        effective_signature = state.get("effective_signature")
+                        if not effective_signature:
                             compatible = True  # Thiếu chữ ký thì chưa thể chứng minh version sai.
                             continue
-                        results = [incompatibility(call, sig, target) for sig in sigs]
-                        if any(result in (None, "") for result in results):
+                        result = incompatibility(call, effective_signature, target)
+                        if result in (None, ""):
                             compatible = True
-                        evidence.extend(zip(sigs, results))
+                        evidence.append((effective_signature, result))
                     if compatible or not evidence:
                         continue
                     # Ví dụ tsplot(x, data) không nhận tsplot(x): thiếu data.
@@ -302,7 +292,7 @@ def main():
                                  target_api=target,
                                  api_call=call or "", version=version,
                                  category=category, detail=detail,
-                                 signatures=" | ".join(dict.fromkeys(sig for sig, _ in evidence)))
+                                 effective_signatures=" | ".join(dict.fromkeys(sig for sig, _ in evidence)))
                     if target == "pandas.DataFrame.loc":
                         # loc là accessor; chữ ký getter không mô tả df.loc(axis=0).
                         manual_review.append(issue)
@@ -313,12 +303,12 @@ def main():
             stats.append((library, kind, counts))
     # 6. Ghi bốn bảng không trùng nhau và in thống kê ngắn.
     fields = ["library", "set", "index", "target_api", "api_call",
-              "version", "category", "detail", "signatures"]
+              "version", "category", "detail", "effective_signatures"]
     write_csv("invalid_selected_versions.csv", issues, fields)
     write_csv("accessor_needs_review.csv", manual_review, fields)
     write_csv("possible_omitted_versions.csv", possible_omissions, [
         "library", "set", "index", "target_api", "api_call",
-        "version", "basis", "signature"])
+        "version", "basis", "effective_signature"])
     write_csv("empty_samples_audit.csv", empty_audit, [
         "library", "set", "index", "target_api", "api_call",
         "reference", "reason", "classification", "candidate_versions",

@@ -1,4 +1,4 @@
-﻿library,set,index,target_api,api_call,version,category,detail,signatures
+﻿library,set,index,target_api,api_call,version,category,detail,effective_signatures
 pytorch,O,801,torch.svd,torch.svd(input=svd_data),1.8.0,signature_mismatch,missing a required argument: 'self',"torch.svd(self: Tensor, some: bool=True, compute_uv: bool=True)"
 pytorch,O,801,torch.svd,torch.svd(input=svd_data),1.9.0,signature_mismatch,missing a required argument: 'self',"torch.svd(self: Tensor, some: bool=True, compute_uv: bool=True)"
 pytorch,O,801,torch.svd,torch.svd(input=svd_data),1.10.0,signature_mismatch,missing a required argument: 'self',"torch.svd(self: Tensor, some: bool=True, compute_uv: bool=True)"

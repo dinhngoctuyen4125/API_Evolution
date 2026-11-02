@@ -8,16 +8,16 @@
 
 1. Đọc hai file `O/U_with_versions.json` và migration path của từng thư viện.
 2. Duyệt từng mẫu; O xét API cũ, U xét API thay thế, rồi ghép timeline theo cặp API.
-3. Với `versions=[]`, suy ra nguyên nhân và kiểm tra chữ ký các mốc callable để tìm khả năng bỏ sót.
-4. Với mẫu đã có version, tìm mốc callable chưa chọn có cùng chữ ký với một mốc đã chọn và nhận `api_call`; ghi là **nghi bỏ sót**, không tự thêm vào `versions`.
-5. Với từng version đã chọn, kiểm tra trạng thái API và ghép đối số của `api_call` vào chữ ký; ghi mốc có mâu thuẫn.
+3. Với `versions=[]`, suy ra nguyên nhân và thử `api_call` với `effective_signature` của các mốc callable.
+4. Với mẫu đã có version, thử mọi mốc callable chưa chọn; nếu `effective_signature` nhận `api_call`, ghi là **nghi bỏ sót**, không tự thêm vào `versions`.
+5. Với từng version đã chọn, kiểm tra trạng thái API và ghép đối số của `api_call` vào `effective_signature`; ghi mốc có mâu thuẫn.
 6. Ghi bốn CSV và in thống kê.
 
-**Output:** thống kê vào bốn CSV trong `reports/step7/output/`: [version gán sai](output/invalid_selected_versions.csv), [mẫu rỗng đã phân loại](output/empty_samples_audit.csv), [version nghi bị bỏ sót](output/possible_omitted_versions.csv), [API cần xem thêm](output/accessor_needs_review.csv).
+**Output:** thống kê vào bốn CSV trong `reports/step7/output/`: [version gán sai](output/invalid_selected_versions.csv), [mẫu rỗng đã phân loại](output/empty_samples_audit.csv), [755 mốc nghi bị bỏ sót](output/possible_omitted_versions.csv), [API cần xem thêm](output/accessor_needs_review.csv).
 
 ## 2. Mẫu bị gán sai version
 
-Đối chiếu `api_call` với trạng thái và chữ ký trong migration path. **137 mẫu** có ít nhất một version sai (272 lượt gán). Chi tiết từng mẫu/version: [invalid_selected_versions.csv](output/invalid_selected_versions.csv).
+Đối chiếu `api_call` với trạng thái và `effective_signature` trong migration path. **137 mẫu** có ít nhất một version sai (272 lượt gán). Chi tiết từng mẫu/version: [invalid_selected_versions.csv](output/invalid_selected_versions.csv).
 
 | Thư viện | O: số mẫu | U: số mẫu |
 |---|---:|---:|
@@ -64,4 +64,4 @@ Có **1.817 mẫu** với `versions=[]`. Bảng dưới đây đếm mẫu; nguy
 
 ## 4. Hạn chế
 
-Kiểm tra này chỉ chứng minh mâu thuẫn về signature, chưa xác nhận hành vi runtime.
+Ghép đối số với `effective_signature` chỉ kiểm tra cú pháp lời gọi; mốc nghi bỏ sót chưa được xác nhận về hành vi runtime, kiểu giá trị hoặc cách xử lý `**kwargs`.

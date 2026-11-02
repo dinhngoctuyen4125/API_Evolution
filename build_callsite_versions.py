@@ -186,14 +186,8 @@ def compact_timeline(timeline, target):
             continue
         milestones.append({
             "version": milestone["version"],
-            "compared_to_version": milestone.get("compared_to_version"),
             "api_states": [{key: state.get(key) for key in
-                            ("name", "status", "signature", "effective_signature")}],
-            "changes": [
-                {key: change.get(key) for key in
-                 ("api", "type", "parameter", "old_value", "new_value",
-                  "from_version", "delegates_to")}
-                for change in milestone["changes"] if change["api"] == target],
+                            ("name", "status", "effective_signature")}],
         })
     return {"mapping_id": timeline["mapping_id"], "milestones": milestones}
 
