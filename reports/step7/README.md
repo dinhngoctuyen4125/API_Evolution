@@ -54,6 +54,8 @@ Có **245 mẫu** (755 mốc) mà `api_call` khớp `effective_signature` ở í
 | transformers | 9 | 9 |
 | **Tổng** | **159** | **86** |
 
+Sau khi bỏ 5 mốc báo nhầm của TensorFlow U `index=4676` (lời gọi dùng chữ ký cũ `load(sess, tags, export_dir)`), [possible_omitted_versions_diy.csv](output/possible_omitted_versions_diy.csv) còn **750 mốc/244 mẫu** (O: 159, U: 85).
+
 ## 4. Mẫu chưa được gán version
 
 Có **1.817 mẫu** với `versions=[]`. Bảng dưới đây đếm mẫu; nguyên nhân và các mốc có thể xét nằm trong [empty_samples_audit.csv](output/empty_samples_audit.csv).
