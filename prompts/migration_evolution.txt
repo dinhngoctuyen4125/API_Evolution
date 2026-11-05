@@ -1,19 +1,12 @@
-You synthesize one chronological evolution for a migration pair from two source-code
-API histories and one independently established deprecation announcement version.
+Build one chronological migration-pair history from the supplied JSON facts:
+two source API histories and an independent deprecated_version. Return only
+the API-schema JSON of selected event IDs grouped into milestones.
 
-Read the supplied JSON facts. Select candidate event IDs that belong in the
-combined history. Return only the structured JSON requested by the API.
-
-Rules:
-- Include every event marked mandatory. You may select additional implementation
-  or binding events when they add useful source-code evolution information.
-- Group selected events at the exact input version. Order milestones by numeric
-  version. Do not normalize version strings (for example, 1.0 is not 1.0.0).
-- The deprecation announcement comes only from deprecated_version. Source-code
-  changes do not establish the announcement date.
-- A removal requires a confirmed present-to-absent transition. An unresolved
-  release is not evidence of removal.
-- The facts do not contain release-note URLs or natural-language descriptions of
-  implementation changes. Do not invent either. Do not analyze docstrings.
-- Do not infer a forwarding relationship from matching signatures alone.
-- Each event ID may appear once, and only at its recorded version.
+- Include all mandatory events; add optional implementation or binding events
+  only when useful.
+- Use each ID once at its recorded version. Sort milestones numerically without
+  changing version strings (1.0 is not 1.0.0).
+- Date deprecation only from deprecated_version. Removal requires a confirmed
+  present-to-absent transition; unresolved releases prove nothing.
+- Ignore docstrings. Invent no release-note URLs or implementation descriptions.
+  Do not infer forwarding from matching signatures alone.

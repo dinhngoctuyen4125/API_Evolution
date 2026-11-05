@@ -1,6 +1,6 @@
-"""Dựng lịch sử source của API công khai theo từng release.
+"""Dựng lịch sử source của API công khai, chỉ dùng chữ ký khai báo.
 
-Chạy: python build_api_source_tracks_v2.py --library seaborn
+Chạy: python build_api_source_tracks.py --library seaborn
 """
 
 import argparse
@@ -19,14 +19,14 @@ from export_rules.dynamic_export_rules import lookup_dynamic_export
 from export_rules.python_export_rules import find_public_binding
 from export_rules.scipy_export_rules import lookup_scipy_generated_export
 from export_rules.tensorflow_export_rules import (
-    export_index, lookup_tensorflow_export, prepare_candidate_paths,
+    export_index, export_source_paths, lookup_tensorflow_export,
+    prepare_candidate_paths,
 )
 from export_rules.torch_binding_rules import lookup_torch_python_binding
 from export_rules.transformers_export_rules import lookup_transformers_export
 from source_evolution_rules import (
-    MAX_IMPORT_DEPTH, Resolution, SourceReader, body_hash, docstring_spans, dotted,
-    error_message_changes, error_message_profile, expr,
-    forwarding_wrapper_target, git, signature, source_structure,
+    SourceReader, body_hash, docstring_spans, error_message_changes,
+    error_message_profile, expr, git, signature, source_structure,
 )
 
 ROOT = Path(__file__).resolve().parent
@@ -36,7 +36,7 @@ SHA_PATTERN = re.compile(r"[0-9a-f]{40}\Z", re.I)
 FUNCTIONS = (ast.FunctionDef, ast.AsyncFunctionDef)
 
 
-# 1. Đọc release và tạo chữ ký để xuất JSON.
+# 1. Đọc release và chuẩn bị dữ liệu để xuất JSON.
 def load_inputs(library, mapping_id=None):
     pairs = json.loads(PAIRS_FILE.read_text(encoding="utf-8"))
     records = json.loads(VERSIONS_FILE.read_text(encoding="utf-8"))
@@ -124,7 +124,7 @@ def location(path, node):
             "line_end": getattr(node, "end_lineno", None)}
 
 
-# 2. Tái dùng vị trí source và export đã xác minh.
+# 2. Tái dùng kết quả phân giải khi đường dẫn và file đã đọc không đổi.
 class TrackedSourceReader(SourceReader):
     def __init__(self, repo, library):
         super().__init__(repo, library)
@@ -136,6 +136,11 @@ class TrackedSourceReader(SourceReader):
         if self.read_paths is not None:
             self.read_paths.add(path)
         return super().parse(sha, path)
+
+    def source_text(self, sha, path):
+        if self.read_paths is not None:
+            self.read_paths.add(path)
+        return super().source_text(sha, path)
 
     def path_fingerprint(self, sha):
         if sha not in self._path_fingerprints:
@@ -161,62 +166,87 @@ class TrackedSourceReader(SourceReader):
 
 
 class PublicResolutionCache:
+    """Reuse a confirmed API state when its source dependencies are unchanged."""
+
     def __init__(self, reader):
         self.reader = reader
-        self.resolutions = {}
-        self.bindings = {}
-
-    def _same_paths(self, old, sha):
-        return old["path_fingerprint"] == self.reader.path_fingerprint(sha)
+        self.states = {}
 
     def _same_blob(self, old_sha, sha, path):
         blob = self.reader.blob(old_sha, path)
         return blob is not None and blob == self.reader.blob(sha, path)
 
-    def resolve(self, sha, api):
-        previous = self.resolutions.get(api)
-        if previous and self._same_paths(previous, sha) and all(
-            self._same_blob(previous["sha"], sha, path)
-            for path in previous["read_paths"]
-        ):
-            # Các file đã đọc và danh sách đường dẫn đều không đổi.
-            return previous["value"]
-        resolved, paths = self.reader.capture(
-            lambda: self.reader.resolve_api(sha, api))
-        if resolved.status == "present" and resolved.reason is None and paths:
-            self.resolutions[api] = {
-                "sha": sha, "path_fingerprint": self.reader.path_fingerprint(sha),
-                "read_paths": paths, "value": resolved,
-            }
-        return resolved
+    @staticmethod
+    def context(record, library):
+        # Cùng source nhưng TensorFlow 1.x/2.x có tên export khác nhau.
+        return int(record["version"].split(".", 1)[0]) < 2 if library == "tensorflow" else None
 
-    def binding(self, sha, api, resolved):
-        previous = self.bindings.get(api)
-        if previous and self._same_paths(previous, sha) and self._same_blob(
-            previous["sha"], sha, previous["path"]
-        ):
-            return copy.deepcopy(previous["value"])
-        value = find_public_binding(self.reader, sha, api, resolved)
-        binding = value[0]
-        if binding["kind"] in {"definition", "import", "alias"} and binding["path"]:
-            self.bindings[api] = {
-                "sha": sha, "path_fingerprint": self.reader.path_fingerprint(sha),
-                "path": binding["path"], "value": copy.deepcopy(value),
-            }
-        return value
+    def reuse(self, record, api):
+        previous = self.states.get(api)
+        if previous is None or previous["context"] != self.context(record, self.reader.library):
+            return None
+        sha = record["commit_sha"]
+        if previous["path_fingerprint"] != self.reader.path_fingerprint(sha):
+            return None
+        paths = previous["read_paths"]
+        if not self._same_blob(previous["sha"], sha, paths[0]):
+            return None
+        if previous["export_paths"] is not None:
+            export_paths, complete = export_source_paths(self.reader.repo, sha)
+            if not complete or export_paths != previous["export_paths"]:
+                return None
+        if not all(self._same_blob(previous["sha"], sha, path)
+                   for path in paths[1:]):
+            return None
+        state, private = copy.deepcopy(previous["value"])
+        state["version"], state["commit_sha"] = record["version"], sha
+        return state, private
+
+    def remember(self, record, api, value, paths):
+        state, private = value
+        paths = set(paths)
+        if state["source_location"].get("path"):
+            paths.add(state["source_location"]["path"])
+        binding = state.get("public_binding")
+        if binding and binding.get("path"):
+            paths.add(binding["path"])
+        paths.update(location["path"] for _, location in
+                     private.get("binding_locations", []) if location.get("path"))
+        sha = record["commit_sha"]
+        export_paths = None
+        if binding and binding["kind"] == "tf_export":
+            export_paths, complete = export_source_paths(self.reader.repo, sha)
+            if not complete:
+                return
+            paths.update(export_paths)
+        # File export thường đổi giữa các release; kiểm tra nó trước để bỏ cache sớm.
+        priority = [binding["path"]] if binding and binding.get("path") else []
+        priority.append(state["source_location"].get("path"))
+        ordered_paths = tuple(dict.fromkeys(
+            path for path in [*priority, *sorted(path for path in paths if path)]
+            if path))
+        if not ordered_paths:
+            return
+        self.states[api] = {
+            "sha": sha, "path_fingerprint": self.reader.path_fingerprint(sha),
+            "read_paths": ordered_paths,
+            "context": self.context(record, self.reader.library),
+            "export_paths": export_paths,
+            "value": copy.deepcopy(value),
+        }
 
 
-# 3. Tìm export Python, lazy export và binding sinh mã.
-def find_public_api(reader, cache, record, api):
+# 3. Sau cache, tìm export Python, lazy export và binding sinh mã.
+def find_public_api(reader, record, api):
     sha = record["commit_sha"]
     special = lookup_transformers_export(reader, sha, api)
     if special:
         resolved, binding, evidence = special
         return resolved, binding, evidence
 
-    resolved = cache.resolve(sha, api)
+    resolved = reader.resolve_api(sha, api)
     if resolved.status == "present":
-        binding, evidence = cache.binding(sha, api, resolved)
+        binding, evidence = find_public_binding(reader, sha, api, resolved)
         return resolved, binding, evidence
 
     dynamic = lookup_dynamic_export(reader, sha, api)
@@ -255,11 +285,8 @@ def generated_state(reader, record, api):
                 "target": generated["target"],
             },
             "declared_parameters": generated["parameters"],
-            "effective_parameters": generated["parameters"],
             "return_annotation": None, "evidence_refs": [],
         }
-        if generated["generated_signatures"] is not None:
-            state["generated_signatures"] = generated["generated_signatures"]
         private = {"body_hash": None, "binding_declaration": True,
                    "binding_locations": [("public_import", generated["export"])]}
         if generated["generator"]:
@@ -279,7 +306,6 @@ def generated_state(reader, record, api):
             "target": f"torch._C._VariableFunctions.{api.split('.')[-1]}",
         },
         "declared_parameters": binding["declared_parameters"],
-        "effective_parameters": binding["effective_parameters"],
         "return_annotation": None, "evidence_refs": [],
     }
     private = {"body_hash": None, "binding_declaration": True,
@@ -291,7 +317,7 @@ def generated_state(reader, record, api):
     return state, private
 
 
-# 4. Truy wrapper và alias đến chữ ký cuối.
+# 4. Chỉ đọc chữ ký khai báo tại định nghĩa của API.
 def declared_signature(reader, sha, resolved):
     node = resolved.node
     if isinstance(node, FUNCTIONS):
@@ -307,223 +333,50 @@ def declared_signature(reader, sha, resolved):
     return None
 
 
-def forwarding_call_target(node):
-    """Nhận wrapper chuyển nguyên *args/**kwargs đến hàm đích."""
-    if not isinstance(node, FUNCTIONS):
-        return None
-    args = node.args
-    if args.posonlyargs or args.args or args.kwonlyargs \
-            or not args.vararg or not args.kwarg:
-        return None
-    body = node.body[1:] if ast.get_docstring(node) else node.body
-    if not body or not all(
-        isinstance(item, ast.Expr) and isinstance(item.value, ast.Call)
-        and dotted(item.value.func) in {"warn", "warnings.warn"}
-        for item in body[:-1]
-    ):
-        return None
-    last = body[-1]
-    if not isinstance(last, ast.Return) or not isinstance(last.value, ast.Call):
-        return None
-    call = last.value
-    target = dotted(call.func)
-    if not target or target == node.name:
-        return None
-    if len(call.args) != 1 or not isinstance(call.args[0], ast.Starred) \
-            or not isinstance(call.args[0].value, ast.Name) \
-            or call.args[0].value.id != args.vararg.arg:
-        return None
-    if len(call.keywords) != 1 or call.keywords[0].arg is not None \
-            or not isinstance(call.keywords[0].value, ast.Name) \
-            or call.keywords[0].value.id != args.kwarg.arg:
-        return None
-    return target
+def read_state_uncached(reader, record, api):
+    sha = record["commit_sha"]
+    resolved, binding, binding_evidence = find_public_api(reader, record, api)
+    if resolved.status != "present":
+        generated = generated_state(reader, record, api)
+        if generated:
+            return "present", generated, None
+        return resolved.status, None, resolved.reason
 
-
-def possible_forwarder(node):
-    if not isinstance(node, FUNCTIONS):
-        return False
-    if not node.args.vararg and not node.args.kwarg:
-        return False
-    body = node.body[1:] if ast.get_docstring(node) else node.body
-    return bool(body and isinstance(body[-1], ast.Return)
-                and isinstance(body[-1].value, ast.Call)
-                and all(isinstance(item, ast.Expr)
-                        and isinstance(item.value, ast.Call)
-                        and dotted(item.value.func) in {"warn", "warnings.warn"}
-                        for item in body[:-1]))
-
-
-def forwards_same_parameters(call, parameters):
-    """Kiểm tra lời gọi chuyển nguyên tham số, kể cả **kwargs."""
-    expected = {item["name"]: item["kind"] for item in parameters[1:]}
-    positional = [item["name"] for item in parameters[1:]
-                  if item["kind"] in {"positional_only", "positional_or_keyword"}]
-    used = set()
-    positional_index = 0
-    for argument in call.args:
-        if isinstance(argument, ast.Starred):
-            name = argument.value.id if isinstance(argument.value, ast.Name) else None
-            if expected.get(name) != "var_positional" or name in used:
-                return False
-        elif isinstance(argument, ast.Name):
-            name = argument.id
-            if positional_index >= len(positional) or name != positional[positional_index]:
-                return False
-            positional_index += 1
-        else:
-            return False
-        used.add(name)
-    for argument in call.keywords:
-        name = argument.value.id if isinstance(argument.value, ast.Name) else None
-        if argument.arg is None:
-            if expected.get(name) != "var_keyword":
-                return False
-        elif argument.arg != name or expected.get(name) not in {
-            "positional_or_keyword", "keyword_only"
-        }:
-            return False
-        if name in used:
-            return False
-        used.add(name)
-    return used == set(expected)
-
-
-def forwarded_self_method(reader, sha, resolved):
-    """Theo self.method khi lời gọi giữ nguyên hình dạng tham số."""
     node = resolved.node
-    if not possible_forwarder(node) or resolved.tree is None:
-        return None
-    body = node.body[1:] if ast.get_docstring(node) else node.body
-    call = body[-1].value
-    if not isinstance(call.func, ast.Attribute) or not isinstance(
-        call.func.value, ast.Name
-    ) or call.func.value.id != "self":
-        return None
-    parameters = signature(node)
-    if not parameters or parameters[0]["name"] != "self" or not forwards_same_parameters(
-        call, parameters
-    ):
-        return None
-    owner = next((item for item in ast.walk(resolved.tree)
-                  if isinstance(item, ast.ClassDef) and node in item.body), None)
-    if owner is None:
-        return None
-    parent = Resolution("present", path=resolved.path, node=owner,
-                        tree=resolved.tree, module=resolved.module)
-    target = reader.resolve_class_member(sha, parent, call.func.attr)
-    if target.status != "present" or not isinstance(target.node, FUNCTIONS):
-        return None
-    target_parameters = signature(target.node)
-    if target_parameters is None or len(parameters) != len(target_parameters):
-        return None
-    # Khác annotation thì vẫn theo; khác tên, kiểu hoặc default thì chưa đủ chắc.
-    for source, destination in zip(parameters, target_parameters):
-        if any(source[field] != destination[field]
-               for field in ("name", "kind", "default")):
-            return None
-    return target
-
-
-def next_target(reader, sha, resolved):
-    method = forwarded_self_method(reader, sha, resolved)
-    if method is not None:
-        return method
-    alias = (forwarding_wrapper_target(resolved.node)
-             or forwarding_call_target(resolved.node)
-             or resolved.alias_target)
-    if not alias:
-        return None
-    if not resolved.module:
-        return None
-    if "." not in alias:
-        return reader.resolve_name(sha, resolved.module, alias)
-    if alias.startswith(reader.root_module + "."):
-        return reader.resolve_api(sha, alias)
-    prefix, _, name = alias.rpartition(".")
-    namespace = reader.resolve_name(sha, resolved.module, prefix)
-    if namespace.status == "present" and namespace.module:
-        return reader.resolve_name(sha, namespace.module, name)
-    return namespace
-
-
-def final_signature(reader, sha, resolved):
-    current = resolved
-    seen = set()
-    chain = []
-    for _ in range(MAX_IMPORT_DEPTH):
-        key = (current.module, current.path,
-               getattr(current.node, "lineno", None),
-               getattr(current.node, "name", None))
-        if key in seen:
-            return None, None, chain, "cyclic_forwarding"
-        seen.add(key)
-        target = next_target(reader, sha, current)
-        if target is None:
-            if current.alias_target or possible_forwarder(current.node):
-                return None, None, chain, "forwarding_pattern_unresolved"
-            parameters = declared_signature(reader, sha, current)
-            if parameters is None and isinstance(current.node, ast.ClassDef):
-                return None, None, chain, "class_constructor_unresolved"
-            return parameters, current, chain, None
-        if target.status != "present" or target.node is None:
-            return None, None, chain, target.reason or "forwarding_target_unresolved"
-        chain.append(location(target.path, target.node))
-        current = target
-    return None, None, chain, "forwarding_depth_exceeded"
+    state = {
+        "version": record["version"], "commit_sha": sha,
+        "source_location": location(resolved.path, node),
+        "public_binding": binding,
+        "declared_parameters": declared_signature(reader, sha, resolved),
+        "return_annotation": expr(node.returns) if isinstance(node, FUNCTIONS) else None,
+        "evidence_refs": [],
+    }
+    private = {
+        "body_hash": body_hash(node),
+        "source_structure": source_structure(node) if node else None,
+        "error_message_profile": error_message_profile(node),
+        "docstring_spans": docstring_spans(node),
+        "binding_locations": binding_evidence,
+    }
+    return "present", (state, private), None
 
 
 def read_state(reader, cache, record, api, validation_reason):
     if validation_reason:
         return "unknown", None, validation_reason
-    sha = record["commit_sha"]
     try:
-        resolved, binding, binding_evidence = find_public_api(
-            reader, cache, record, api)
-        if resolved.status != "present":
-            generated = generated_state(reader, record, api)
-            if generated:
-                state, private = generated
-                return "present", (state, private), None
-            return resolved.status, None, resolved.reason
-
-        node = resolved.node
-        declared = declared_signature(reader, sha, resolved)
-        effective, terminal, chain, reason = final_signature(reader, sha, resolved)
-        state = {
-            "version": record["version"], "commit_sha": sha,
-            "source_location": location(resolved.path, node),
-            "public_binding": binding,
-            "declared_parameters": declared,
-            "effective_parameters": effective,
-            "return_annotation": expr(node.returns) if isinstance(node, FUNCTIONS) else None,
-            "evidence_refs": [],
-        }
-        private = {
-            "body_hash": body_hash(node),
-            "source_structure": source_structure(node) if node else None,
-            "error_message_profile": error_message_profile(node),
-            "docstring_spans": docstring_spans(node),
-            "binding_locations": binding_evidence,
-            "effective_unresolved_reason": reason,
-            "effective_target": (
-                f"{terminal.module}.{getattr(terminal.node, 'name', '')}"
-                if terminal and terminal.module else None),
-        }
-        if terminal and terminal.path:
-            private["effective_location"] = location(terminal.path, terminal.node)
-            private["effective_docstring_spans"] = docstring_spans(terminal.node)
-            private["effective_body_hash"] = body_hash(terminal.node)
-            private["effective_error_profile"] = error_message_profile(terminal.node)
-        if chain:
-            private["binding_locations"].extend(
-                ("forwarding_target", step) for step in chain[:-1])
-        return "present", (state, private), None
+        reused = cache.reuse(record, api)
+        if reused is not None:
+            return "present", reused, None
+        result, paths = reader.capture(lambda: read_state_uncached(reader, record, api))
+        if result[0] == "present":
+            cache.remember(record, api, result[1], paths)
+        return result
     except (OSError, RuntimeError) as exc:
         return "unknown", None, f"source_read_failed: {exc}"
 
 
-# 5. So sánh release liền kề, bỏ qua tham số chưa phân giải.
+# 5. So sánh source và chữ ký khai báo giữa hai release liền kề.
 def compare_parameters(before, after, scope):
     if before is None or after is None:
         return []
@@ -654,21 +507,9 @@ def compare_source_structure(old, new, old_private, new_private):
 
 def compare_base_states(old, new, old_private, new_private):
     changes = compare_source_structure(old, new, old_private, new_private)
-    if (old.get("generated_signatures") is not None
-            and new.get("generated_signatures") is not None
-            and old["generated_signatures"] != new["generated_signatures"]):
-        changes.append({"kind": "generated_ufunc_signatures_changed",
-                        "before": old["generated_signatures"],
-                        "after": new["generated_signatures"]})
-    old_effective = old["effective_parameters"]
-    new_effective = new["effective_parameters"]
-    if old_effective is not None and new_effective is not None:
-        changes.extend(compare_parameters(old_effective, new_effective, "effective"))
-        # Giữ chữ ký khai báo khi wrapper khác hàm đích.
-        if (old["declared_parameters"] != old_effective
-                or new["declared_parameters"] != new_effective):
-            changes.extend(compare_parameters(old["declared_parameters"],
-                                              new["declared_parameters"], "declared"))
+    # Chữ ký của wrapper là chữ ký khai báo; không lần theo hàm đích.
+    changes.extend(compare_parameters(old["declared_parameters"],
+                                      new["declared_parameters"], "declared"))
     if ((old["public_binding"]["kind"] == "generated_python_binding") !=
             (new["public_binding"]["kind"] == "generated_python_binding")):
         # Kiểu ATen và annotation Python không cùng hệ kiểu.
@@ -695,40 +536,10 @@ def compare_base_states(old, new, old_private, new_private):
     return changes
 
 
-def compare_states(old, new, old_private, new_private):
-    changes = compare_base_states(old, new, old_private, new_private)
-
-    if old_private.get("effective_target") != new_private.get("effective_target"):
-        changes.append({"kind": "effective_target_changed",
-                        "before": old_private.get("effective_target"),
-                        "after": new_private.get("effective_target")})
-
-    old_target = old_private.get("effective_location")
-    new_target = new_private.get("effective_location")
-    old_hash = old_private.get("effective_body_hash")
-    new_hash = new_private.get("effective_body_hash")
-    if (old_target and new_target and old_hash and new_hash
-            and old_hash != new_hash
-            and (old_target != old["source_location"]
-                 or new_target != new["source_location"])):
-        message_only = error_message_changes(
-            old_private.get("effective_error_profile"),
-            new_private.get("effective_error_profile"))
-        changes.append({
-            "kind": "error_message_changed" if message_only else "implementation_changed",
-            "scope": "effective_target",
-            "before": {"version": old["version"], **old_target},
-            "after": {"version": new["version"], **new_target},
-        })
-    return changes
-
-
 def output_state(api, state):
     result = {key: copy.deepcopy(value) for key, value in state.items()
-              if key not in {"declared_parameters", "effective_parameters"}}
+              if key != "declared_parameters"}
     result["signature"] = format_signature(api, state["declared_parameters"])
-    result["effective_signature"] = format_signature(
-        api, state["effective_parameters"])
     return result
 
 
@@ -747,15 +558,6 @@ def add_source_evidence(evidences, state, private):
                           "version": state["version"],
                           "commit_sha": state["commit_sha"], **location})
         state["evidence_refs"].append(identifier)
-    effective = private.get("effective_location")
-    if effective and effective != state["source_location"]:
-        identifier = f"E{len(evidences) + 1:05d}"
-        evidences.append({"id": identifier, "type": "effective_source",
-                          "version": state["version"],
-                          "commit_sha": state["commit_sha"], **effective})
-        state["evidence_refs"].append(identifier)
-
-
 def relevant_git_diff(reader, old, new, old_private, new_private):
     message_spans = error_message_changes(
         old_private.get("error_message_profile"),
@@ -763,8 +565,6 @@ def relevant_git_diff(reader, old, new, old_private, new_private):
 
     def locations(state, private):
         return [(state["source_location"], private.get("docstring_spans", [])),
-                (private.get("effective_location"),
-                 private.get("effective_docstring_spans", [])),
                 *((location, []) for evidence_type, location in
                   private.get("binding_locations", [])
                   if evidence_type == "tf_export_decorator")]
@@ -879,7 +679,7 @@ def build_history(reader, cache, api, versions, validation, observations=None,
 
     by_version = {state["version"]: (state, private)
                   for state, private in zip(states, privates)}
-    transitions, unresolved_intervals, signature_intervals = [], [], []
+    transitions, unresolved_intervals = [], []
     skipped_absent = 0
     for index, (old_record, new_record) in enumerate(zip(versions, versions[1:])):
         old_version, new_version = old_record["version"], new_record["version"]
@@ -894,16 +694,9 @@ def build_history(reader, cache, api, versions, validation, observations=None,
             continue
         old, old_private = by_version[old_version]
         new, new_private = by_version[new_version]
-        changes = compare_states(old, new, old_private, new_private)
+        changes = compare_base_states(old, new, old_private, new_private)
         refs = [*old["evidence_refs"], *new["evidence_refs"]]
-        partial = bool(old_private.get("effective_unresolved_reason")
-                       or new_private.get("effective_unresolved_reason"))
-        status = "partial" if partial else "compared"
-        if partial:
-            signature_intervals.append({
-                "from_version": old_version, "to_version": new_version,
-                "reason": "effective_signature_unresolved",
-            })
+        status = "compared"
         if changes:
             try:
                 diff = relevant_git_diff(reader, old, new, old_private, new_private)
@@ -938,24 +731,17 @@ def build_history(reader, cache, api, versions, validation, observations=None,
         "versions_considered": len(versions), "versions_present": len(states),
         "versions_absent": len(absent), "versions_unresolved": len(unresolved),
         "absent_versions": absent, "unresolved_versions": unresolved,
-        "signature_unresolved_versions": [
-            {"version": state["version"],
-             "reason": private["effective_unresolved_reason"]}
-            for state, private in zip(states, privates)
-            if private.get("effective_unresolved_reason")
-        ],
         "intervals_considered": max(len(versions) - 1, 0),
         "intervals_compared": sum(t["status"] == "compared" for t in transitions),
         "intervals_skipped_absent": skipped_absent,
         "unresolved_intervals": unresolved_intervals,
-        "signature_unresolved_intervals": signature_intervals,
     }
     return {"versions": [output_state(api, state) for state in states],
             "transitions": transitions, "coverage": coverage,
             "evidence": evidence}
 
 
-# 7. Chạy một thư viện và ghi JSON v2.
+# 7. Chạy một thư viện và ghi JSON.
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="Trace public API source histories by release")
@@ -1005,7 +791,7 @@ def main(argv=None):
                     reader, cache, api, versions, validation,
                     trace_versions=args.trace_versions)
 
-        output = args.output or ROOT / "data" / args.library / "api_source_tracks_v2.json"
+        output = args.output or ROOT / "data" / args.library / "api_source_tracks.json"
         result = [{"mapping_id": pair["id"], "library": pair["library"],
                    "api_states": [
                        {"role": role, "api": pair[role], **histories[pair[role]]}
