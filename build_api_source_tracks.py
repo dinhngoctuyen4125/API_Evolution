@@ -18,15 +18,22 @@ from enrich_pypi_versions import REPOSITORIES
 from export_rules.dynamic_export_rules import lookup_dynamic_export
 from export_rules.python_export_rules import find_public_binding
 from export_rules.scipy_export_rules import lookup_scipy_generated_export
+from export_rules.source_signature_rules import (
+    pandas_loc_syntax, scipy_assignment_signature,
+    tensorflow_deprecated_signature,
+)
 from export_rules.tensorflow_export_rules import (
     export_index, export_source_paths, lookup_tensorflow_export,
     prepare_candidate_paths,
 )
-from export_rules.torch_binding_rules import lookup_torch_python_binding
+from export_rules.torch_binding_rules import (
+    lookup_torch_linalg_signature, lookup_torch_python_binding,
+)
 from export_rules.transformers_export_rules import lookup_transformers_export
 from source_evolution_rules import (
-    SourceReader, body_hash, docstring_spans, error_message_changes,
-    error_message_profile, expr, git, signature, source_structure,
+    Resolution, SourceReader, body_hash, docstring_spans, dotted,
+    error_message_changes, error_message_profile, expr, git, signature,
+    source_structure,
 )
 
 ROOT = Path(__file__).resolve().parent
@@ -122,6 +129,12 @@ def format_signature(api, parameters):
 def location(path, node):
     return {"path": path, "line_start": getattr(node, "lineno", None),
             "line_end": getattr(node, "end_lineno", None)}
+
+
+def signature_location(path, node):
+    first_body_line = node.body[0].lineno if node.body else node.lineno
+    return {"path": path, "line_start": node.lineno,
+            "line_end": max(node.lineno, first_body_line - 1)}
 
 
 # 2. Tái dùng kết quả phân giải khi đường dẫn và file đã đọc không đổi.
@@ -287,6 +300,8 @@ def generated_state(reader, record, api):
             "declared_parameters": generated["parameters"],
             "return_annotation": None, "evidence_refs": [],
         }
+        if generated.get("call_syntax") is not None:
+            state["call_syntax"] = generated["call_syntax"]
         private = {"body_hash": None, "binding_declaration": True,
                    "binding_locations": [("public_import", generated["export"])]}
         if generated["generator"]:
@@ -333,6 +348,77 @@ def declared_signature(reader, sha, resolved):
     return None
 
 
+def trace_declared_signature(reader, sha, resolved, seen=None):
+    """Chỉ lần theo alias khi binding công khai chưa có chữ ký def."""
+    if resolved.status != "present" or resolved.node is None:
+        return None, []
+    seen = seen or set()
+    key = (resolved.path, getattr(resolved.node, "lineno", None))
+    if key in seen or len(seen) >= 24:
+        return None, []
+    seen = seen | {key}
+
+    parameters = declared_signature(reader, sha, resolved)
+    if parameters is not None:
+        origin = resolved
+        if isinstance(resolved.node, ast.ClassDef):
+            origin = reader.resolve_class_member(sha, resolved, "__init__")
+        return parameters, [("signature_source", signature_location(
+            origin.path, origin.node))]
+
+    node = resolved.node
+    if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+        return None, []
+    value = node.value
+    native = lookup_torch_linalg_signature(reader, sha, resolved)
+    if native:
+        return native
+    target = dotted(value)
+    if target:
+        # Ưu tiên thành viên cùng class, ví dụ DataFrame.items = iteritems.
+        owner = next((item for item in ast.walk(resolved.tree)
+                      if isinstance(item, ast.ClassDef) and node in item.body), None) \
+            if resolved.tree is not None else None
+        if owner and "." not in target:
+            parent = Resolution("present", path=resolved.path, node=owner,
+                                tree=resolved.tree, module=resolved.module)
+            member = reader.resolve_class_member(sha, parent, target)
+            if member.status == "present":
+                return trace_declared_signature(reader, sha, member, seen)
+        if "." not in target:
+            found = reader.resolve_name(sha, resolved.module, target)
+        elif target.startswith(reader.root_module + "."):
+            found = reader.resolve_api(sha, target)
+        else:
+            prefix, _, name = target.rpartition(".")
+            namespace = reader.resolve_name(sha, resolved.module, prefix)
+            if namespace.status != "present":
+                return None, []
+            if isinstance(namespace.node, ast.ClassDef):
+                found = reader.resolve_class_member(sha, namespace, name)
+            elif namespace.module:
+                found = reader.resolve_name(sha, namespace.module, name)
+            else:
+                return None, []
+        return trace_declared_signature(reader, sha, found, seen)
+
+    # Chỉ lấy chữ ký boolean_dispatch khi hai nhánh khai báo cùng tham số.
+    if isinstance(value, ast.Call) and dotted(value.func) == "boolean_dispatch":
+        branches = {}
+        for keyword in value.keywords:
+            if keyword.arg in {"if_true", "if_false"}:
+                name = dotted(keyword.value)
+                if name and "." not in name:
+                    found = reader.resolve_name(sha, resolved.module, name)
+                    branches[keyword.arg] = trace_declared_signature(
+                        reader, sha, found, seen)
+        if len(branches) == 2 and branches["if_true"][0] is not None \
+                and branches["if_true"][0] == branches["if_false"][0]:
+            return branches["if_true"][0], (
+                branches["if_true"][1] + branches["if_false"][1])
+    return None, []
+
+
 def read_state_uncached(reader, record, api):
     sha = record["commit_sha"]
     resolved, binding, binding_evidence = find_public_api(reader, record, api)
@@ -343,20 +429,38 @@ def read_state_uncached(reader, record, api):
         return resolved.status, None, resolved.reason
 
     node = resolved.node
+    parameters, signature_evidence = trace_declared_signature(reader, sha, resolved)
+    call_syntax, syntax_evidence = pandas_loc_syntax(reader, sha, api, resolved)
+    if call_syntax is not None:
+        # loc is an indexer property; its getter's def is not the public call.
+        parameters, signature_evidence = None, []
+    extra_evidence, external_evidence = [], []
+    if parameters is None:
+        if reader.library == "scipy":
+            parameters, extra_evidence, external_evidence = scipy_assignment_signature(
+                reader, sha, api, resolved)
+        elif reader.library == "tensorflow":
+            parameters, extra_evidence = tensorflow_deprecated_signature(
+                reader, sha, api, resolved)
     state = {
         "version": record["version"], "commit_sha": sha,
         "source_location": location(resolved.path, node),
         "public_binding": binding,
-        "declared_parameters": declared_signature(reader, sha, resolved),
+        "declared_parameters": parameters,
         "return_annotation": expr(node.returns) if isinstance(node, FUNCTIONS) else None,
         "evidence_refs": [],
     }
+    if call_syntax is not None:
+        state["call_syntax"] = call_syntax
     private = {
         "body_hash": body_hash(node),
         "source_structure": source_structure(node) if node else None,
         "error_message_profile": error_message_profile(node),
         "docstring_spans": docstring_spans(node),
-        "binding_locations": binding_evidence,
+        "binding_locations": binding_evidence + syntax_evidence + (
+            signature_evidence if not isinstance(node, FUNCTIONS + (ast.ClassDef,)) else []
+        ) + extra_evidence,
+        "external_evidence": external_evidence,
     }
     return "present", (state, private), None
 
@@ -510,6 +614,10 @@ def compare_base_states(old, new, old_private, new_private):
     # Chữ ký của wrapper là chữ ký khai báo; không lần theo hàm đích.
     changes.extend(compare_parameters(old["declared_parameters"],
                                       new["declared_parameters"], "declared"))
+    if old.get("call_syntax") != new.get("call_syntax"):
+        changes.append({"kind": "call_syntax_changed",
+                        "before": old.get("call_syntax"),
+                        "after": new.get("call_syntax")})
     if ((old["public_binding"]["kind"] == "generated_python_binding") !=
             (new["public_binding"]["kind"] == "generated_python_binding")):
         # Kiểu ATen và annotation Python không cùng hệ kiểu.
@@ -558,6 +666,10 @@ def add_source_evidence(evidences, state, private):
                           "version": state["version"],
                           "commit_sha": state["commit_sha"], **location})
         state["evidence_refs"].append(identifier)
+    for item in private.get("external_evidence", []):
+        identifier = f"E{len(evidences) + 1:05d}"
+        evidences.append({"id": identifier, **item})
+        state["evidence_refs"].append(identifier)
 def relevant_git_diff(reader, old, new, old_private, new_private):
     message_spans = error_message_changes(
         old_private.get("error_message_profile"),
@@ -567,7 +679,8 @@ def relevant_git_diff(reader, old, new, old_private, new_private):
         return [(state["source_location"], private.get("docstring_spans", [])),
                 *((location, []) for evidence_type, location in
                   private.get("binding_locations", [])
-                  if evidence_type == "tf_export_decorator")]
+                  if evidence_type in {"tf_export_decorator", "signature_source",
+                                       "function_copy_source"})]
 
     def classify_line(state, private, path, line, focus):
         matches = [spans for location, spans in locations(state, private)

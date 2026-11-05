@@ -8,11 +8,11 @@ API_Evolution/
 ├── enrich_pypi_versions.py                      # Bước 2: ghép Git tag và commit SHA
 ├── crawl_release_notes.py                       # Bước 3: tải release notes
 ├── crawl_source.py                              # Bước 4: tải và chuyển version source
-├── build_api_source_tracks_v2.py                # Bước 5: truy source và chữ ký hiệu dụng
-├── build_migration_evolution_v2.py              # Bước 6: tổng hợp đường tiến hóa cặp API
+├── build_api_source_tracks.py                   # Bước 5: truy source và chữ ký khai báo
+├── build_migration_evolution.py                 # Bước 6: tổng hợp đường tiến hóa cặp API
 ├── build_callsite_versions.py                   # Bước 7: gán mốc version cho mẫu gọi API O/U
-├── audit_step7.py                                # Bước 8: rà soát version đã gán
-├── build_step7_modified.py                       # Bước 8: tạo bộ mẫu đã sửa
+├── audit_step7.py                               # Bước 8: rà soát version đã gán
+├── build_step7_modified.py                      # Bước 8: tạo bộ mẫu đã sửa
 ├── source_evolution_rules.py                    # Quy tắc phân giải public API và AST
 ├── export_rules/                                # Quy tắc export chung và theo thư viện
 │   ├── __init__.py
@@ -159,17 +159,16 @@ python crawl_source.py --library numpy --version 1.4.1
 - Khi đã tìm thấy API, xác định điểm public binding; tái sử dụng binding đã lưu nếu file export không đổi.
 - Nếu chưa tìm thấy, thử các cơ chế lazy export được hỗ trợ, rồi thử decorator export đối với TensorFlow.
 - Nếu vẫn chưa xác nhận được API, kiểm tra ufunc sinh mã của SciPy hoặc Python binding của PyTorch.
-- Với API đã xác nhận, lần theo wrapper và alias nhận diện được để lấy chữ ký hiệu dụng; trường hợp không đủ căn cứ được ghi là chưa phân giải.
+- Giữ chữ ký `def` của API, kể cả wrapper; với alias lần theo định nghĩa được tham chiếu. Hàm sao chép giữ chữ ký của hàm nguồn; wrapper tạo động giữ chữ ký `def` của wrapper.
+- Accessor như `DataFrame.loc` và ufunc như `special.betainc` không có chữ ký hàm gọi trực tiếp: giữ `signature: null`, ghi cú pháp được source xác nhận vào `call_syntax`.
 
-**Chạy từng thư viện:**
+**Chạy riêng:**
 
 ```powershell
-python build_api_source_tracks_v2.py --library seaborn
-
-python build_api_source_tracks_v2.py --library numpy --mapping-id 3 --from-version 1.15.0 --to-version 1.15.1 --output data/numpy/probe_v2.json
+python build_api_source_tracks.py --library seaborn
 ```
 
-**Output:** `data/{library}/api_source_tracks_v2.json`.
+**Output:** `data/{library}/api_source_tracks.json`.
 
 **Schema dự kiến:**
 
@@ -182,12 +181,13 @@ python build_api_source_tracks_v2.py --library numpy --mapping-id 3 --from-versi
         │   ├── version, commit_sha
         │   ├── source_location             # path, line_start, line_end
         │   ├── public_binding              # kind, path, target
-        │   ├── signature, effective_signature, return_annotation
-        │   └── evidence_refs[]; generated_signatures nếu có
+        │   ├── signature, return_annotation
+        │   ├── call_syntax                # cú pháp accessor/ufunc nếu có
+        │   └── evidence_refs[]
         ├── transitions[]                   # so sánh hai release liền kề
         │   ├── from_version, to_version, status, evidence_refs[]
         │   └── changes[]                   # kind, scope, parameter/method, before, after, evidence_refs[]
-        ├── coverage                        # version/khoảng có, vắng, chưa rõ; chữ ký chưa giải được
+        ├── coverage                        # version/khoảng có, vắng, chưa rõ
         └── evidence[]                      # source, binding, Git diff, so sánh AST theo ID
 ```
 

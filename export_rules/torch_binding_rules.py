@@ -296,3 +296,93 @@ def lookup_torch_python_binding(reader, sha, api):
             "effective_parameters": declaration["effective_parameters"],
             "parameter_evidence": declaration["parameter_evidence"],
             "generator": generator, "export": export}
+
+
+def lookup_torch_linalg_signature(reader, sha, resolved):
+    """Trace a torch.linalg _add_docstr alias to its native source schema."""
+    if reader.library != "pytorch" or resolved.module != "torch.linalg" \
+            or not isinstance(resolved.node, ast.Assign) \
+            or not isinstance(resolved.node.value, ast.Call):
+        return None
+    call = resolved.node.value
+    if dotted(call.func) != "_add_docstr" or not call.args:
+        return None
+    target = dotted(call.args[0])
+    if not target or not target.startswith("_linalg.linalg_"):
+        return None
+    tree = resolved.tree
+    if not any(isinstance(item, ast.ImportFrom)
+               and item.module == "torch._C"
+               and {"_linalg", "_add_docstr"}.issubset(
+                   {alias.name for alias in item.names})
+               for item in tree.body):
+        return None
+    if SCHEMA not in reader.paths(sha) or GENERATOR not in reader.paths(sha):
+        return None
+    generator = reader.parse(sha, GENERATOR)
+    if generator is None:
+        return None
+    functions = {item.name: item for item in generator.body
+                 if isinstance(item, ast.FunctionDef)}
+    selector = functions.get("is_py_linalg_function")
+    generated = None
+    if selector and "python_module == 'linalg'" in ast.unparse(selector):
+        generated = next((item for item in ast.walk(generator)
+                          if isinstance(item, ast.Call)
+                          and dotted(item.func) in {
+                              "create_python_bindings", "create_python_bindings_sharded"}
+                          and any(isinstance(arg, ast.Name)
+                                  and arg.id == "is_py_linalg_function"
+                                  for arg in item.args)
+                          and any(isinstance(arg, ast.Constant)
+                                  and arg.value == "torch.linalg"
+                                  for arg in item.args)), None)
+    if generated is None:
+        selector = functions.get("is_linalg_module_function")
+        group = functions.get("get_py_linalg_functions")
+        builder = functions.get("gen_py_linalg_functions")
+        if selector and group and builder \
+                and "python_module" in ast.unparse(selector) \
+                and "'linalg'" in ast.unparse(selector) \
+                and any(isinstance(item, ast.Name)
+                        and item.id == "is_linalg_module_function"
+                        for item in ast.walk(group)) \
+                and any(isinstance(item, ast.Call)
+                        and dotted(item.func) == "get_py_linalg_functions"
+                        for item in ast.walk(builder)):
+            generated = next((item for item in ast.walk(builder)
+                              if isinstance(item, ast.Call)
+                              and dotted(item.func) == "create_python_bindings"
+                              and any(keyword.arg == "module"
+                                      and isinstance(keyword.value, ast.Constant)
+                                      and keyword.value.value == "torch.linalg"
+                                      for keyword in item.keywords)), None)
+    if generated is None:
+        return None
+    name = target.rpartition(".")[2]
+    lines = reader.source_text(sha, SCHEMA).splitlines()
+    starts = [i for i, line in enumerate(lines)
+              if re.match(r"^\s*-\s*func:\s*" + re.escape(name) + r"\(", line)]
+    if len(starts) != 1:
+        return None
+    start = starts[0]
+    end = next((i for i in range(start + 1, len(lines))
+                if re.match(r"^\s*-\s*func:\s*", lines[i])), len(lines))
+    block = lines[start:end]
+    variant = next((line.partition(":")[2].strip()
+                    for line in block if re.match(r"^\s*variants:\s*", line)),
+                   "function")
+    if not any(re.fullmatch(r"\s*python_module:\s*linalg\s*", line)
+               for line in block) or "function" not in variant.split(", "):
+        return None
+    schema, last = _argument_text(lines, start)
+    parameters = _parameters(schema) if schema else None
+    if parameters is None:
+        return None
+    return parameters, [
+        ("signature_source", {"path": SCHEMA, "line_start": start + 1,
+                              "line_end": (last if last is not None else start) + 1}),
+        ("binding_generator", {"path": GENERATOR,
+                               "line_start": generated.lineno,
+                               "line_end": generated.end_lineno}),
+    ]

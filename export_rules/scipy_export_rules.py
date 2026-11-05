@@ -7,6 +7,38 @@ import re
 from source_evolution_rules import module_statements, signature
 
 
+def _betainc_syntax(source, generated_signatures=None):
+    """Read ufunc input/output arity from its source declaration."""
+    if generated_signatures is None:
+        match = re.search(
+            r"betainc\s*=\s*np\.PyUFunc_FromFuncAndData\(.*?,\s*\d+\s*,"
+            r"\s*(\d+)\s*,\s*(\d+)\s*,\s*\d+\s*,\s*['\"]betainc['\"]",
+            source, re.S)
+        arities = {(int(match[1]), int(match[2]))} if match else set()
+    else:
+        def strings(value):
+            if isinstance(value, str):
+                yield value
+            elif isinstance(value, dict):
+                for child in value.values():
+                    yield from strings(child)
+            elif isinstance(value, list):
+                for child in value:
+                    yield from strings(child)
+
+        arities = set()
+        for value in strings(generated_signatures):
+            match = re.fullmatch(r"([A-Za-z]+)->([A-Za-z]+)", value)
+            if match:
+                arities.add((len(match[1]), len(match[2])))
+    if len(arities) != 1:
+        return None
+    inputs, outputs = arities.pop()
+    return {"kind": "ufunc", "required_inputs": inputs, "outputs": outputs,
+            "form": "scipy.special.betainc(" + ", ".join(
+                f"input{i}" for i in range(1, inputs + 1)) + ")"}
+
+
 def lookup_scipy_generated_export(reader, sha, api):
     if reader.library != "scipy" or not api.startswith("scipy.special.") \
             or api.count(".") != 2:
@@ -38,6 +70,7 @@ def lookup_scipy_generated_export(reader, sha, api):
                     "declaration": {"path": cython_path, "line_start": line,
                                     "line_end": line},
                     "export": export, "generator": None, "parameters": None,
+                    "call_syntax": _betainc_syntax(cython) if name == "betainc" else None,
                     "generated_signatures": None}
     if generator_path not in reader.paths(sha):
         return None
@@ -74,6 +107,8 @@ def lookup_scipy_generated_export(reader, sha, api):
                     "declaration": {"path": functions_path, "line_start": line,
                                     "line_end": line},
                     "export": export, "generator": generator_location,
+                    "call_syntax": _betainc_syntax("", functions[name])
+                    if name == "betainc" else None,
                     "parameters": None, "generated_signatures": functions[name]}
 
     extra_path = "scipy/special/_ufuncs_extra_code.pxi"

@@ -12124,9 +12124,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00001"
+              "E00001",
+              "E00002"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_max(*args, **kwargs)"
           },
           {
             "version": "1.4.0",
@@ -12143,9 +12144,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00002"
+              "E00003",
+              "E00004"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_max(*args, **kwargs)"
           },
           {
             "version": "1.4.1",
@@ -12162,9 +12164,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00003"
+              "E00005",
+              "E00006"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_max(*args, **kwargs)"
           },
           {
             "version": "1.5.0",
@@ -12181,9 +12184,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00004"
+              "E00007",
+              "E00008"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_max(*args, **kwargs)"
           },
           {
             "version": "1.5.1",
@@ -12200,9 +12204,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00005"
+              "E00009",
+              "E00010"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_max(*args, **kwargs)"
           },
           {
             "version": "1.6.0",
@@ -12219,9 +12224,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00006"
+              "E00011",
+              "E00012"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_max(*args, **kwargs)"
           },
           {
             "version": "1.7.0",
@@ -12238,9 +12244,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00007"
+              "E00013",
+              "E00014"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_max(*args, **kwargs)"
           },
           {
             "version": "1.7.1",
@@ -12257,9 +12264,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00008"
+              "E00015",
+              "E00016"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_max(*args, **kwargs)"
           }
         ],
         "transitions": [
@@ -12270,7 +12278,9 @@
             "changes": [],
             "evidence_refs": [
               "E00001",
-              "E00002"
+              "E00002",
+              "E00003",
+              "E00004"
             ]
           },
           {
@@ -12279,8 +12289,10 @@
             "status": "compared",
             "changes": [],
             "evidence_refs": [
-              "E00002",
-              "E00003"
+              "E00003",
+              "E00004",
+              "E00005",
+              "E00006"
             ]
           },
           {
@@ -12293,16 +12305,20 @@
                 "before": "deprecated(None, 'Use `argmax` instead')(arg_max)",
                 "after": "deprecation.deprecated(None, 'Use `argmax` instead')(arg_max)",
                 "evidence_refs": [
-                  "E00003",
-                  "E00004",
-                  "E00009"
+                  "E00005",
+                  "E00006",
+                  "E00007",
+                  "E00008",
+                  "E00017"
                 ]
               }
             ],
             "evidence_refs": [
-              "E00003",
-              "E00004",
-              "E00009"
+              "E00005",
+              "E00006",
+              "E00007",
+              "E00008",
+              "E00017"
             ]
           },
           {
@@ -12311,8 +12327,10 @@
             "status": "compared",
             "changes": [],
             "evidence_refs": [
-              "E00004",
-              "E00005"
+              "E00007",
+              "E00008",
+              "E00009",
+              "E00010"
             ]
           },
           {
@@ -12321,8 +12339,10 @@
             "status": "compared",
             "changes": [],
             "evidence_refs": [
-              "E00005",
-              "E00006"
+              "E00009",
+              "E00010",
+              "E00011",
+              "E00012"
             ]
           },
           {
@@ -12331,8 +12351,10 @@
             "status": "compared",
             "changes": [],
             "evidence_refs": [
-              "E00006",
-              "E00007"
+              "E00011",
+              "E00012",
+              "E00013",
+              "E00014"
             ]
           },
           {
@@ -12341,8 +12363,10 @@
             "status": "compared",
             "changes": [],
             "evidence_refs": [
-              "E00007",
-              "E00008"
+              "E00013",
+              "E00014",
+              "E00015",
+              "E00016"
             ]
           }
         ],
@@ -13209,6 +13233,15 @@
           },
           {
             "id": "E00002",
+            "type": "signature_source",
+            "version": "1.3.0",
+            "commit_sha": "9e76bf324f6bac63137a02bb6e6ec9120703ea9b",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 119,
+            "line_end": 128
+          },
+          {
+            "id": "E00003",
             "type": "source",
             "version": "1.4.0",
             "commit_sha": "d752244fbaad5e4268243355046d30990f59418f",
@@ -13217,7 +13250,16 @@
             "line_end": 178
           },
           {
-            "id": "E00003",
+            "id": "E00004",
+            "type": "signature_source",
+            "version": "1.4.0",
+            "commit_sha": "d752244fbaad5e4268243355046d30990f59418f",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 124,
+            "line_end": 136
+          },
+          {
+            "id": "E00005",
             "type": "source",
             "version": "1.4.1",
             "commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
@@ -13226,7 +13268,16 @@
             "line_end": 178
           },
           {
-            "id": "E00004",
+            "id": "E00006",
+            "type": "signature_source",
+            "version": "1.4.1",
+            "commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 124,
+            "line_end": 136
+          },
+          {
+            "id": "E00007",
             "type": "source",
             "version": "1.5.0",
             "commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
@@ -13235,7 +13286,16 @@
             "line_end": 178
           },
           {
-            "id": "E00005",
+            "id": "E00008",
+            "type": "signature_source",
+            "version": "1.5.0",
+            "commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 124,
+            "line_end": 136
+          },
+          {
+            "id": "E00009",
             "type": "source",
             "version": "1.5.1",
             "commit_sha": "6a1ec9deeb2b04dc698db385ea582f6949b4f8bc",
@@ -13244,7 +13304,16 @@
             "line_end": 178
           },
           {
-            "id": "E00006",
+            "id": "E00010",
+            "type": "signature_source",
+            "version": "1.5.1",
+            "commit_sha": "6a1ec9deeb2b04dc698db385ea582f6949b4f8bc",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 124,
+            "line_end": 136
+          },
+          {
+            "id": "E00011",
             "type": "source",
             "version": "1.6.0",
             "commit_sha": "d2e24b6039433bd83478da8c8c2d6c58034be607",
@@ -13253,7 +13322,16 @@
             "line_end": 180
           },
           {
-            "id": "E00007",
+            "id": "E00012",
+            "type": "signature_source",
+            "version": "1.6.0",
+            "commit_sha": "d2e24b6039433bd83478da8c8c2d6c58034be607",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 238,
+            "line_end": 250
+          },
+          {
+            "id": "E00013",
             "type": "source",
             "version": "1.7.0",
             "commit_sha": "024aecf414941e11eb643e29ceed3e1c47a115ad",
@@ -13262,7 +13340,16 @@
             "line_end": 178
           },
           {
-            "id": "E00008",
+            "id": "E00014",
+            "type": "signature_source",
+            "version": "1.7.0",
+            "commit_sha": "024aecf414941e11eb643e29ceed3e1c47a115ad",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 238,
+            "line_end": 250
+          },
+          {
+            "id": "E00015",
             "type": "source",
             "version": "1.7.1",
             "commit_sha": "c8137f3a8e1a22b6e274d0ffc84013624523df59",
@@ -13271,16 +13358,26 @@
             "line_end": 178
           },
           {
+            "id": "E00016",
+            "type": "signature_source",
+            "version": "1.7.1",
+            "commit_sha": "c8137f3a8e1a22b6e274d0ffc84013624523df59",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 238,
+            "line_end": 250
+          },
+          {
             "type": "git_diff",
             "from_version": "1.4.1",
             "to_version": "1.5.0",
             "from_commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
             "to_commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
             "paths": [
-              "tensorflow/python/ops/math_ops.py"
+              "tensorflow/python/ops/math_ops.py",
+              "tensorflow/python/util/deprecation.py"
             ],
             "diff_excerpt": "@@ -178,2 +178,2 @@ linspace = gen_math_ops.lin_space\n-arg_max = deprecated(None, \"Use `argmax` instead\")(arg_max)  # pylint: disable=used-before-assignment\n-arg_min = deprecated(None, \"Use `argmin` instead\")(arg_min)  # pylint: disable=used-before-assignment\n+arg_max = deprecation.deprecated(None, \"Use `argmax` instead\")(arg_max)  # pylint: disable=used-before-assignment\n+arg_min = deprecation.deprecated(None, \"Use `argmin` instead\")(arg_min)  # pylint: disable=used-before-assignment",
-            "id": "E00009"
+            "id": "E00017"
           }
         ]
       },
@@ -19255,9 +19352,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00001"
+              "E00001",
+              "E00002"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_min(*args, **kwargs)"
           },
           {
             "version": "1.4.0",
@@ -19274,9 +19372,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00002"
+              "E00003",
+              "E00004"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_min(*args, **kwargs)"
           },
           {
             "version": "1.4.1",
@@ -19293,9 +19392,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00003"
+              "E00005",
+              "E00006"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_min(*args, **kwargs)"
           },
           {
             "version": "1.5.0",
@@ -19312,9 +19412,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00004"
+              "E00007",
+              "E00008"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_min(*args, **kwargs)"
           },
           {
             "version": "1.5.1",
@@ -19331,9 +19432,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00005"
+              "E00009",
+              "E00010"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_min(*args, **kwargs)"
           },
           {
             "version": "1.6.0",
@@ -19350,9 +19452,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00006"
+              "E00011",
+              "E00012"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_min(*args, **kwargs)"
           },
           {
             "version": "1.7.0",
@@ -19369,9 +19472,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00007"
+              "E00013",
+              "E00014"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_min(*args, **kwargs)"
           },
           {
             "version": "1.7.1",
@@ -19388,9 +19492,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00008"
+              "E00015",
+              "E00016"
             ],
-            "signature": null
+            "signature": "tensorflow.arg_min(*args, **kwargs)"
           }
         ],
         "transitions": [
@@ -19401,7 +19506,9 @@
             "changes": [],
             "evidence_refs": [
               "E00001",
-              "E00002"
+              "E00002",
+              "E00003",
+              "E00004"
             ]
           },
           {
@@ -19410,8 +19517,10 @@
             "status": "compared",
             "changes": [],
             "evidence_refs": [
-              "E00002",
-              "E00003"
+              "E00003",
+              "E00004",
+              "E00005",
+              "E00006"
             ]
           },
           {
@@ -19424,16 +19533,20 @@
                 "before": "deprecated(None, 'Use `argmin` instead')(arg_min)",
                 "after": "deprecation.deprecated(None, 'Use `argmin` instead')(arg_min)",
                 "evidence_refs": [
-                  "E00003",
-                  "E00004",
-                  "E00009"
+                  "E00005",
+                  "E00006",
+                  "E00007",
+                  "E00008",
+                  "E00017"
                 ]
               }
             ],
             "evidence_refs": [
-              "E00003",
-              "E00004",
-              "E00009"
+              "E00005",
+              "E00006",
+              "E00007",
+              "E00008",
+              "E00017"
             ]
           },
           {
@@ -19442,8 +19555,10 @@
             "status": "compared",
             "changes": [],
             "evidence_refs": [
-              "E00004",
-              "E00005"
+              "E00007",
+              "E00008",
+              "E00009",
+              "E00010"
             ]
           },
           {
@@ -19452,8 +19567,10 @@
             "status": "compared",
             "changes": [],
             "evidence_refs": [
-              "E00005",
-              "E00006"
+              "E00009",
+              "E00010",
+              "E00011",
+              "E00012"
             ]
           },
           {
@@ -19462,8 +19579,10 @@
             "status": "compared",
             "changes": [],
             "evidence_refs": [
-              "E00006",
-              "E00007"
+              "E00011",
+              "E00012",
+              "E00013",
+              "E00014"
             ]
           },
           {
@@ -19472,8 +19591,10 @@
             "status": "compared",
             "changes": [],
             "evidence_refs": [
-              "E00007",
-              "E00008"
+              "E00013",
+              "E00014",
+              "E00015",
+              "E00016"
             ]
           }
         ],
@@ -20340,6 +20461,15 @@
           },
           {
             "id": "E00002",
+            "type": "signature_source",
+            "version": "1.3.0",
+            "commit_sha": "9e76bf324f6bac63137a02bb6e6ec9120703ea9b",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 119,
+            "line_end": 128
+          },
+          {
+            "id": "E00003",
             "type": "source",
             "version": "1.4.0",
             "commit_sha": "d752244fbaad5e4268243355046d30990f59418f",
@@ -20348,7 +20478,16 @@
             "line_end": 179
           },
           {
-            "id": "E00003",
+            "id": "E00004",
+            "type": "signature_source",
+            "version": "1.4.0",
+            "commit_sha": "d752244fbaad5e4268243355046d30990f59418f",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 124,
+            "line_end": 136
+          },
+          {
+            "id": "E00005",
             "type": "source",
             "version": "1.4.1",
             "commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
@@ -20357,7 +20496,16 @@
             "line_end": 179
           },
           {
-            "id": "E00004",
+            "id": "E00006",
+            "type": "signature_source",
+            "version": "1.4.1",
+            "commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 124,
+            "line_end": 136
+          },
+          {
+            "id": "E00007",
             "type": "source",
             "version": "1.5.0",
             "commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
@@ -20366,7 +20514,16 @@
             "line_end": 179
           },
           {
-            "id": "E00005",
+            "id": "E00008",
+            "type": "signature_source",
+            "version": "1.5.0",
+            "commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 124,
+            "line_end": 136
+          },
+          {
+            "id": "E00009",
             "type": "source",
             "version": "1.5.1",
             "commit_sha": "6a1ec9deeb2b04dc698db385ea582f6949b4f8bc",
@@ -20375,7 +20532,16 @@
             "line_end": 179
           },
           {
-            "id": "E00006",
+            "id": "E00010",
+            "type": "signature_source",
+            "version": "1.5.1",
+            "commit_sha": "6a1ec9deeb2b04dc698db385ea582f6949b4f8bc",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 124,
+            "line_end": 136
+          },
+          {
+            "id": "E00011",
             "type": "source",
             "version": "1.6.0",
             "commit_sha": "d2e24b6039433bd83478da8c8c2d6c58034be607",
@@ -20384,7 +20550,16 @@
             "line_end": 181
           },
           {
-            "id": "E00007",
+            "id": "E00012",
+            "type": "signature_source",
+            "version": "1.6.0",
+            "commit_sha": "d2e24b6039433bd83478da8c8c2d6c58034be607",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 238,
+            "line_end": 250
+          },
+          {
+            "id": "E00013",
             "type": "source",
             "version": "1.7.0",
             "commit_sha": "024aecf414941e11eb643e29ceed3e1c47a115ad",
@@ -20393,7 +20568,16 @@
             "line_end": 179
           },
           {
-            "id": "E00008",
+            "id": "E00014",
+            "type": "signature_source",
+            "version": "1.7.0",
+            "commit_sha": "024aecf414941e11eb643e29ceed3e1c47a115ad",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 238,
+            "line_end": 250
+          },
+          {
+            "id": "E00015",
             "type": "source",
             "version": "1.7.1",
             "commit_sha": "c8137f3a8e1a22b6e274d0ffc84013624523df59",
@@ -20402,16 +20586,26 @@
             "line_end": 179
           },
           {
+            "id": "E00016",
+            "type": "signature_source",
+            "version": "1.7.1",
+            "commit_sha": "c8137f3a8e1a22b6e274d0ffc84013624523df59",
+            "path": "tensorflow/python/util/deprecation.py",
+            "line_start": 238,
+            "line_end": 250
+          },
+          {
             "type": "git_diff",
             "from_version": "1.4.1",
             "to_version": "1.5.0",
             "from_commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
             "to_commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
             "paths": [
-              "tensorflow/python/ops/math_ops.py"
+              "tensorflow/python/ops/math_ops.py",
+              "tensorflow/python/util/deprecation.py"
             ],
             "diff_excerpt": "@@ -178,2 +178,2 @@ linspace = gen_math_ops.lin_space\n-arg_max = deprecated(None, \"Use `argmax` instead\")(arg_max)  # pylint: disable=used-before-assignment\n-arg_min = deprecated(None, \"Use `argmin` instead\")(arg_min)  # pylint: disable=used-before-assignment\n+arg_max = deprecation.deprecated(None, \"Use `argmax` instead\")(arg_max)  # pylint: disable=used-before-assignment\n+arg_min = deprecation.deprecated(None, \"Use `argmin` instead\")(arg_min)  # pylint: disable=used-before-assignment",
-            "id": "E00009"
+            "id": "E00017"
           }
         ]
       },
@@ -61906,9 +62100,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00001"
+              "E00001",
+              "E00043"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.4.1",
@@ -61925,9 +62120,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00002"
+              "E00002",
+              "E00044"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.0",
@@ -61944,9 +62140,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00003"
+              "E00003",
+              "E00045"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.1",
@@ -61963,9 +62160,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00004"
+              "E00004",
+              "E00046"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.6.0",
@@ -61982,9 +62180,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00005"
+              "E00005",
+              "E00047"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.0",
@@ -62001,9 +62200,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00006"
+              "E00006",
+              "E00048"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.1",
@@ -62020,9 +62220,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00007"
+              "E00007",
+              "E00049"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.8.0",
@@ -62513,7 +62714,9 @@
             "changes": [],
             "evidence_refs": [
               "E00001",
-              "E00002"
+              "E00043",
+              "E00002",
+              "E00044"
             ]
           },
           {
@@ -62523,7 +62726,9 @@
             "changes": [],
             "evidence_refs": [
               "E00002",
-              "E00003"
+              "E00044",
+              "E00003",
+              "E00045"
             ]
           },
           {
@@ -62533,7 +62738,9 @@
             "changes": [],
             "evidence_refs": [
               "E00003",
-              "E00004"
+              "E00045",
+              "E00004",
+              "E00046"
             ]
           },
           {
@@ -62543,7 +62750,9 @@
             "changes": [],
             "evidence_refs": [
               "E00004",
-              "E00005"
+              "E00046",
+              "E00005",
+              "E00047"
             ]
           },
           {
@@ -62553,7 +62762,9 @@
             "changes": [],
             "evidence_refs": [
               "E00005",
-              "E00006"
+              "E00047",
+              "E00006",
+              "E00048"
             ]
           },
           {
@@ -62563,7 +62774,9 @@
             "changes": [],
             "evidence_refs": [
               "E00006",
-              "E00007"
+              "E00048",
+              "E00007",
+              "E00049"
             ]
           },
           {
@@ -62577,6 +62790,7 @@
                 "after": "ClassDef",
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -62589,6 +62803,7 @@
                 ],
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -62599,6 +62814,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -62611,6 +62827,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -62658,6 +62875,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -62717,6 +62935,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -62746,6 +62965,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -62776,6 +62996,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -62786,6 +63007,7 @@
                 "after": "tensorflow/python/ops/init_ops.py",
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -62793,6 +63015,7 @@
             ],
             "evidence_refs": [
               "E00007",
+              "E00049",
               "E00008",
               "E00009"
             ]
@@ -63827,6 +64050,69 @@
             ],
             "diff_excerpt": "@@ -424,8 +448,3 @@ class UniformUnitScaling(Initializer):\n-@tf_export(\n-    \"keras.initializers.VarianceScaling\",\n-    \"initializers.variance_scaling\",\n-    v1=[\n-        \"keras.initializers.VarianceScaling\", \"initializers.variance_scaling\",\n-        \"variance_scaling_initializer\"\n-    ])\n-@deprecation.deprecated_endpoints(\"variance_scaling_initializer\")\n+@tf_export(v1=[\"initializers.variance_scaling\", \"variance_scaling_initializer\"])\n+@deprecation.deprecated_endpoints(\"initializers.variance_scaling\",\n+                                  \"variance_scaling_initializer\")\n@@ -461,0 +480,3 @@ class VarianceScaling(Initializer):\n+  @deprecated_args(None,\n+                   \"Call initializer instance with the dtype argument instead \"\n+                   \"of passing it to the constructor\", \"dtype\")\n@@ -477,2 +498,3 @@ class VarianceScaling(Initializer):\n-    if distribution not in {\"normal\", \"uniform\",\n-                            \"truncated_normal\", \"untruncated_normal\"}:\n+    if distribution not in {\n+        \"normal\", \"uniform\", \"truncated_normal\", \"untruncated_normal\"\n+    }:\n@@ -501 +523 @@ class VarianceScaling(Initializer):\n-    # constant taken from scipy.stats.truncnorm.std(a=-2, b=2, loc=0., scale=1.)\n+      # constant taken from scipy.stats.truncnorm.std(a=-2, b=2, loc=0., scale=1.)\n@@ -507,2 +529 @@ class VarianceScaling(Initializer):\n-      return random_ops.random_normal(\n-          shape, 0.0, stddev, dtype, seed=self.seed)\n+      return random_ops.random_normal(shape, 0.0, stddev, dtype, seed=self.seed)",
             "id": "E00042"
+          },
+          {
+            "id": "E00043",
+            "type": "signature_source",
+            "version": "1.4.0",
+            "commit_sha": "d752244fbaad5e4268243355046d30990f59418f",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00044",
+            "type": "signature_source",
+            "version": "1.4.1",
+            "commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00045",
+            "type": "signature_source",
+            "version": "1.5.0",
+            "commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00046",
+            "type": "signature_source",
+            "version": "1.5.1",
+            "commit_sha": "6a1ec9deeb2b04dc698db385ea582f6949b4f8bc",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00047",
+            "type": "signature_source",
+            "version": "1.6.0",
+            "commit_sha": "d2e24b6039433bd83478da8c8c2d6c58034be607",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
+          },
+          {
+            "id": "E00048",
+            "type": "signature_source",
+            "version": "1.7.0",
+            "commit_sha": "024aecf414941e11eb643e29ceed3e1c47a115ad",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
+          },
+          {
+            "id": "E00049",
+            "type": "signature_source",
+            "version": "1.7.1",
+            "commit_sha": "c8137f3a8e1a22b6e274d0ffc84013624523df59",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
           }
         ]
       }
@@ -176490,9 +176776,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00001"
+              "E00001",
+              "E00043"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.4.1",
@@ -176509,9 +176796,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00002"
+              "E00002",
+              "E00044"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.0",
@@ -176528,9 +176816,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00003"
+              "E00003",
+              "E00045"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.1",
@@ -176547,9 +176836,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00004"
+              "E00004",
+              "E00046"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.6.0",
@@ -176566,9 +176856,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00005"
+              "E00005",
+              "E00047"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.0",
@@ -176585,9 +176876,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00006"
+              "E00006",
+              "E00048"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.1",
@@ -176604,9 +176896,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00007"
+              "E00007",
+              "E00049"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.8.0",
@@ -177097,7 +177390,9 @@
             "changes": [],
             "evidence_refs": [
               "E00001",
-              "E00002"
+              "E00043",
+              "E00002",
+              "E00044"
             ]
           },
           {
@@ -177107,7 +177402,9 @@
             "changes": [],
             "evidence_refs": [
               "E00002",
-              "E00003"
+              "E00044",
+              "E00003",
+              "E00045"
             ]
           },
           {
@@ -177117,7 +177414,9 @@
             "changes": [],
             "evidence_refs": [
               "E00003",
-              "E00004"
+              "E00045",
+              "E00004",
+              "E00046"
             ]
           },
           {
@@ -177127,7 +177426,9 @@
             "changes": [],
             "evidence_refs": [
               "E00004",
-              "E00005"
+              "E00046",
+              "E00005",
+              "E00047"
             ]
           },
           {
@@ -177137,7 +177438,9 @@
             "changes": [],
             "evidence_refs": [
               "E00005",
-              "E00006"
+              "E00047",
+              "E00006",
+              "E00048"
             ]
           },
           {
@@ -177147,7 +177450,9 @@
             "changes": [],
             "evidence_refs": [
               "E00006",
-              "E00007"
+              "E00048",
+              "E00007",
+              "E00049"
             ]
           },
           {
@@ -177161,6 +177466,7 @@
                 "after": "ClassDef",
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -177173,6 +177479,7 @@
                 ],
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -177183,6 +177490,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -177195,6 +177503,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -177242,6 +177551,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -177301,6 +177611,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -177330,6 +177641,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -177360,6 +177672,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -177370,6 +177683,7 @@
                 "after": "tensorflow/python/ops/init_ops.py",
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -177377,6 +177691,7 @@
             ],
             "evidence_refs": [
               "E00007",
+              "E00049",
               "E00008",
               "E00009"
             ]
@@ -178411,6 +178726,69 @@
             ],
             "diff_excerpt": "@@ -424,8 +448,3 @@ class UniformUnitScaling(Initializer):\n-@tf_export(\n-    \"keras.initializers.VarianceScaling\",\n-    \"initializers.variance_scaling\",\n-    v1=[\n-        \"keras.initializers.VarianceScaling\", \"initializers.variance_scaling\",\n-        \"variance_scaling_initializer\"\n-    ])\n-@deprecation.deprecated_endpoints(\"variance_scaling_initializer\")\n+@tf_export(v1=[\"initializers.variance_scaling\", \"variance_scaling_initializer\"])\n+@deprecation.deprecated_endpoints(\"initializers.variance_scaling\",\n+                                  \"variance_scaling_initializer\")\n@@ -461,0 +480,3 @@ class VarianceScaling(Initializer):\n+  @deprecated_args(None,\n+                   \"Call initializer instance with the dtype argument instead \"\n+                   \"of passing it to the constructor\", \"dtype\")\n@@ -477,2 +498,3 @@ class VarianceScaling(Initializer):\n-    if distribution not in {\"normal\", \"uniform\",\n-                            \"truncated_normal\", \"untruncated_normal\"}:\n+    if distribution not in {\n+        \"normal\", \"uniform\", \"truncated_normal\", \"untruncated_normal\"\n+    }:\n@@ -501 +523 @@ class VarianceScaling(Initializer):\n-    # constant taken from scipy.stats.truncnorm.std(a=-2, b=2, loc=0., scale=1.)\n+      # constant taken from scipy.stats.truncnorm.std(a=-2, b=2, loc=0., scale=1.)\n@@ -507,2 +529 @@ class VarianceScaling(Initializer):\n-      return random_ops.random_normal(\n-          shape, 0.0, stddev, dtype, seed=self.seed)\n+      return random_ops.random_normal(shape, 0.0, stddev, dtype, seed=self.seed)",
             "id": "E00042"
+          },
+          {
+            "id": "E00043",
+            "type": "signature_source",
+            "version": "1.4.0",
+            "commit_sha": "d752244fbaad5e4268243355046d30990f59418f",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00044",
+            "type": "signature_source",
+            "version": "1.4.1",
+            "commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00045",
+            "type": "signature_source",
+            "version": "1.5.0",
+            "commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00046",
+            "type": "signature_source",
+            "version": "1.5.1",
+            "commit_sha": "6a1ec9deeb2b04dc698db385ea582f6949b4f8bc",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00047",
+            "type": "signature_source",
+            "version": "1.6.0",
+            "commit_sha": "d2e24b6039433bd83478da8c8c2d6c58034be607",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
+          },
+          {
+            "id": "E00048",
+            "type": "signature_source",
+            "version": "1.7.0",
+            "commit_sha": "024aecf414941e11eb643e29ceed3e1c47a115ad",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
+          },
+          {
+            "id": "E00049",
+            "type": "signature_source",
+            "version": "1.7.1",
+            "commit_sha": "c8137f3a8e1a22b6e274d0ffc84013624523df59",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
           }
         ]
       }
@@ -204076,9 +204454,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00001"
+              "E00001",
+              "E00042"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.uniform_unit_scaling(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.4.1",
@@ -204095,9 +204474,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00002"
+              "E00002",
+              "E00043"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.uniform_unit_scaling(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.0",
@@ -204114,9 +204494,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00003"
+              "E00003",
+              "E00044"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.uniform_unit_scaling(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.1",
@@ -204133,9 +204514,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00004"
+              "E00004",
+              "E00045"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.uniform_unit_scaling(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.6.0",
@@ -204152,9 +204534,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00005"
+              "E00005",
+              "E00046"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.uniform_unit_scaling(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.0",
@@ -204171,9 +204554,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00006"
+              "E00006",
+              "E00047"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.uniform_unit_scaling(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.1",
@@ -204190,9 +204574,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00007"
+              "E00007",
+              "E00048"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.uniform_unit_scaling(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.8.0",
@@ -204663,7 +205048,9 @@
             "changes": [],
             "evidence_refs": [
               "E00001",
-              "E00002"
+              "E00042",
+              "E00002",
+              "E00043"
             ]
           },
           {
@@ -204673,7 +205060,9 @@
             "changes": [],
             "evidence_refs": [
               "E00002",
-              "E00003"
+              "E00043",
+              "E00003",
+              "E00044"
             ]
           },
           {
@@ -204683,7 +205072,9 @@
             "changes": [],
             "evidence_refs": [
               "E00003",
-              "E00004"
+              "E00044",
+              "E00004",
+              "E00045"
             ]
           },
           {
@@ -204693,7 +205084,9 @@
             "changes": [],
             "evidence_refs": [
               "E00004",
-              "E00005"
+              "E00045",
+              "E00005",
+              "E00046"
             ]
           },
           {
@@ -204703,7 +205096,9 @@
             "changes": [],
             "evidence_refs": [
               "E00005",
-              "E00006"
+              "E00046",
+              "E00006",
+              "E00047"
             ]
           },
           {
@@ -204713,7 +205108,9 @@
             "changes": [],
             "evidence_refs": [
               "E00006",
-              "E00007"
+              "E00047",
+              "E00007",
+              "E00048"
             ]
           },
           {
@@ -204727,6 +205124,7 @@
                 "after": "ClassDef",
                 "evidence_refs": [
                   "E00007",
+                  "E00048",
                   "E00008",
                   "E00009"
                 ]
@@ -204739,6 +205137,7 @@
                 ],
                 "evidence_refs": [
                   "E00007",
+                  "E00048",
                   "E00008",
                   "E00009"
                 ]
@@ -204749,6 +205148,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00007",
+                  "E00048",
                   "E00008",
                   "E00009"
                 ]
@@ -204761,6 +205161,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00007",
+                  "E00048",
                   "E00008",
                   "E00009"
                 ]
@@ -204808,6 +205209,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00048",
                   "E00008",
                   "E00009"
                 ]
@@ -204855,6 +205257,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00048",
                   "E00008",
                   "E00009"
                 ]
@@ -204884,6 +205287,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00048",
                   "E00008",
                   "E00009"
                 ]
@@ -204912,6 +205316,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00048",
                   "E00008",
                   "E00009"
                 ]
@@ -204922,6 +205327,7 @@
                 "after": "tensorflow/python/ops/init_ops.py",
                 "evidence_refs": [
                   "E00007",
+                  "E00048",
                   "E00008",
                   "E00009"
                 ]
@@ -204929,6 +205335,7 @@
             ],
             "evidence_refs": [
               "E00007",
+              "E00048",
               "E00008",
               "E00009"
             ]
@@ -205725,6 +206132,69 @@
             ],
             "diff_excerpt": "@@ -356,6 +380,5 @@ class TruncatedNormal(Initializer):\n-@tf_export(\n-    \"initializers.uniform_unit_scaling\",\n-    v1=[\n-        \"initializers.uniform_unit_scaling\", \"uniform_unit_scaling_initializer\"\n-    ])\n-@deprecation.deprecated_endpoints(\"uniform_unit_scaling_initializer\")\n+@tf_export(v1=[\n+    \"initializers.uniform_unit_scaling\", \"uniform_unit_scaling_initializer\"\n+])\n+@deprecation.deprecated_endpoints(\"uniform_unit_scaling_initializer\",\n+                                  \"initializers.uniform_unit_scaling\")\n@@ -392,0 +414,3 @@ class UniformUnitScaling(Initializer):\n+  @deprecated_args(None,\n+                   \"Call initializer instance with the dtype argument instead \"\n+                   \"of passing it to the constructor\", \"dtype\")",
             "id": "E00041"
+          },
+          {
+            "id": "E00042",
+            "type": "signature_source",
+            "version": "1.4.0",
+            "commit_sha": "d752244fbaad5e4268243355046d30990f59418f",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 350,
+            "line_end": 350
+          },
+          {
+            "id": "E00043",
+            "type": "signature_source",
+            "version": "1.4.1",
+            "commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 350,
+            "line_end": 350
+          },
+          {
+            "id": "E00044",
+            "type": "signature_source",
+            "version": "1.5.0",
+            "commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 350,
+            "line_end": 350
+          },
+          {
+            "id": "E00045",
+            "type": "signature_source",
+            "version": "1.5.1",
+            "commit_sha": "6a1ec9deeb2b04dc698db385ea582f6949b4f8bc",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 350,
+            "line_end": 350
+          },
+          {
+            "id": "E00046",
+            "type": "signature_source",
+            "version": "1.6.0",
+            "commit_sha": "d2e24b6039433bd83478da8c8c2d6c58034be607",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 375,
+            "line_end": 375
+          },
+          {
+            "id": "E00047",
+            "type": "signature_source",
+            "version": "1.7.0",
+            "commit_sha": "024aecf414941e11eb643e29ceed3e1c47a115ad",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 375,
+            "line_end": 375
+          },
+          {
+            "id": "E00048",
+            "type": "signature_source",
+            "version": "1.7.1",
+            "commit_sha": "c8137f3a8e1a22b6e274d0ffc84013624523df59",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 375,
+            "line_end": 375
           }
         ]
       },
@@ -205747,9 +206217,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00001"
+              "E00001",
+              "E00043"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.4.1",
@@ -205766,9 +206237,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00002"
+              "E00002",
+              "E00044"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.0",
@@ -205785,9 +206257,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00003"
+              "E00003",
+              "E00045"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.1",
@@ -205804,9 +206277,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00004"
+              "E00004",
+              "E00046"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.6.0",
@@ -205823,9 +206297,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00005"
+              "E00005",
+              "E00047"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.0",
@@ -205842,9 +206317,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00006"
+              "E00006",
+              "E00048"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.1",
@@ -205861,9 +206337,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00007"
+              "E00007",
+              "E00049"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.8.0",
@@ -206354,7 +206831,9 @@
             "changes": [],
             "evidence_refs": [
               "E00001",
-              "E00002"
+              "E00043",
+              "E00002",
+              "E00044"
             ]
           },
           {
@@ -206364,7 +206843,9 @@
             "changes": [],
             "evidence_refs": [
               "E00002",
-              "E00003"
+              "E00044",
+              "E00003",
+              "E00045"
             ]
           },
           {
@@ -206374,7 +206855,9 @@
             "changes": [],
             "evidence_refs": [
               "E00003",
-              "E00004"
+              "E00045",
+              "E00004",
+              "E00046"
             ]
           },
           {
@@ -206384,7 +206867,9 @@
             "changes": [],
             "evidence_refs": [
               "E00004",
-              "E00005"
+              "E00046",
+              "E00005",
+              "E00047"
             ]
           },
           {
@@ -206394,7 +206879,9 @@
             "changes": [],
             "evidence_refs": [
               "E00005",
-              "E00006"
+              "E00047",
+              "E00006",
+              "E00048"
             ]
           },
           {
@@ -206404,7 +206891,9 @@
             "changes": [],
             "evidence_refs": [
               "E00006",
-              "E00007"
+              "E00048",
+              "E00007",
+              "E00049"
             ]
           },
           {
@@ -206418,6 +206907,7 @@
                 "after": "ClassDef",
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -206430,6 +206920,7 @@
                 ],
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -206440,6 +206931,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -206452,6 +206944,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -206499,6 +206992,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -206558,6 +207052,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -206587,6 +207082,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -206617,6 +207113,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -206627,6 +207124,7 @@
                 "after": "tensorflow/python/ops/init_ops.py",
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -206634,6 +207132,7 @@
             ],
             "evidence_refs": [
               "E00007",
+              "E00049",
               "E00008",
               "E00009"
             ]
@@ -207668,6 +208167,69 @@
             ],
             "diff_excerpt": "@@ -424,8 +448,3 @@ class UniformUnitScaling(Initializer):\n-@tf_export(\n-    \"keras.initializers.VarianceScaling\",\n-    \"initializers.variance_scaling\",\n-    v1=[\n-        \"keras.initializers.VarianceScaling\", \"initializers.variance_scaling\",\n-        \"variance_scaling_initializer\"\n-    ])\n-@deprecation.deprecated_endpoints(\"variance_scaling_initializer\")\n+@tf_export(v1=[\"initializers.variance_scaling\", \"variance_scaling_initializer\"])\n+@deprecation.deprecated_endpoints(\"initializers.variance_scaling\",\n+                                  \"variance_scaling_initializer\")\n@@ -461,0 +480,3 @@ class VarianceScaling(Initializer):\n+  @deprecated_args(None,\n+                   \"Call initializer instance with the dtype argument instead \"\n+                   \"of passing it to the constructor\", \"dtype\")\n@@ -477,2 +498,3 @@ class VarianceScaling(Initializer):\n-    if distribution not in {\"normal\", \"uniform\",\n-                            \"truncated_normal\", \"untruncated_normal\"}:\n+    if distribution not in {\n+        \"normal\", \"uniform\", \"truncated_normal\", \"untruncated_normal\"\n+    }:\n@@ -501 +523 @@ class VarianceScaling(Initializer):\n-    # constant taken from scipy.stats.truncnorm.std(a=-2, b=2, loc=0., scale=1.)\n+      # constant taken from scipy.stats.truncnorm.std(a=-2, b=2, loc=0., scale=1.)\n@@ -507,2 +529 @@ class VarianceScaling(Initializer):\n-      return random_ops.random_normal(\n-          shape, 0.0, stddev, dtype, seed=self.seed)\n+      return random_ops.random_normal(shape, 0.0, stddev, dtype, seed=self.seed)",
             "id": "E00042"
+          },
+          {
+            "id": "E00043",
+            "type": "signature_source",
+            "version": "1.4.0",
+            "commit_sha": "d752244fbaad5e4268243355046d30990f59418f",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00044",
+            "type": "signature_source",
+            "version": "1.4.1",
+            "commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00045",
+            "type": "signature_source",
+            "version": "1.5.0",
+            "commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00046",
+            "type": "signature_source",
+            "version": "1.5.1",
+            "commit_sha": "6a1ec9deeb2b04dc698db385ea582f6949b4f8bc",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00047",
+            "type": "signature_source",
+            "version": "1.6.0",
+            "commit_sha": "d2e24b6039433bd83478da8c8c2d6c58034be607",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
+          },
+          {
+            "id": "E00048",
+            "type": "signature_source",
+            "version": "1.7.0",
+            "commit_sha": "024aecf414941e11eb643e29ceed3e1c47a115ad",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
+          },
+          {
+            "id": "E00049",
+            "type": "signature_source",
+            "version": "1.7.1",
+            "commit_sha": "c8137f3a8e1a22b6e274d0ffc84013624523df59",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
           }
         ]
       }
@@ -331270,9 +331832,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00003"
+              "E00003",
+              "E00052"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.0.1",
@@ -331289,9 +331852,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00004"
+              "E00004",
+              "E00053"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.1.0",
@@ -331308,9 +331872,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00005"
+              "E00005",
+              "E00054"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.2.0",
@@ -331327,9 +331892,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00006"
+              "E00006",
+              "E00055"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.2.1",
@@ -331346,9 +331912,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00007"
+              "E00007",
+              "E00056"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.3.0",
@@ -331365,9 +331932,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00008"
+              "E00008",
+              "E00057"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.4.0",
@@ -331384,9 +331952,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00009"
+              "E00009",
+              "E00058"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.4.1",
@@ -331403,9 +331972,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00010"
+              "E00010",
+              "E00059"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.0",
@@ -331422,9 +331992,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00011"
+              "E00011",
+              "E00060"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.1",
@@ -331441,9 +332012,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00012"
+              "E00012",
+              "E00061"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.6.0",
@@ -331460,9 +332032,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00013"
+              "E00013",
+              "E00062"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.0",
@@ -331479,9 +332052,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00014"
+              "E00014",
+              "E00063"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.1",
@@ -331498,9 +332072,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00015"
+              "E00015",
+              "E00064"
             ],
-            "signature": null
+            "signature": "tensorflow.uniform_unit_scaling_initializer(factor=1.0, seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.8.0",
@@ -331987,7 +332562,8 @@
                 "evidence_refs": [
                   "E00002",
                   "E00003",
-                  "E00049"
+                  "E00052",
+                  "E00065"
                 ]
               },
               {
@@ -331997,7 +332573,8 @@
                 "evidence_refs": [
                   "E00002",
                   "E00003",
-                  "E00049"
+                  "E00052",
+                  "E00065"
                 ]
               },
               {
@@ -332009,14 +332586,16 @@
                 "evidence_refs": [
                   "E00002",
                   "E00003",
-                  "E00049"
+                  "E00052",
+                  "E00065"
                 ]
               }
             ],
             "evidence_refs": [
               "E00002",
               "E00003",
-              "E00049"
+              "E00052",
+              "E00065"
             ]
           },
           {
@@ -332026,7 +332605,9 @@
             "changes": [],
             "evidence_refs": [
               "E00003",
-              "E00004"
+              "E00052",
+              "E00004",
+              "E00053"
             ]
           },
           {
@@ -332036,7 +332617,9 @@
             "changes": [],
             "evidence_refs": [
               "E00004",
-              "E00005"
+              "E00053",
+              "E00005",
+              "E00054"
             ]
           },
           {
@@ -332046,7 +332629,9 @@
             "changes": [],
             "evidence_refs": [
               "E00005",
-              "E00006"
+              "E00054",
+              "E00006",
+              "E00055"
             ]
           },
           {
@@ -332056,7 +332641,9 @@
             "changes": [],
             "evidence_refs": [
               "E00006",
-              "E00007"
+              "E00055",
+              "E00007",
+              "E00056"
             ]
           },
           {
@@ -332066,7 +332653,9 @@
             "changes": [],
             "evidence_refs": [
               "E00007",
-              "E00008"
+              "E00056",
+              "E00008",
+              "E00057"
             ]
           },
           {
@@ -332076,7 +332665,9 @@
             "changes": [],
             "evidence_refs": [
               "E00008",
-              "E00009"
+              "E00057",
+              "E00009",
+              "E00058"
             ]
           },
           {
@@ -332086,7 +332677,9 @@
             "changes": [],
             "evidence_refs": [
               "E00009",
-              "E00010"
+              "E00058",
+              "E00010",
+              "E00059"
             ]
           },
           {
@@ -332096,7 +332689,9 @@
             "changes": [],
             "evidence_refs": [
               "E00010",
-              "E00011"
+              "E00059",
+              "E00011",
+              "E00060"
             ]
           },
           {
@@ -332106,7 +332701,9 @@
             "changes": [],
             "evidence_refs": [
               "E00011",
-              "E00012"
+              "E00060",
+              "E00012",
+              "E00061"
             ]
           },
           {
@@ -332116,7 +332713,9 @@
             "changes": [],
             "evidence_refs": [
               "E00012",
-              "E00013"
+              "E00061",
+              "E00013",
+              "E00062"
             ]
           },
           {
@@ -332126,7 +332725,9 @@
             "changes": [],
             "evidence_refs": [
               "E00013",
-              "E00014"
+              "E00062",
+              "E00014",
+              "E00063"
             ]
           },
           {
@@ -332136,7 +332737,9 @@
             "changes": [],
             "evidence_refs": [
               "E00014",
-              "E00015"
+              "E00063",
+              "E00015",
+              "E00064"
             ]
           },
           {
@@ -332150,6 +332753,7 @@
                 "after": "ClassDef",
                 "evidence_refs": [
                   "E00015",
+                  "E00064",
                   "E00016",
                   "E00017"
                 ]
@@ -332162,6 +332766,7 @@
                 ],
                 "evidence_refs": [
                   "E00015",
+                  "E00064",
                   "E00016",
                   "E00017"
                 ]
@@ -332172,6 +332777,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00015",
+                  "E00064",
                   "E00016",
                   "E00017"
                 ]
@@ -332184,6 +332790,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00015",
+                  "E00064",
                   "E00016",
                   "E00017"
                 ]
@@ -332231,6 +332838,7 @@
                 },
                 "evidence_refs": [
                   "E00015",
+                  "E00064",
                   "E00016",
                   "E00017"
                 ]
@@ -332278,6 +332886,7 @@
                 },
                 "evidence_refs": [
                   "E00015",
+                  "E00064",
                   "E00016",
                   "E00017"
                 ]
@@ -332307,6 +332916,7 @@
                 },
                 "evidence_refs": [
                   "E00015",
+                  "E00064",
                   "E00016",
                   "E00017"
                 ]
@@ -332335,6 +332945,7 @@
                 },
                 "evidence_refs": [
                   "E00015",
+                  "E00064",
                   "E00016",
                   "E00017"
                 ]
@@ -332342,6 +332953,7 @@
             ],
             "evidence_refs": [
               "E00015",
+              "E00064",
               "E00016",
               "E00017"
             ]
@@ -333159,6 +333771,135 @@
             ],
             "diff_excerpt": "@@ -356,6 +380,5 @@ class TruncatedNormal(Initializer):\n-@tf_export(\n-    \"initializers.uniform_unit_scaling\",\n-    v1=[\n-        \"initializers.uniform_unit_scaling\", \"uniform_unit_scaling_initializer\"\n-    ])\n-@deprecation.deprecated_endpoints(\"uniform_unit_scaling_initializer\")\n+@tf_export(v1=[\n+    \"initializers.uniform_unit_scaling\", \"uniform_unit_scaling_initializer\"\n+])\n+@deprecation.deprecated_endpoints(\"uniform_unit_scaling_initializer\",\n+                                  \"initializers.uniform_unit_scaling\")\n@@ -392,0 +414,3 @@ class UniformUnitScaling(Initializer):\n+  @deprecated_args(None,\n+                   \"Call initializer instance with the dtype argument instead \"\n+                   \"of passing it to the constructor\", \"dtype\")",
             "id": "E00051"
+          },
+          {
+            "id": "E00052",
+            "type": "signature_source",
+            "version": "1.0.0",
+            "commit_sha": "07bb8ea2379bd459832b23951fb20ec47f3fdbd4",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 269,
+            "line_end": 269
+          },
+          {
+            "id": "E00053",
+            "type": "signature_source",
+            "version": "1.0.1",
+            "commit_sha": "e895d5ca395c2362df4f5c8f08b68501b41f8a98",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 269,
+            "line_end": 269
+          },
+          {
+            "id": "E00054",
+            "type": "signature_source",
+            "version": "1.1.0",
+            "commit_sha": "1ec6ed51182adf8f1b03a3188c16cd8a45ca6c85",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 278,
+            "line_end": 278
+          },
+          {
+            "id": "E00055",
+            "type": "signature_source",
+            "version": "1.2.0",
+            "commit_sha": "12f033df4c8fa3feb88ce936eb1581eaa92b303e",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 345,
+            "line_end": 345
+          },
+          {
+            "id": "E00056",
+            "type": "signature_source",
+            "version": "1.2.1",
+            "commit_sha": "b4957ffc69e73cf8348db7f381438c3b0ccabd14",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 345,
+            "line_end": 345
+          },
+          {
+            "id": "E00057",
+            "type": "signature_source",
+            "version": "1.3.0",
+            "commit_sha": "9e76bf324f6bac63137a02bb6e6ec9120703ea9b",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 345,
+            "line_end": 345
+          },
+          {
+            "id": "E00058",
+            "type": "signature_source",
+            "version": "1.4.0",
+            "commit_sha": "d752244fbaad5e4268243355046d30990f59418f",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 350,
+            "line_end": 350
+          },
+          {
+            "id": "E00059",
+            "type": "signature_source",
+            "version": "1.4.1",
+            "commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 350,
+            "line_end": 350
+          },
+          {
+            "id": "E00060",
+            "type": "signature_source",
+            "version": "1.5.0",
+            "commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 350,
+            "line_end": 350
+          },
+          {
+            "id": "E00061",
+            "type": "signature_source",
+            "version": "1.5.1",
+            "commit_sha": "6a1ec9deeb2b04dc698db385ea582f6949b4f8bc",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 350,
+            "line_end": 350
+          },
+          {
+            "id": "E00062",
+            "type": "signature_source",
+            "version": "1.6.0",
+            "commit_sha": "d2e24b6039433bd83478da8c8c2d6c58034be607",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 375,
+            "line_end": 375
+          },
+          {
+            "id": "E00063",
+            "type": "signature_source",
+            "version": "1.7.0",
+            "commit_sha": "024aecf414941e11eb643e29ceed3e1c47a115ad",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 375,
+            "line_end": 375
+          },
+          {
+            "id": "E00064",
+            "type": "signature_source",
+            "version": "1.7.1",
+            "commit_sha": "c8137f3a8e1a22b6e274d0ffc84013624523df59",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 375,
+            "line_end": 375
+          },
+          {
+            "type": "git_diff",
+            "from_version": "0.12.1",
+            "to_version": "1.0.0",
+            "from_commit_sha": "4d924e796368163eff11a8151e8505715345f58d",
+            "to_commit_sha": "07bb8ea2379bd459832b23951fb20ec47f3fdbd4",
+            "paths": [
+              "tensorflow/python/ops/init_ops.py"
+            ],
+            "diff_excerpt": "@@ -234,4 +241,3 @@ def truncated_normal_initializer(mean=0.0, stddev=1.0, seed=None,\n-def uniform_unit_scaling_initializer(factor=1.0,\n-                                     seed=None,\n-                                     dtype=dtypes.float32):\n-  \"\"\"Returns an initializer that generates tensors without scaling variance.\n+\n+class UniformUnitScaling(Initializer):\n+  \"\"\"Initializer that generates tensors without scaling variance.\n@@ -262,2 +269,4 @@ def uniform_unit_scaling_initializer(factor=1.0,\n-  Returns:\n-    An initializer that generates tensors with unit variance.\n+  def __init__(self, factor=1.0, seed=None, dtype=dtypes.float32):\n+    self.factor = factor\n+    self.seed = seed\n+    self.dtype = _assert_float_dtype(dtype)\n@@ -265,5 +274,3 @@ def uniform_unit_scaling_initializer(factor=1.0,\n-  Raises:\n-    ValueError: if `dtype` is not a floating point type.\n-  \"\"\"\n-  def _initializer(shape, dtype=_assert_float_dtype(dtype),\n-                   partition_info=None):\n+  def __call__(self, shape, dtype=None, partition_info=None):\n+    if dtype is None:\n+      dtype = self.dtype\n@@ -282 +289 @@ def uniform_unit_scaling_initializer(factor=1.0,\n-    max_val = math.sqrt(3 / input_size) * factor\n+    max_val = math.sqrt(3 / input_size) * self.factor\n@@ -284,2 +291 @@ def uniform_unit_scaling_initializer(factor=1.0,\n-                                     dtype, seed=seed)\n-  return _initializer\n+                                     dtype, seed=self.seed)\n@@ -396 +414,59 @@ def orthogonal_initializer(gain=1.0, dtype=dtypes.float32, seed=None):\n-    return gain * array_ops.reshape(q, shape)\n+    return self.gain * array_ops.reshape(q, shape)\n+\n+\n+# Aliases.\n+\n+# pylint: disable=invalid-name\n+zeros_initializer = Zeros\n+ones_initializer = Ones\n+constant_initializer = Constant\n+random_uniform_initializer = RandomUniform\n+random_normal_initializer = RandomNormal\n+truncated_normal_initializer = TruncatedNormal\n+uniform_unit_scaling_initializer = UniformUnitScaling\n+variance_scaling_initializer = VarianceScaling\n+orthogonal_initializer = Orthogonal\n+# pylint: enable=invalid-name\n+\n+\n+def glorot_uniform_initializer(seed=None, dtype=dtypes.float32):\n+  \"\"\"The Glorot uniform initializer, also called Xavier uniform initializer.\n+\n+  It draws samples from a uniform distribution within [-limit, limit]\n+  where `limit` is `sqrt(6 / (fan_in + fan_out))`\n+  where `fan_in` is the number of input units in the weight tensor\n+  and `fan_out` is the number of output units in the weight tensor.\n+\n+  Reference: http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf\n+\n+  Arguments:\n+    seed: A Python integer. Used to create random seeds. See\n+      [`set_random_seed`](../../api_docs/python/constant_op.md#set_random_seed)\n+      for behavior.\n+    dtype: The data type. Only floating point types are supported.\n+\n+  Returns:\n+    An initializer.\n+  \"\"\"\n+  return variance_scaling_initializer(scale=1.0,\n+                                      mode=\"fan_avg\",\n+                                      distribution=\"uniform\",\n+                                      seed=seed,\n+                                      dtype=dtype)\n+\n+\n+def glorot_normal_initializer(seed=None, dtype=dtypes.float32):\n+  \"\"\"The Glorot normal initializer, also called Xavier normal initializer.\n+\n+  It draws samples from a truncated normal distribution centered on 0\n+  with `stddev = sqrt(2 / (fan_in + fan_out))`\n+  where `fan_in` is the number of input units in the weight tensor\n+  and `fan_out` is the number of output units in the weight tensor.\n+\n+  Reference: http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf\n+\n+  Arguments:\n+    seed: A Python integer. Used to create random seeds. See\n+      [`set_random_seed`](../../api_docs/python/constant_op.md#set_random_seed)\n+      for behavior.\n+    dtype: The data type. Only floating point types are supported.",
+            "id": "E00065"
           }
         ]
       },
@@ -333181,9 +333922,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00001"
+              "E00001",
+              "E00043"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.4.1",
@@ -333200,9 +333942,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00002"
+              "E00002",
+              "E00044"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.0",
@@ -333219,9 +333962,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00003"
+              "E00003",
+              "E00045"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.5.1",
@@ -333238,9 +333982,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00004"
+              "E00004",
+              "E00046"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.6.0",
@@ -333257,9 +334002,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00005"
+              "E00005",
+              "E00047"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.0",
@@ -333276,9 +334022,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00006"
+              "E00006",
+              "E00048"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.7.1",
@@ -333295,9 +334042,10 @@
             },
             "return_annotation": null,
             "evidence_refs": [
-              "E00007"
+              "E00007",
+              "E00049"
             ],
-            "signature": null
+            "signature": "tensorflow.initializers.variance_scaling(scale=1.0, mode='fan_in', distribution='normal', seed=None, dtype=dtypes.float32)"
           },
           {
             "version": "1.8.0",
@@ -333788,7 +334536,9 @@
             "changes": [],
             "evidence_refs": [
               "E00001",
-              "E00002"
+              "E00043",
+              "E00002",
+              "E00044"
             ]
           },
           {
@@ -333798,7 +334548,9 @@
             "changes": [],
             "evidence_refs": [
               "E00002",
-              "E00003"
+              "E00044",
+              "E00003",
+              "E00045"
             ]
           },
           {
@@ -333808,7 +334560,9 @@
             "changes": [],
             "evidence_refs": [
               "E00003",
-              "E00004"
+              "E00045",
+              "E00004",
+              "E00046"
             ]
           },
           {
@@ -333818,7 +334572,9 @@
             "changes": [],
             "evidence_refs": [
               "E00004",
-              "E00005"
+              "E00046",
+              "E00005",
+              "E00047"
             ]
           },
           {
@@ -333828,7 +334584,9 @@
             "changes": [],
             "evidence_refs": [
               "E00005",
-              "E00006"
+              "E00047",
+              "E00006",
+              "E00048"
             ]
           },
           {
@@ -333838,7 +334596,9 @@
             "changes": [],
             "evidence_refs": [
               "E00006",
-              "E00007"
+              "E00048",
+              "E00007",
+              "E00049"
             ]
           },
           {
@@ -333852,6 +334612,7 @@
                 "after": "ClassDef",
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -333864,6 +334625,7 @@
                 ],
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -333874,6 +334636,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -333886,6 +334649,7 @@
                 "after": null,
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -333933,6 +334697,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -333992,6 +334757,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -334021,6 +334787,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -334051,6 +334818,7 @@
                 },
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -334061,6 +334829,7 @@
                 "after": "tensorflow/python/ops/init_ops.py",
                 "evidence_refs": [
                   "E00007",
+                  "E00049",
                   "E00008",
                   "E00009"
                 ]
@@ -334068,6 +334837,7 @@
             ],
             "evidence_refs": [
               "E00007",
+              "E00049",
               "E00008",
               "E00009"
             ]
@@ -335102,6 +335872,69 @@
             ],
             "diff_excerpt": "@@ -424,8 +448,3 @@ class UniformUnitScaling(Initializer):\n-@tf_export(\n-    \"keras.initializers.VarianceScaling\",\n-    \"initializers.variance_scaling\",\n-    v1=[\n-        \"keras.initializers.VarianceScaling\", \"initializers.variance_scaling\",\n-        \"variance_scaling_initializer\"\n-    ])\n-@deprecation.deprecated_endpoints(\"variance_scaling_initializer\")\n+@tf_export(v1=[\"initializers.variance_scaling\", \"variance_scaling_initializer\"])\n+@deprecation.deprecated_endpoints(\"initializers.variance_scaling\",\n+                                  \"variance_scaling_initializer\")\n@@ -461,0 +480,3 @@ class VarianceScaling(Initializer):\n+  @deprecated_args(None,\n+                   \"Call initializer instance with the dtype argument instead \"\n+                   \"of passing it to the constructor\", \"dtype\")\n@@ -477,2 +498,3 @@ class VarianceScaling(Initializer):\n-    if distribution not in {\"normal\", \"uniform\",\n-                            \"truncated_normal\", \"untruncated_normal\"}:\n+    if distribution not in {\n+        \"normal\", \"uniform\", \"truncated_normal\", \"untruncated_normal\"\n+    }:\n@@ -501 +523 @@ class VarianceScaling(Initializer):\n-    # constant taken from scipy.stats.truncnorm.std(a=-2, b=2, loc=0., scale=1.)\n+      # constant taken from scipy.stats.truncnorm.std(a=-2, b=2, loc=0., scale=1.)\n@@ -507,2 +529 @@ class VarianceScaling(Initializer):\n-      return random_ops.random_normal(\n-          shape, 0.0, stddev, dtype, seed=self.seed)\n+      return random_ops.random_normal(shape, 0.0, stddev, dtype, seed=self.seed)",
             "id": "E00042"
+          },
+          {
+            "id": "E00043",
+            "type": "signature_source",
+            "version": "1.4.0",
+            "commit_sha": "d752244fbaad5e4268243355046d30990f59418f",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00044",
+            "type": "signature_source",
+            "version": "1.4.1",
+            "commit_sha": "438604fc885208ee05f9eef2d0f2c630e1360a83",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00045",
+            "type": "signature_source",
+            "version": "1.5.0",
+            "commit_sha": "37aa430d84ced579342a4044c89c236664be7f68",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00046",
+            "type": "signature_source",
+            "version": "1.5.1",
+            "commit_sha": "6a1ec9deeb2b04dc698db385ea582f6949b4f8bc",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 405,
+            "line_end": 410
+          },
+          {
+            "id": "E00047",
+            "type": "signature_source",
+            "version": "1.6.0",
+            "commit_sha": "d2e24b6039433bd83478da8c8c2d6c58034be607",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
+          },
+          {
+            "id": "E00048",
+            "type": "signature_source",
+            "version": "1.7.0",
+            "commit_sha": "024aecf414941e11eb643e29ceed3e1c47a115ad",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
+          },
+          {
+            "id": "E00049",
+            "type": "signature_source",
+            "version": "1.7.1",
+            "commit_sha": "c8137f3a8e1a22b6e274d0ffc84013624523df59",
+            "path": "tensorflow/python/ops/init_ops.py",
+            "line_start": 432,
+            "line_end": 437
           }
         ]
       }
