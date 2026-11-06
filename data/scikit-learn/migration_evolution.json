@@ -7206,7 +7206,7 @@
         "api_states": [
           {
             "name": "sklearn.mixture.GMM",
-            "status": "active",
+            "status": "deprecated",
             "signature": "sklearn.mixture.GMM(n_components=1, covariance_type='diag', random_state=None, tol=0.001, min_covar=0.001, n_iter=100, n_init=1, params='wmc', init_params='wmc', verbose=0)",
             "call_syntax": null
           },
@@ -7218,6 +7218,17 @@
           }
         ],
         "changes": [
+          {
+            "api": "sklearn.mixture.GMM",
+            "type": "deprecated",
+            "parameter": null,
+            "old_value": null,
+            "new_value": "sklearn.mixture.GaussianMixture",
+            "from_version": null,
+            "source": "data/api_mapping_versions.json#id=58",
+            "replace_to": null,
+            "source_evidence": []
+          },
           {
             "api": "sklearn.mixture.GaussianMixture",
             "type": "introduced",
@@ -8031,39 +8042,8 @@
         ]
       },
       {
-        "version": "0.18.0",
-        "compared_to_version": "0.18",
-        "api_states": [
-          {
-            "name": "sklearn.mixture.GMM",
-            "status": "unknown",
-            "signature": null,
-            "call_syntax": null
-          },
-          {
-            "name": "sklearn.mixture.GaussianMixture",
-            "status": "unknown",
-            "signature": null,
-            "call_syntax": null
-          }
-        ],
-        "changes": [
-          {
-            "api": "sklearn.mixture.GMM",
-            "type": "deprecated",
-            "parameter": null,
-            "old_value": null,
-            "new_value": "sklearn.mixture.GaussianMixture",
-            "from_version": null,
-            "source": "data/api_mapping_versions.json#id=58",
-            "replace_to": null,
-            "source_evidence": []
-          }
-        ]
-      },
-      {
         "version": "0.20.0",
-        "compared_to_version": "0.18.0",
+        "compared_to_version": "0.18",
         "api_states": [
           {
             "name": "sklearn.mixture.GMM",
@@ -9892,7 +9872,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "cace0ed1dfbc7ebd12b5a332384101c5cd76145e30d2074bfcdff786e37efc21"
+    "input_digest": "e3c4d036b82b521e4357400ca418a6723e83a8c341097cc7951cf1b545befa48"
   },
   {
     "mapping_id": 59,

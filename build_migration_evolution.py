@@ -25,9 +25,12 @@ OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 def version_key(version):
     try:
-        return tuple(int(part) for part in version.split("."))
+        parts = tuple(int(part) for part in version.split("."))
     except ValueError as exc:
         raise ValueError(f"Non-numeric version: {version}") from exc
+    while len(parts) > 1 and parts[-1] == 0:
+        parts = parts[:-1]
+    return parts
 
 
 def read_json(path):
@@ -163,6 +166,9 @@ def build_facts(pair, track):
     statuses = {api: state_statuses(history) for api, history in histories.items()}
     all_versions = sorted(set().union(*(set(items) for items in statuses.values())),
                           key=version_key)
+    deprecation_version = next((version for version in all_versions
+                                if version_key(version) == version_key(pair["deprecated_version"])),
+                               pair["deprecated_version"])
     present_versions = [version for version in all_versions if any(
         statuses[api].get(version) == "present" for api in histories)]
     baseline = present_versions[0] if present_versions else pair["deprecated_version"]
@@ -212,7 +218,7 @@ def build_facts(pair, track):
                                 "api": api, "mandatory": True, "change": change})
             previous = (version, current)
 
-    pending.append({"version": pair["deprecated_version"],
+    pending.append({"version": deprecation_version,
                     "category": "deprecation", "api": old_api, "mandatory": True,
                     "change": {"api": old_api, "type": "deprecated", "parameter": None,
                                "old_value": None, "new_value": new_api,
