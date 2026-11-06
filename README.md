@@ -36,8 +36,8 @@ API_Evolution/
 │   ├── pypi_versions_with_github_diy.json       # Bản chỉnh tay bước 2
 │   ├── release_notes.json                       # Kết quả bước 3
 │   └── {library}/
-│       ├── api_source_tracks_v2.json            # Kết quả bước 5
-│       ├── migration_evolution_v2.json          # Kết quả bước 6
+│       ├── api_source_tracks.json               # Kết quả bước 5
+│       ├── migration_evolution.json             # Kết quả bước 6
 │       ├── O_with_versions.json                 # Kết quả bước 7 (tập O)
 │       ├── U_with_versions.json                 # Kết quả bước 7 (tập U)
 │       ├── O_modified.json                      # Kết quả bước 8 (tập O)
@@ -154,13 +154,12 @@ python crawl_source.py --library numpy --version 1.4.1
 
 **Chiến lược tìm kiếm:**
 
-- Với Transformers, thử quy tắc export riêng trước.
-- Với các API còn lại, tái sử dụng kết quả phân giải nếu danh sách đường dẫn và các file đã đọc không đổi; nếu không, truy định nghĩa, import, alias, wildcard import và thành viên class bằng AST.
-- Khi đã tìm thấy API, xác định điểm public binding; tái sử dụng binding đã lưu nếu file export không đổi.
-- Nếu chưa tìm thấy, thử các cơ chế lazy export được hỗ trợ, rồi thử decorator export đối với TensorFlow.
-- Nếu vẫn chưa xác nhận được API, kiểm tra ufunc sinh mã của SciPy hoặc Python binding của PyTorch.
-- Giữ chữ ký `def` của API, kể cả wrapper; với alias lần theo định nghĩa được tham chiếu. Hàm sao chép giữ chữ ký của hàm nguồn; wrapper tạo động giữ chữ ký `def` của wrapper.
-- Accessor như `DataFrame.loc` và ufunc như `special.betainc` không có chữ ký hàm gọi trực tiếp: giữ `signature: null`, ghi cú pháp được source xác nhận vào `call_syntax`.
+- Xác thực commit/tag của release; dùng lại kết quả nếu danh sách đường dẫn và các file liên quan không đổi.
+- Thử quy tắc export riêng của Transformers, rồi phân giải định nghĩa, import, alias, wildcard import và thành viên class bằng AST.
+- Nếu tìm thấy API, xác định public binding. Nếu chưa, thử dynamic/lazy export rồi decorator export của TensorFlow.
+- Nếu vẫn chưa xác nhận được, kiểm tra ufunc sinh mã của SciPy hoặc Python binding của PyTorch.
+- Lấy chữ ký `def` đã khai báo; với alias hoặc hàm sao chép, lần theo hàm nguồn. Wrapper giữ chữ ký `def` của chính nó.
+- Với accessor `DataFrame.loc` và ufunc `special.betainc`, ghi `signature: null` và cú pháp được source xác nhận vào `call_syntax`.
 
 **Chạy riêng:**
 
@@ -170,7 +169,7 @@ python build_api_source_tracks.py --library seaborn
 
 **Output:** `data/{library}/api_source_tracks.json`.
 
-**Schema dự kiến:**
+**Schema output:**
 
 ```text
 []
@@ -182,7 +181,7 @@ python build_api_source_tracks.py --library seaborn
         │   ├── source_location             # path, line_start, line_end
         │   ├── public_binding              # kind, path, target
         │   ├── signature, return_annotation
-        │   ├── call_syntax                # cú pháp accessor/ufunc nếu có
+        │   ├── call_syntax                # cú pháp accessor/ufunc (nếu có)
         │   └── evidence_refs[]
         ├── transitions[]                   # so sánh hai release liền kề
         │   ├── from_version, to_version, status, evidence_refs[]
@@ -193,7 +192,7 @@ python build_api_source_tracks.py --library seaborn
 
 ## Bước 6 — Tổng hợp đường tiến hóa của cặp migration
 
-**Mô tả:** dùng LLM ghép `deprecated_version` và đường tiến hóa của hai API ở bước 5 thành đường tiến hóa hoàn chỉnh cho từng cặp migration.
+**Mô tả:** đọc `data/{library}/api_source_tracks.json` và `deprecated_version` trong `data/api_mapping_versions.json`. Cặp có `deprecated_version: null` được bỏ qua. Script tạo sự kiện deprecated tại version này; LLM chọn và nhóm các sự kiện đã có thành đường tiến hóa của cặp API.
 
 **Chọn API gọi model (chọn một):**
 
@@ -214,12 +213,12 @@ $provider = "openai"
 **Chạy từng thư viện:**
 
 ```powershell
-python build_migration_evolution_v2.py --library numpy --mapping-id 1 --provider $provider --dry-run
-python build_migration_evolution_v2.py --library numpy --provider $provider
-python build_migration_evolution_v2.py --library numpy --provider $provider --resume
+python build_migration_evolution.py --library numpy --mapping-id 1 --provider $provider --dry-run
+python build_migration_evolution.py --library numpy --provider $provider
+python build_migration_evolution.py --library numpy --provider $provider --resume
 ```
 
-**Output:** `data/{library}/migration_evolution_v2.json`. Khi chọn `--mapping-id`, script ghi `migration_evolution_v2_mapping_{id}.json` để không ghi đè output toàn thư viện.
+**Output:** `data/{library}/migration_evolution.json`. Khi chọn `--mapping-id`, script ghi `migration_evolution_mapping_{id}.json` để không ghi đè output toàn thư viện.
 
 **Schema dự kiến:**
 
@@ -232,22 +231,25 @@ python build_migration_evolution_v2.py --library numpy --provider $provider --re
     │   ├── version: string
     │   ├── compared_to_version: string|null # Mốc trước đó; null ở mốc đầu tiên
     │   ├── api_states[]                     # Trạng thái của cả hai API tại mốc này
-    │   │   └── name, status, signature, effective_signature
+    │   │   ├── name, status
+    │   │   ├── signature: string|null
+    │   │   └── call_syntax: object|null
     │   └── changes[]                        # Các thay đổi được chọn cho mốc này
     │       ├── api, type, parameter
     │       ├── old_value, new_value, from_version
-    │       └── source, delegates_to, source_evidence[]
+    │       └── source, replace_to, source_evidence[]
     └── model, input_digest                   # Model đã dùng, mã băm của input
 ```
 
 - `status`: `active`, `deprecated`, `removed`, `absent` hoặc `unknown`.
-- `signature` là chữ ký khai báo; `effective_signature` là chữ ký sau khi giải wrapper hoặc alias, có thể là `null`.
-- `changes[]` ghi thay đổi tham số, wrapper, implementation hoặc trạng thái API; `source_evidence[]` giữ bằng chứng từ bước 5 nếu có.
+- Với API được xác nhận có mặt tại mốc, `signature` là chữ ký khai báo. Nếu `signature` là `null`, `call_syntax` chứa cú pháp gọi thay thế từ bước 5 (ví dụ indexer hoặc ufunc). Nếu có `signature`, `call_syntax` là `null`.
+- Với API vắng mặt hoặc chưa xác định tại mốc, cả `signature` và `call_syntax` đều là `null`.
+- `changes[]` ghi sự kiện deprecated, thay đổi source hoặc trạng thái API; `source_evidence[]` giữ bằng chứng từ bước 5 nếu có.
 - `from_version` là version gốc của thay đổi, có thể khác `compared_to_version` của mốc.
 
 ## Bước 7 — Gán các mốc version khả dĩ cho lời gọi API
 
-**Mô tả:** với từng mẫu trong tập O (`data/icsme_data/O.json`) và tập U (`data/icsme_data/U.json`), trích lời gọi API cùng đầy đủ tham số, rồi dùng LLM chọn các mốc có trạng thái và `effective_signature` phù hợp.
+**Mô tả:** đọc `data/{library}/migration_evolution.json`. Với từng mẫu trong tập O (`data/icsme_data/O.json`) và tập U (`data/icsme_data/U.json`), trích lời gọi API hoặc cú pháp indexer, rồi dùng LLM chọn các mốc có trạng thái phù hợp. Model so lời gọi với `signature`; khi trường này là `null`, model dùng `call_syntax` của indexer hoặc ufunc.
 
 **Chạy từng thư viện:**
 
@@ -266,7 +268,7 @@ python build_callsite_versions.py --library numpy --file O --provider openai --w
 
 **Output:** `data/{library}/O_with_versions.json` hoặc `U_with_versions.json`.
 
-- Mỗi mẫu giữ nguyên các trường đầu vào, thêm `api_call` (lời gọi API cùng đầy đủ tham số, hoặc `null` nếu không tìm thấy) ngay trước `versions[]`. Model dùng `api_call` thay cho `reference` để chọn các **mốc của timeline** phù hợp.
+- Mỗi mẫu giữ nguyên các trường đầu vào, thêm `api_call` (lời gọi API hoặc biểu thức indexer cùng đầy đủ đối số, hoặc `null` nếu không tìm thấy) ngay trước `versions[]`. Model dùng `api_call` thay cho `reference` để chọn các **mốc của timeline** phù hợp.
 - `--max-samples` tạo output một phần; `--resume` dùng file tiến độ cùng phiên bản prompt để xử lý các mẫu còn lại. File tiến độ tạo trước thay đổi này cần chạy lại bằng `--overwrite`.
 
 ## Bước 8 — Rà soát và sửa version

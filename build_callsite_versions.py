@@ -29,7 +29,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from build_migration_evolution_v2 import (
+from build_migration_evolution import (
     DATA, MODEL, OPENROUTER_BASE_URL, ROOT, provider_model, version_key,
     write_json,
 )
@@ -112,41 +112,66 @@ def extract_api_call(sample, file_kind):
         line, column = position
         return offsets[line - 1] + column
 
-    def complete_call(start, opening):
+    def expression_text(start, end):
+        begin, end = offset(start.start), offset(end.end)
+        cursor = begin
+        pieces = []
+        for token in tokens:
+            if token.type != tokenize.COMMENT:
+                continue
+            comment_start = offset(token.start)
+            if begin <= comment_start < end:
+                pieces.append(source[cursor:comment_start])
+                cursor = offset(token.end)
+        pieces.append(source[cursor:end])
+        return "".join(pieces)
+
+    def closing_index(opening, left, right):
         depth = 0
-        for closing in significant[opening:]:
-            if closing.string == "(":
+        for index in range(opening, len(significant)):
+            token = significant[index]
+            if token.string == left:
                 depth += 1
-            elif closing.string == ")":
+            elif token.string == right:
                 depth -= 1
                 if depth == 0:
-                    begin, end = offset(start.start), offset(closing.end)
-                    cursor = begin
-                    pieces = []
-                    for token in tokens:
-                        if token.type != tokenize.COMMENT:
-                            continue
-                        comment_start = offset(token.start)
-                        if begin <= comment_start < end:
-                            pieces.append(source[cursor:comment_start])
-                            cursor = offset(token.end)
-                    pieces.append(source[cursor:end])
-                    return "".join(pieces)
+                    return index
         return None
 
+    def complete_call(start, opening):
+        closing = closing_index(opening, "(", ")")
+        return expression_text(start, significant[closing]) if closing is not None else None
+
+    def complete_indexer(start, opening):
+        if significant[opening].string == "(":
+            closing = closing_index(opening, "(", ")")
+            if closing is None or closing + 1 >= len(significant) \
+                    or significant[closing + 1].string != "[":
+                return None
+            opening = closing + 1
+        if significant[opening].string != "[":
+            return None
+        closing = closing_index(opening, "[", "]")
+        return expression_text(start, significant[closing]) if closing is not None else None
+
+    indexer = target == "pandas.DataFrame.loc"
     for index, token in enumerate(significant):
         if token.type != tokenize.NAME:
             continue
         for name in name_tokens:
             end = index + 2 * len(name) - 1
-            if end >= len(significant) or significant[end].string != "(":
+            if end >= len(significant) or significant[end].string not in (
+                    ("[", "(") if indexer else ("(",)):
                 continue
             if any(significant[index + 2 * part].string != component
                    for part, component in enumerate(name)) or any(
                     significant[index + 2 * part + 1].string != "."
                     for part in range(len(name) - 1)):
                 continue
-            return complete_call(token, end)
+            result = (complete_indexer(token, end) if indexer
+                      else complete_call(token, end))
+            if result is not None:
+                return result
 
     # Instance methods appear as obj.method(...) rather than Class.method(...).
     parts = target.split(".")
@@ -155,14 +180,18 @@ def extract_api_call(sample, file_kind):
         for index in range(2, len(significant) - 1):
             if (significant[index].string != method
                     or significant[index - 1].string != "."
-                    or significant[index + 1].string != "("
+                    or significant[index + 1].string not in (
+                        ("[", "(") if indexer else ("(",))
                     or significant[index - 2].type != tokenize.NAME):
                 continue
             start = index - 2
             while (start >= 2 and significant[start - 1].string == "."
                    and significant[start - 2].type == tokenize.NAME):
                 start -= 2
-            return complete_call(significant[start], index + 1)
+            result = (complete_indexer(significant[start], index + 1) if indexer
+                      else complete_call(significant[start], index + 1))
+            if result is not None:
+                return result
     # Python 3.11 coi cả f-string là STRING; đọc lời gọi trong biểu thức {...}.
     for token in tokens:
         if token.type != tokenize.STRING or not re.match(r"(?i)^(?:f|fr|rf)['\"]", token.string):
@@ -171,10 +200,14 @@ def extract_api_call(sample, file_kind):
             expression = ast.parse(token.string, mode="eval")
         except SyntaxError:
             continue
-        calls = sorted((node for node in ast.walk(expression) if isinstance(node, ast.Call)),
-                       key=lambda node: (node.lineno, node.col_offset))
-        for node in calls:
-            name = ast.unparse(node.func)
+        candidates = sorted((node for node in ast.walk(expression)
+                             if isinstance(node, ast.Subscript if indexer else ast.Call)),
+                            key=lambda node: (node.lineno, node.col_offset))
+        for node in candidates:
+            value = node.value if indexer else node.func
+            if indexer and isinstance(value, ast.Call):
+                value = value.func
+            name = ast.unparse(value)
             if (tuple(name.split(".")) in name_tokens
                     or (len(parts) >= 2 and parts[-2][:1].isupper()
                         and name.endswith("." + parts[-1]))):
@@ -204,7 +237,7 @@ def compact_timeline(timeline, target):
         milestones.append({
             "version": milestone["version"],
             "api_states": [{key: state.get(key) for key in
-                            ("name", "status", "effective_signature")}],
+                            ("name", "status", "signature", "call_syntax")}],
         })
     return {"mapping_id": timeline["mapping_id"], "milestones": milestones}
 
@@ -522,7 +555,7 @@ def main(argv=None):
         # Nạp mẫu, timeline và cấu hình model.
         load_dotenv(ROOT / ".env")
         dataset_path = DATA / "icsme_data" / f"{args.file}.json"
-        timeline_path = DATA / args.library / "migration_evolution_v2.json"
+        timeline_path = DATA / args.library / "migration_evolution.json"
         selected = select_samples(read_json(dataset_path), args.library)
         if not selected:
             raise ValueError(f"No {args.file} samples for {args.library}")

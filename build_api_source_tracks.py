@@ -332,6 +332,28 @@ def generated_state(reader, record, api):
     return state, private
 
 
+def pandas_loc_public_binding(resolved):
+    """Identify the declaration that supplies the public DataFrame.loc accessor."""
+    node = resolved.node
+    if resolved.reason == "generated_class_member" and isinstance(node, ast.For):
+        installer = next((dotted(item.value.func) for item in node.body
+                          if isinstance(item, ast.Expr)
+                          and isinstance(item.value, ast.Call)
+                          and dotted(item.value.func).endswith("._create_indexer")), None)
+        owner = installer.rpartition(".")[0] if installer else None
+        if owner:
+            return {"kind": "generated_class_member", "path": resolved.path,
+                    "target": f"{resolved.module}.{owner}.loc"}
+    if isinstance(node, ast.FunctionDef) and any(
+            dotted(decorator) == "property" for decorator in node.decorator_list):
+        owner = next((item.name for item in resolved.tree.body
+                      if isinstance(item, ast.ClassDef) and node in item.body), None)
+        if owner:
+            return {"kind": "property", "path": resolved.path,
+                    "target": f"{resolved.module}.{owner}.loc"}
+    raise RuntimeError("DataFrame.loc binding owner could not be confirmed")
+
+
 # 4. Chỉ đọc chữ ký khai báo tại định nghĩa của API.
 def declared_signature(reader, sha, resolved):
     node = resolved.node
@@ -434,6 +456,7 @@ def read_state_uncached(reader, record, api):
     if call_syntax is not None:
         # loc is an indexer property; its getter's def is not the public call.
         parameters, signature_evidence = None, []
+        binding = pandas_loc_public_binding(resolved)
     extra_evidence, external_evidence = [], []
     if parameters is None:
         if reader.library == "scipy":
@@ -611,6 +634,13 @@ def compare_source_structure(old, new, old_private, new_private):
 
 def compare_base_states(old, new, old_private, new_private):
     changes = compare_source_structure(old, new, old_private, new_private)
+    if (old.get("call_syntax", {}).get("kind") == "indexer"
+            and new.get("call_syntax", {}).get("kind") == "indexer"
+            and old["public_binding"]["kind"] == "generated_class_member"
+            and new["public_binding"]["kind"] == "property"):
+        # These nodes are an installer loop and a property getter, not two API definitions.
+        changes = [change for change in changes
+                   if change["kind"] != "definition_kind_changed"]
     # Chữ ký của wrapper là chữ ký khai báo; không lần theo hàm đích.
     changes.extend(compare_parameters(old["declared_parameters"],
                                       new["declared_parameters"], "declared"))

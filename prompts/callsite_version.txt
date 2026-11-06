@@ -6,17 +6,25 @@ The target API is the deprecated API for file O and the replacement API for
 file U. Analyze api_call, using the full function only for context. An expected
 replacement name is not evidence that the function already calls it.
 
-Evaluate each candidate milestone independently. Include it when the target
-state is active or deprecated and the arguments supplied by api_call can bind
-to its effective_signature. Positional arguments bind by position; keywords
-bind by name. Parameters with defaults may be omitted. A required parameter
-that is not supplied, an unexpected keyword, too many positional arguments,
-or a duplicate argument makes the milestone incompatible. Use only
-effective_signature for argument matching. If it is null or cannot be parsed,
-the milestone has insufficient signature evidence and must not be selected.
+Evaluate each candidate milestone independently. The target state must be
+active or deprecated. If it has a signature, bind the arguments in api_call
+to that declared signature: positional arguments bind by position, keywords
+by name, and parameters with defaults may be omitted. For a bound instance
+method such as obj.method(...), self or cls is supplied by the instance; for
+a call through the class, it must be supplied explicitly. A missing required
+argument, unexpected keyword, too many positional arguments, or duplicate
+argument makes the milestone incompatible.
+
+If signature is null, use call_syntax instead. For kind=indexer, api_call must
+have a bracket access matching one of forms: obj.loc[key] or, only when listed,
+obj.loc(axis=axis)[key]. The key expression may contain slices, tuples, or
+other Python expressions. For kind=ufunc, api_call must call the target with
+the number of positional inputs in required_inputs; do not assume keyword
+names or optional arguments that call_syntax does not document. If neither
+signature nor a matching call_syntax is available, exclude the milestone.
+Do not infer a signature from the implementation or from another version.
 Do not exclude a milestone because runtime values or types cannot be inferred
-from static code. Return every matching milestone, even if its effective
-signature differs from those of other matching milestones.
+from static code. Return every matching milestone.
 
 candidate_versions contains only milestones where the target is confirmed
 active or deprecated; milestones with unknown availability are not included.

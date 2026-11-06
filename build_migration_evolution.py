@@ -1,4 +1,4 @@
-"""Tổng hợp hai lịch sử source thành đường tiến hóa của cặp migration.
+"""Tổng hợp hai lịch sử API bước 5 thành đường tiến hóa của cặp migration.
 
 Dry run: python build_migration_evolution.py --library numpy --mapping-id 3 --dry-run
 Live:    python build_migration_evolution.py --library numpy
@@ -41,7 +41,7 @@ def write_json(path, value):
     temporary.replace(path)
 
 
-# 1. Ghép mapping với hai lịch sử API chỉ có chữ ký khai báo.
+# 1. Ghép mapping với hai lịch sử API bước 5.
 def load_inputs(library, mapping_id):
     mappings = [item for item in read_json(DATA / "api_mapping_versions.json")
                 if item["library"] == library
@@ -80,14 +80,24 @@ def load_inputs(library, mapping_id):
     return ready, skipped
 
 
-# 2. Chuẩn hóa thay đổi source để ghi vào migration path.
+# 2. Dùng chữ ký hoặc cú pháp gọi đã xác nhận ở bước 5.
+def call_form(api, state):
+    declared = state.get("signature")
+    if declared is not None:
+        return {"signature": declared, "call_syntax": None}
+    syntax = state.get("call_syntax")
+    if not syntax:
+        raise ValueError(f"Missing signature and call_syntax for {api} at {state['version']}")
+    return {"signature": None, "call_syntax": syntax}
+
+
 def short_value(value):
     if value is None or isinstance(value, str):
         return value
     return json.dumps(value, ensure_ascii=False, sort_keys=True)
 
 
-# 3. Chuẩn hóa thay đổi theo schema migration path.
+# 3. Chuẩn hóa thay đổi theo schema bước 6 cũ.
 def normalize_change(api, transition, change, evidence):
     kind = change["kind"]
     types = {"parameter_renamed": "parameter_rename",
@@ -117,7 +127,7 @@ def normalize_change(api, transition, change, evidence):
     return {"api": api, "type": types.get(kind, kind), "parameter": parameter,
             "old_value": short_value(before), "new_value": short_value(after),
             "from_version": transition["from_version"],
-            "source": None, "delegates_to": None, "source_evidence": refs}
+            "source": None, "replace_to": None, "source_evidence": refs}
 
 
 def state_statuses(state):
@@ -152,6 +162,9 @@ def build_facts(pair, track):
                 continue
             version = transition["to_version"]
             for change in transition["changes"]:
+                kind = change["kind"]
+                if status == "partial" and kind.startswith("parameter_"):
+                    continue
                 normalized = normalize_change(api, transition, change, evidence)
                 pending.append({"version": version, "category": "source_change",
                                 "api": api, "mandatory": True,
@@ -167,7 +180,7 @@ def build_facts(pair, track):
                           "old_value": "present", "new_value": "absent",
                           "from_version": previous[0],
                           "source": f"data/{pair['library']}/api_source_tracks.json",
-                          "delegates_to": new_api if api == old_api else None,
+                          "replace_to": new_api if api == old_api else None,
                           "source_evidence": []}
                 pending.append({"version": version, "category": "removal",
                                 "api": api, "mandatory": True, "change": change})
@@ -176,19 +189,18 @@ def build_facts(pair, track):
                           "old_value": "absent", "new_value": "present",
                           "from_version": previous[0],
                           "source": f"data/{pair['library']}/api_source_tracks.json",
-                          "delegates_to": None, "source_evidence": []}
+                          "replace_to": None, "source_evidence": []}
                 pending.append({"version": version, "category": "introduction",
                                 "api": api, "mandatory": True, "change": change})
             previous = (version, current)
 
-    # Ngày công bố deprecated lấy từ mapping, không suy ra từ thay đổi source.
     pending.append({"version": pair["deprecated_version"],
                     "category": "deprecation", "api": old_api, "mandatory": True,
                     "change": {"api": old_api, "type": "deprecated", "parameter": None,
                                "old_value": None, "new_value": new_api,
                                "from_version": None,
                                "source": f"data/api_mapping_versions.json#id={pair['id']}",
-                               "delegates_to": None, "source_evidence": []}})
+                               "replace_to": None, "source_evidence": []}})
     pending.sort(key=lambda item: (version_key(item["version"]),
                                    item["category"], item["api"] or ""))
     # Gộp thay đổi giống nhau sau khi bỏ scope, giữ mọi bằng chứng.
@@ -219,22 +231,23 @@ def build_facts(pair, track):
     histories_summary = []
     for api, history in histories.items():
         states = version_states[api]
-        signature_runs = []
+        call_form_runs = []
         for version in sorted(states, key=version_key):
             state = states[version]
-            current = state.get("signature")
-            if signature_runs and signature_runs[-1]["signature"] == current:
-                signature_runs[-1]["to_version"] = version
+            current = call_form(api, state)
+            if call_form_runs and all(call_form_runs[-1][key] == value
+                                      for key, value in current.items()):
+                call_form_runs[-1]["to_version"] = version
             else:
-                signature_runs.append({"from_version": version, "to_version": version,
-                                       "signature": current})
+                call_form_runs.append({"from_version": version, "to_version": version,
+                                       **current})
         histories_summary.append({"api": api,
                                   "present_versions": sorted(states, key=version_key),
                                   "absent_versions": history["coverage"].get(
                                       "absent_versions", []),
                                   "unresolved_versions": history["coverage"].get(
                                       "unresolved_versions", []),
-                                  "signature_runs": signature_runs})
+                                  "call_form_runs": call_form_runs})
     facts = {"mapping_id": pair["id"], "library": pair["library"],
              "seed": {"deprecated_api": old_api, "replacement_api": new_api},
              "deprecated_version": pair["deprecated_version"],
@@ -306,13 +319,13 @@ def render_milestones(facts, selection, version_states, statuses):
             state = version_states[api].get(version)
             status = statuses[api].get(version, "unknown")
             if status == "present":
-                # Source xác nhận API tồn tại; mapping quyết định khi nào gắn nhãn deprecated.
                 status = ("deprecated" if api == old_api and version_key(version) >=
                           version_key(facts["deprecated_version"]) else "active")
             elif status == "absent" and confirmed_removed_at(statuses[api], version):
                 status = "removed"
-            api_states.append({"name": api, "status": status,
-                               "signature": state.get("signature") if state else None})
+            form = call_form(api, state) if state else {"signature": None,
+                                                        "call_syntax": None}
+            api_states.append({"name": api, "status": status, **form})
         changes = [by_id[event_id]["change"] for event_id in selected["event_ids"]
                    if by_id[event_id]["change"] is not None]
         result.append({"version": version, "compared_to_version": previous,
