@@ -1,34 +1,29 @@
-You determine which recorded migration milestones can support one Python API call.
+Determine which recorded migration milestones support one Python API call.
 
-The input contains a function, a probing-input prefix, the extracted api_call,
-alias/reference dictionaries, and the relevant migration milestones.
-The target API is the deprecated API for file O and the replacement API for
-file U. Analyze api_call, using the full function only for context. An expected
-replacement name is not evidence that the function already calls it.
+The input contains a function, probing-input prefix, extracted api_call,
+alias/reference dictionaries, and migration milestones. The target is the
+deprecated API for file O and replacement API for file U. Analyze api_call;
+use the full function only for context. An expected replacement name does not
+prove the function calls it.
 
-Evaluate each candidate milestone independently. The target state must be
-active or deprecated. If it has a signature, bind the arguments in api_call
-to that declared signature: positional arguments bind by position, keywords
-by name, and parameters with defaults may be omitted. For a bound instance
-method such as obj.method(...), self or cls is supplied by the instance; for
-a call through the class, it must be supplied explicitly. A missing required
-argument, unexpected keyword, too many positional arguments, or duplicate
-argument makes the milestone incompatible.
+Evaluate each candidate milestone independently; the target must be active or
+deprecated. If signature exists, bind positional arguments by position and
+keywords by name; defaults may be omitted. A bound instance method supplies
+self or cls, while a class call must supply it explicitly. Missing required
+arguments, unexpected keywords, excess positional arguments, or duplicate
+arguments make the milestone incompatible.
 
-If signature is null, use call_syntax instead. For kind=indexer, api_call must
-have a bracket access matching one of forms: obj.loc[key] or, only when listed,
-obj.loc(axis=axis)[key]. The key expression may contain slices, tuples, or
-other Python expressions. For kind=ufunc, api_call must call the target with
-the number of positional inputs in required_inputs; do not assume keyword
-names or optional arguments that call_syntax does not document. If neither
-signature nor a matching call_syntax is available, exclude the milestone.
-Do not infer a signature from the implementation or from another version.
-Do not exclude a milestone because runtime values or types cannot be inferred
-from static code. Return every matching milestone.
+If signature is null, use call_syntax. For kind=indexer, require a listed
+bracket form: obj.loc[key] or, only if listed, obj.loc(axis=axis)[key]. The
+key may contain slices, tuples, or other Python expressions. For kind=ufunc,
+require the number of positional inputs in required_inputs; do not assume
+undocumented keyword names or optional arguments. Exclude a milestone without
+a matching signature or call_syntax. Do not infer signatures from code or
+other versions, or exclude calls solely because runtime values or types are
+unknown. Return every matching milestone.
 
-candidate_versions contains only milestones where the target is confirmed
-active or deprecated; milestones with unknown availability are not included.
-Use only versions in candidate_versions. Do not invent intermediate releases,
-the actual installed package version, or facts absent from the input. Return
-an empty array only when no candidate milestone is supported. Respond with
-the JSON object required by the schema: {"versions": ["..."]}.
+candidate_versions includes only confirmed active or deprecated milestones;
+unknown availability is excluded. Use only these versions. Do not invent
+intermediate releases, the installed version, or facts absent from the input.
+Return an empty array only if none match. Respond with the schema's JSON
+object: {"versions": ["..."]}.

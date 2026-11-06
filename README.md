@@ -194,16 +194,7 @@ python build_api_source_tracks.py --library seaborn
 
 **Mô tả:** đọc `data/{library}/api_source_tracks.json` và `deprecated_version` trong `data/api_mapping_versions.json`. Cặp có `deprecated_version: null` được bỏ qua. Script tạo sự kiện deprecated tại version này; LLM chọn và nhóm các sự kiện đã có thành đường tiến hóa của cặp API.
 
-**Chọn API gọi model (chọn một):**
-
-OpenRouter:
-
-```powershell
-$env:OPENROUTER_API_KEY = "sk-or-v1-..."
-$provider = "openrouter"
-```
-
-OpenAI trực tiếp:
+**Chọn API gọi model:**
 
 ```powershell
 $env:OPENAI_API_KEY = "sk-..."
@@ -264,6 +255,9 @@ python build_callsite_versions.py --library numpy --file O --resume
 
 # Mặc định tối đa 8 lời gọi model đồng thời; OpenAI tự giãn nhịp và thử lại khi gặp 429 tạm thời.
 python build_callsite_versions.py --library numpy --file O --provider openai --workers 4 --resume
+
+# Claude Haiku 5.5 (đặt ANTHROPIC_API_KEY trong môi trường hoặc .env).
+python build_callsite_versions.py --library numpy --file O --provider anthropic
 ```
 
 **Output:** `data/{library}/O_with_versions.json` hoặc `U_with_versions.json`.

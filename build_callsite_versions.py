@@ -37,6 +37,8 @@ from enrich_pypi_versions import REPOSITORIES
 
 
 PROMPT = ROOT / "prompts" / "callsite_version.txt"
+ANTHROPIC_MODEL = "claude-haiku-5-5"
+ANTHROPIC_MESSAGES_URL = "https://api.anthropic.com/v1/messages"
 PACKAGE_ROOT = {"pytorch": "torch", "scikit-learn": "sklearn"}
 CALLABLE_STATUSES = {"active", "deprecated"}
 
@@ -319,6 +321,32 @@ def openrouter_completion(api_key, payload):
     raise RuntimeError("OpenRouter request failed after retries")
 
 
+def anthropic_completion(api_key, payload):
+    request = Request(
+        ANTHROPIC_MESSAGES_URL,
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+        headers={"x-api-key": api_key, "anthropic-version": "2023-06-01",
+                 "Content-Type": "application/json"},
+        method="POST",
+    )
+    for attempt in range(3):
+        try:
+            with urlopen(request, timeout=180) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except HTTPError as exc:
+            if exc.code in {408, 429, 500, 502, 503, 504} and attempt < 2:
+                time.sleep(2 ** attempt)
+                continue
+            detail = exc.read().decode("utf-8", errors="replace")[:500]
+            raise RuntimeError(f"Anthropic HTTP {exc.code}: {detail}") from exc
+        except (URLError, TimeoutError, socket.timeout) as exc:
+            if attempt < 2:
+                time.sleep(2 ** attempt)
+                continue
+            raise RuntimeError(f"Anthropic connection failed: {exc}") from exc
+    raise RuntimeError("Anthropic request failed after retries")
+
+
 def call_model(client, prompt, facts, model, provider):
     messages = [{"role": "system", "content": prompt},
                 {"role": "user", "content": json.dumps(
@@ -326,7 +354,18 @@ def call_model(client, prompt, facts, model, provider):
     format_spec = {"type": "json_schema", "name": "callsite_versions",
                    "strict": True,
                    "schema": response_schema(facts["candidate_versions"])}
-    if provider == "openrouter":
+    if provider == "anthropic":
+        response = anthropic_completion(client, {
+            "model": model, "max_tokens": 2048, "system": prompt,
+            "messages": [messages[1]],
+            "output_config": {"format": {"type": "json_schema",
+                                         "schema": format_spec["schema"]}},
+        })
+        if not isinstance(response, dict) or response.get("stop_reason") != "end_turn":
+            raise RuntimeError("Model response incomplete")
+        content = "".join(block["text"] for block in response.get("content", [])
+                          if block.get("type") == "text")
+    elif provider == "openrouter":
         response = openrouter_completion(client, {
             "model": model, "messages": messages,
             "response_format": {"type": "json_schema", "json_schema": {
@@ -531,8 +570,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--library", required=True, choices=sorted(REPOSITORIES))
     parser.add_argument("--file", required=True, type=str.upper, choices=("O", "U"))
-    parser.add_argument("--model", default=MODEL)
-    parser.add_argument("--provider", choices=("openrouter", "openai"))
+    parser.add_argument("--model")
+    parser.add_argument("--provider", choices=("openrouter", "openai", "anthropic"))
     parser.add_argument("--output", type=Path)
     parser.add_argument("--max-samples", type=int,
                         help="Process at most this many library samples in this run")
@@ -566,8 +605,12 @@ def main(argv=None):
             raise ValueError(f"No {args.file} samples match {args.library} timelines")
         prompt = PROMPT.read_text(encoding="utf-8")
         provider = args.provider or ("openrouter" if os.getenv("OPENROUTER_API_KEY")
+                                     else "openai" if os.getenv("OPENAI_API_KEY")
+                                     else "anthropic" if os.getenv("ANTHROPIC_API_KEY")
                                      else "openai")
-        model = provider_model(args.model, provider)
+        model = provider_model(
+            args.model or (ANTHROPIC_MODEL if provider == "anthropic" else MODEL),
+            provider)
         output = args.output or DATA / args.library / f"{args.file}_with_versions.json"
         journal = output.with_name(output.stem + ".progress.jsonl")
         if output.resolve() in {dataset_path.resolve(), timeline_path.resolve()}:
@@ -614,12 +657,13 @@ def main(argv=None):
             for _, sample in work)
         client = None
         if needs_model:
-            key_name = ("OPENROUTER_API_KEY" if provider == "openrouter"
-                        else "OPENAI_API_KEY")
+            key_name = {"openrouter": "OPENROUTER_API_KEY",
+                        "openai": "OPENAI_API_KEY",
+                        "anthropic": "ANTHROPIC_API_KEY"}[provider]
             api_key = os.getenv(key_name)
             if not api_key:
                 raise ValueError(f"Set {key_name} before calling the model")
-            if provider == "openrouter":
+            if provider in {"openrouter", "anthropic"}:
                 client = api_key
             else:
                 try:
