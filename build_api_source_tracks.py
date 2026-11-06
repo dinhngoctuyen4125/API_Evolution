@@ -26,7 +26,8 @@ from export_rules.source_signature_rules import (
     tensorflow_deprecated_signature,
 )
 from export_rules.tensorflow_export_rules import (
-    export_index, export_query, export_source_paths, lookup_tensorflow_export,
+    export_index, export_query, export_source_paths, legacy_public_root_absent,
+    lookup_tensorflow_export,
     lookup_tensorflow_generated_div, lookup_tensorflow_generated_substr,
     prepare_candidate_paths,
 )
@@ -272,6 +273,9 @@ def find_public_api(reader, record, api):
         return dynamic
 
     if reader.library == "tensorflow":
+        if legacy_public_root_absent(reader, sha, api):
+            resolved.status, resolved.reason = "absent", "public_name_filtered_from_source"
+            return resolved, None, []
         tf_binding, reason = lookup_tensorflow_export(
             reader, sha, api, record["version"])
         if (reason in {"tf_compat_namespace_not_generated",
@@ -279,7 +283,8 @@ def find_public_api(reader, record, api):
                 or (reason in {"tf_export_other_generation", "tf_export_name_absent"}
                     and resolved.reason == "generated_public_namespace_unresolved")):
             resolved.status, resolved.reason = "absent", reason
-        elif reason:
+        elif reason and (resolved.status != "absent"
+                         or reason != "tf_export_index_incomplete"):
             resolved.status, resolved.reason = "unknown", reason
         elif tf_binding:
             resolved = tf_binding["resolution"]

@@ -30,6 +30,8 @@ def compat_v1_generated(reader, sha):
                           re.S)
     if any(re.search(r"\b1\b", values) for values in versions):
         return True
+    if "gen_api_init_files(" in build:
+        return False
     generator = "tensorflow/python/tools/api/generator/create_python_api.py"
     if generator not in paths or "compat_api_versions" not in reader.source_text(
             sha, generator):
@@ -70,6 +72,86 @@ def golden_export_status(reader, sha, api, version):
     source = reader.source_text(sha, path)
     return re.search(r'(?m)^  member(?:_method)? \{\n    name: "' + re.escape(member)
                      + r'"\s*$', source) is not None
+
+
+@lru_cache(maxsize=128)
+def legacy_public_root_absent(reader, sha, api):
+    """Prove a legacy root name is removed by TensorFlow's public-name filter."""
+    if reader.library != "tensorflow" or not api.startswith("tensorflow."):
+        return False
+    name = api.split(".", 2)[1]
+    root = reader.parse(sha, "tensorflow/__init__.py")
+    public = reader.parse(sha, "tensorflow/python/__init__.py")
+    if root is None or public is None or not any(
+            isinstance(node, ast.ImportFrom)
+            and node.module == "tensorflow.python"
+            and any(alias.name == "*" for alias in node.names)
+            for node in root.body):
+        return False
+    if any(isinstance(node, (ast.FunctionDef, ast.ClassDef)) and node.name == name
+           or isinstance(node, ast.FunctionDef) and node.name == "__getattr__"
+           or isinstance(node, ast.Assign) and any(
+               isinstance(target, ast.Name) and target.id == name
+               for target in node.targets)
+           or isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name)
+           and node.target.id == name
+           or isinstance(node, ast.ImportFrom) and any(
+               (alias.asname or alias.name) == name for alias in node.names)
+           or isinstance(node, ast.Import) and any(
+               (alias.asname or alias.name.split(".")[0]) == name
+               for alias in node.names)
+           for node in root.body):
+        return False
+
+    imports = {alias.asname or alias.name: f"{node.module}.{alias.name}"
+               for node in public.body if isinstance(node, ast.ImportFrom)
+               and node.module for alias in node.names if alias.name != "*"}
+    if imports.get("remove_undocumented") != "tensorflow.python.util.all_util.remove_undocumented":
+        return False
+    allowed = set()
+    allowed_declared = False
+    doc_modules = None
+    for node in public.body:
+        if isinstance(node, ast.Assign) and any(
+                isinstance(target, ast.Name) and target.id == "_allowed_symbols"
+                for target in node.targets):
+            try:
+                allowed = set(ast.literal_eval(node.value))
+                allowed_declared = True
+            except (ValueError, TypeError, SyntaxError):
+                return False
+        elif isinstance(node, ast.AugAssign) and isinstance(node.target, ast.Name) \
+                and node.target.id == "_allowed_symbols":
+            return False
+        elif isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
+            call = node.value
+            if (isinstance(call.func, ast.Attribute)
+                    and isinstance(call.func.value, ast.Name)
+                    and call.func.value.id == "_allowed_symbols"):
+                if call.func.attr != "extend" or len(call.args) != 1:
+                    return False
+                try:
+                    allowed.update(ast.literal_eval(call.args[0]))
+                except (ValueError, TypeError, SyntaxError):
+                    return False
+            if isinstance(call.func, ast.Name) and call.func.id == "remove_undocumented" \
+                    and len(call.args) >= 3 and isinstance(call.args[0], ast.Name) \
+                    and call.args[0].id == "__name__" \
+                    and isinstance(call.args[1], ast.Name) \
+                    and call.args[1].id == "_allowed_symbols" \
+                    and isinstance(call.args[2], ast.List):
+                doc_modules = call.args[2].elts
+    if not allowed_declared or doc_modules is None or name in allowed:
+        return False
+    for item in doc_modules:
+        if not isinstance(item, ast.Name) or item.id not in imports:
+            return False
+        path = reader.module_file(sha, imports[item.id])
+        tree = reader.parse(sha, path) if path else None
+        doc = ast.get_docstring(tree) if tree else None
+        if doc is None or re.search(r"(?m)^@@" + re.escape(name) + r"$", doc):
+            return False
+    return True
 
 
 def lookup_tensorflow_generated_substr(reader, sha, api, version):

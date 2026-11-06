@@ -20,7 +20,7 @@
           },
           {
             "name": "tensorflow.print",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -827,7 +827,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "b04df46a45f64501229412f08486b928c5ed6d1741ffeb03a1771147574e9fba"
+    "input_digest": "910afdafbd21af2538e3c20bb9cb1779138b8cd91dfe80c70757e08015496b06"
   },
   {
     "mapping_id": 61,
@@ -13038,7 +13038,7 @@
         "api_states": [
           {
             "name": "tensorflow.compat.v1.substr",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           },
@@ -13366,7 +13366,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "4d793469f9d62ef4fd5e8d4b0afd81660bbfbe29ba644c0b7d073df993f907a2"
+    "input_digest": "7abbe1f8888544d0320f8961fcca81eb26a9724becf74a8dbead7d5722e14504"
   },
   {
     "mapping_id": 82,
@@ -26305,7 +26305,7 @@
           },
           {
             "name": "tensorflow.keras.metrics.AUC",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -28343,7 +28343,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "93d9e1d5c1821dda0223a3cd93a15ba0726675f0d05c65921f0f448e2b4fd7fe"
+    "input_digest": "1b44dfba2f15f92b49ca11051db4fde2658c7657e7454f97866a2e45731620b0"
   },
   {
     "mapping_id": 98,
@@ -30040,7 +30040,7 @@
           },
           {
             "name": "tensorflow.random.categorical",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -30422,7 +30422,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "dbc39067ccbe4365dc1fc2ec678b092a1eb53a94da2dfe35ae0204b0ac70f976"
+    "input_digest": "ac7046164350ff5503c2de8ecf9c4c86574788efec678a534db8b75a59f24ad9"
   },
   {
     "mapping_id": 103,
@@ -30656,7 +30656,7 @@
           },
           {
             "name": "tensorflow.saved_model.load",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -31927,7 +31927,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "bd581faf3ee0e9d270c86d991d87d8e2baa57d523ab7b9b5f1923ca58da3d6c9"
+    "input_digest": "3fb1c5e3873a8b7bb762db2ed24409ede208f547956c4cecb611f3767fc48cd0"
   },
   {
     "mapping_id": 105,
@@ -31950,7 +31950,7 @@
           },
           {
             "name": "tensorflow.sparse.to_dense",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -32413,7 +32413,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "f28ab6b3330451057daa4aea09ebfda6eb77184f86ca538c0f54a2470215ced6"
+    "input_digest": "c34a5c0cd95f67242d92132487948f83e9901232654c57231784f510e88e109c"
   },
   {
     "mapping_id": 106,
@@ -34061,7 +34061,7 @@
         "api_states": [
           {
             "name": "tensorflow.to_complex128",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           },
@@ -34080,7 +34080,7 @@
         "api_states": [
           {
             "name": "tensorflow.to_complex128",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           },
@@ -35119,7 +35119,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "f732ccaf135fec930bf410810c3d877071ff40807708d6f3f95f740f5785713d"
+    "input_digest": "bd3c447838bb27cadc7ffeace1f2a94698967d9b9878f258946332c70b8a68d3"
   },
   {
     "mapping_id": 109,
@@ -35136,7 +35136,7 @@
         "api_states": [
           {
             "name": "tensorflow.to_complex64",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           },
@@ -35155,7 +35155,7 @@
         "api_states": [
           {
             "name": "tensorflow.to_complex64",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           },
@@ -36194,7 +36194,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "a8e55e6a982b747882ffe45b249518c848710518494aeaf6959b7be7f901aff8"
+    "input_digest": "240746e434e65a34a6f271d3cadc3de2feed2300eab9a56867cfb2eb8765ac8e"
   },
   {
     "mapping_id": 110,
@@ -41713,7 +41713,7 @@
           },
           {
             "name": "tensorflow.initializers.variance_scaling",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -41732,7 +41732,7 @@
           },
           {
             "name": "tensorflow.initializers.variance_scaling",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -43035,6 +43035,6 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "46697f2a51af838e09d494820c36f7565d9e989a1cb2d731f890cc62e486786d"
+    "input_digest": "8711555e6b4b82f02035421329adfeadf8e8b2c048509ac039f7e098a88579da"
   }
 ]

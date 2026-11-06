@@ -5563,9 +5563,10 @@
         "coverage": {
           "versions_considered": 101,
           "versions_present": 82,
-          "versions_absent": 14,
-          "versions_unresolved": 5,
+          "versions_absent": 15,
+          "versions_unresolved": 4,
           "absent_versions": [
+            "0.12.0",
             "1.2.0",
             "1.2.1",
             "1.3.0",
@@ -5582,10 +5583,6 @@
             "1.11.0"
           ],
           "unresolved_versions": [
-            {
-              "version": "0.12.0",
-              "reason": "tf_export_index_incomplete"
-            },
             {
               "version": "0.12.1",
               "reason": "tf_export_index_incomplete"
@@ -195258,8 +195255,8 @@
         "coverage": {
           "versions_considered": 101,
           "versions_present": 78,
-          "versions_absent": 19,
-          "versions_unresolved": 4,
+          "versions_absent": 20,
+          "versions_unresolved": 3,
           "absent_versions": [
             "0.12.0",
             "0.12.1",
@@ -195279,13 +195276,10 @@
             "1.8.0",
             "1.9.0",
             "1.10.0",
-            "1.10.1"
+            "1.10.1",
+            "1.11.0"
           ],
           "unresolved_versions": [
-            {
-              "version": "1.11.0",
-              "reason": "tf_export_index_incomplete"
-            },
             {
               "version": "1.12.0",
               "reason": "tf_export_index_incomplete"
@@ -195301,13 +195295,8 @@
           ],
           "intervals_considered": 100,
           "intervals_compared": 77,
-          "intervals_skipped_absent": 18,
+          "intervals_skipped_absent": 19,
           "unresolved_intervals": [
-            {
-              "from_version": "1.10.1",
-              "to_version": "1.11.0",
-              "reason": "api_presence_unresolved"
-            },
             {
               "from_version": "1.11.0",
               "to_version": "1.12.0",
@@ -357113,9 +357102,10 @@
         "coverage": {
           "versions_considered": 101,
           "versions_present": 62,
-          "versions_absent": 17,
-          "versions_unresolved": 22,
+          "versions_absent": 18,
+          "versions_unresolved": 21,
           "absent_versions": [
+            "1.0.0",
             "1.4.0",
             "1.4.1",
             "1.5.0",
@@ -357141,10 +357131,6 @@
             },
             {
               "version": "0.12.1",
-              "reason": "tf_export_index_incomplete"
-            },
-            {
-              "version": "1.0.0",
               "reason": "tf_export_index_incomplete"
             },
             {
@@ -381193,9 +381179,10 @@
         "coverage": {
           "versions_considered": 101,
           "versions_present": 78,
-          "versions_absent": 18,
-          "versions_unresolved": 5,
+          "versions_absent": 19,
+          "versions_unresolved": 4,
           "absent_versions": [
+            "0.12.0",
             "1.2.0",
             "1.2.1",
             "1.3.0",
@@ -381216,10 +381203,6 @@
             "1.12.3"
           ],
           "unresolved_versions": [
-            {
-              "version": "0.12.0",
-              "reason": "tf_export_index_incomplete"
-            },
             {
               "version": "0.12.1",
               "reason": "tf_export_index_incomplete"
@@ -395718,9 +395701,10 @@
         "coverage": {
           "versions_considered": 101,
           "versions_present": 81,
-          "versions_absent": 15,
-          "versions_unresolved": 5,
+          "versions_absent": 16,
+          "versions_unresolved": 4,
           "absent_versions": [
+            "1.0.0",
             "1.2.0",
             "1.2.1",
             "1.3.0",
@@ -395744,10 +395728,6 @@
             },
             {
               "version": "0.12.1",
-              "reason": "tf_export_index_incomplete"
-            },
-            {
-              "version": "1.0.0",
               "reason": "tf_export_index_incomplete"
             },
             {
@@ -403630,9 +403610,10 @@
         "coverage": {
           "versions_considered": 101,
           "versions_present": 81,
-          "versions_absent": 15,
-          "versions_unresolved": 5,
+          "versions_absent": 16,
+          "versions_unresolved": 4,
           "absent_versions": [
+            "0.12.0",
             "1.2.0",
             "1.2.1",
             "1.3.0",
@@ -403650,10 +403631,6 @@
             "1.11.0"
           ],
           "unresolved_versions": [
-            {
-              "version": "0.12.0",
-              "reason": "tf_export_index_incomplete"
-            },
             {
               "version": "0.12.1",
               "reason": "tf_export_index_incomplete"
@@ -423584,9 +423561,11 @@
         "coverage": {
           "versions_considered": 101,
           "versions_present": 18,
-          "versions_absent": 78,
-          "versions_unresolved": 5,
+          "versions_absent": 80,
+          "versions_unresolved": 3,
           "absent_versions": [
+            "0.12.0",
+            "1.0.0",
             "1.2.0",
             "1.2.1",
             "1.3.0",
@@ -423668,15 +423647,7 @@
           ],
           "unresolved_versions": [
             {
-              "version": "0.12.0",
-              "reason": "tf_export_index_incomplete"
-            },
-            {
               "version": "0.12.1",
-              "reason": "tf_export_index_incomplete"
-            },
-            {
-              "version": "1.0.0",
               "reason": "tf_export_index_incomplete"
             },
             {
@@ -432307,9 +432278,11 @@
         "coverage": {
           "versions_considered": 101,
           "versions_present": 18,
-          "versions_absent": 78,
-          "versions_unresolved": 5,
+          "versions_absent": 80,
+          "versions_unresolved": 3,
           "absent_versions": [
+            "0.12.0",
+            "1.0.0",
             "1.2.0",
             "1.2.1",
             "1.3.0",
@@ -432391,15 +432364,7 @@
           ],
           "unresolved_versions": [
             {
-              "version": "0.12.0",
-              "reason": "tf_export_index_incomplete"
-            },
-            {
               "version": "0.12.1",
-              "reason": "tf_export_index_incomplete"
-            },
-            {
-              "version": "1.0.0",
               "reason": "tf_export_index_incomplete"
             },
             {
@@ -493455,9 +493420,11 @@
         "coverage": {
           "versions_considered": 101,
           "versions_present": 23,
-          "versions_absent": 73,
-          "versions_unresolved": 5,
+          "versions_absent": 75,
+          "versions_unresolved": 3,
           "absent_versions": [
+            "0.12.0",
+            "1.0.0",
             "1.2.0",
             "1.2.1",
             "1.3.0",
@@ -493534,15 +493501,7 @@
           ],
           "unresolved_versions": [
             {
-              "version": "0.12.0",
-              "reason": "tf_export_index_incomplete"
-            },
-            {
               "version": "0.12.1",
-              "reason": "tf_export_index_incomplete"
-            },
-            {
-              "version": "1.0.0",
               "reason": "tf_export_index_incomplete"
             },
             {
