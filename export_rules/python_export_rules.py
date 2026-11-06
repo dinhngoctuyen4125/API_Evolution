@@ -16,8 +16,11 @@ def find_public_binding(reader, sha, api, resolved):
     if len(parts) > 2:
         parent = reader.resolve_api(sha, parent_api)
         if isinstance(parent.node, ast.ClassDef):
+            owner = next((item.name for item in (resolved.tree.body if resolved.tree else [])
+                          if isinstance(item, ast.ClassDef)
+                          and resolved.node in item.body), parent.node.name)
             return {"kind": "class_member", "path": resolved.path,
-                    "target": f"{resolved.module}.{parent.node.name}.{parts[-1]}"}, []
+                    "target": f"{resolved.module}.{owner}.{parts[-1]}"}, []
         if isinstance(parent.node, (ast.Assign, ast.AnnAssign)):
             value = parent.node.value
             constructor = dotted(value.func) if isinstance(value, ast.Call) else None

@@ -7,7 +7,7 @@ It only returns positive evidence; an unrecognized binding stays unresolved.
 import ast
 import re
 
-from source_evolution_rules import dotted
+from source_evolution_rules import dotted, signature
 
 
 SCHEMA = "aten/src/ATen/native/native_functions.yaml"
@@ -207,7 +207,7 @@ def _parameters(schema):
     return parameters
 
 
-def _schema_entry(lines, name):
+def _schema_entry(lines, name, implicit_function=False):
     start = next((index for index, line in enumerate(lines)
                   if re.match(r"^\s*-\s*func:\s*" + re.escape(name) + r"\(", line)),
                  None)
@@ -217,7 +217,8 @@ def _schema_entry(lines, name):
                 if re.match(r"^\s*-\s*func:\s*", lines[index])), len(lines))
     block = lines[start:end]
     variant = next((line.split(":", 1)[1].strip() for line in block
-                    if re.match(r"^\s*variants:\s*", line)), None)
+                    if re.match(r"^\s*variants:\s*", line)),
+                   "function" if implicit_function else None)
     if variant is None or "function" not in variant.split(", ") \
             or any(re.match(r"^\s*python_module:\s*\S", line) for line in block) \
             or any(re.match(r"^\s*tags:\s*.*\bgenerated\b", line) for line in block):
@@ -226,6 +227,17 @@ def _schema_entry(lines, name):
     return {"location": {"path": SCHEMA, "line_start": start + 1,
                          "line_end": (last if last is not None else start) + 1},
             "parameters": _parameters(schema) if schema else None}
+
+
+def _implicit_function_rule(reader, sha):
+    for path in ("tools/codegen/model.py", "torchgen/model.py"):
+        if path not in reader.paths(sha):
+            continue
+        for index, line in enumerate(reader.source_text(sha, path).splitlines(), 1):
+            if re.search(r"variants_s\s*=\s*e\.pop\(\s*['\"]variants['\"]\s*,"
+                         r"\s*['\"]function['\"]\s*\)", line):
+                return {"path": path, "line_start": index, "line_end": index}
+    return None
 
 
 def _out_merge_rule(reader, sha):
@@ -253,12 +265,18 @@ def _schema(reader, sha, name):
         return None
     lines = reader.source_text(sha, SCHEMA).splitlines()
     base = _schema_entry(lines, name)
+    implicit_rule = None
     if base is None:
-        return None
+        implicit_rule = _implicit_function_rule(reader, sha)
+        if implicit_rule is None:
+            return None
+        base = _schema_entry(lines, name, implicit_function=True)
+        if base is None:
+            return None
     declared = base["parameters"]
     effective = [item.copy() for item in declared] if declared is not None else None
-    extra_evidence = []
-    out = _schema_entry(lines, name + ".out")
+    extra_evidence = [("binding_generator", implicit_rule)] if implicit_rule else []
+    out = _schema_entry(lines, name + ".out", implicit_function=bool(implicit_rule))
     if out and effective is not None:
         out_parameters = out["parameters"]
         rule = _out_merge_rule(reader, sha)
@@ -270,14 +288,41 @@ def _schema(reader, sha, name):
                                     for item in outputs):
             effective.append({"name": "out", "kind": "keyword_only",
                               "default": "None", "annotation": None})
-            extra_evidence = [("binding_overload", out["location"]),
-                              ("python_signature_rule", rule)]
+            extra_evidence.extend([("binding_overload", out["location"]),
+                                   ("python_signature_rule", rule)])
         else:
             effective = None
     return {"location": base["location"],
             "declared_parameters": declared,
             "effective_parameters": effective,
             "parameter_evidence": extra_evidence}
+
+
+def _matrix_rank_signature(reader, sha):
+    path = "torch/_torch_docs.py"
+    if path not in reader.paths(sha):
+        return None
+    lines = reader.source_text(sha, path).splitlines()
+    for index, line in enumerate(lines):
+        if not re.match(r"\s*add_docstr\(torch\.matrix_rank,\s*r?['\"]{3}", line):
+            continue
+        if index + 1 >= len(lines):
+            return None
+        header = lines[index + 1].strip()
+        match = re.fullmatch(r"matrix_rank\((.*)\)\s*->\s*Tensor", header)
+        if not match:
+            return None
+        try:
+            node = ast.parse(f"def matrix_rank({match.group(1)}): pass").body[0]
+        except SyntaxError:
+            return None
+        parameters = signature(node)
+        names = [parameter["name"] for parameter in parameters]
+        if names != ["input", "tol", "symmetric", "out"]:
+            return None
+        return parameters, {"path": path, "line_start": index + 2,
+                            "line_end": index + 2}
+    return None
 
 
 def lookup_torch_python_binding(reader, sha, api):
@@ -291,11 +336,41 @@ def lookup_torch_python_binding(reader, sha, api):
     declaration = _schema(reader, sha, name) if generator else None
     if not (export and generator and declaration):
         return None
+    if name == "matrix_rank":
+        overload = _schema_entry(reader.source_text(sha, SCHEMA).splitlines(),
+                                 "matrix_rank.tol", implicit_function=True)
+        documented = _matrix_rank_signature(reader, sha)
+        if overload is None or documented is None:
+            return None
+        declaration["declared_parameters"] = documented[0]
+        declaration["parameter_evidence"].extend([
+            ("binding_overload", overload["location"]),
+            ("signature_source", documented[1]),
+        ])
     return {"declaration": declaration["location"],
             "declared_parameters": declaration["declared_parameters"],
             "effective_parameters": declaration["effective_parameters"],
             "parameter_evidence": declaration["parameter_evidence"],
             "generator": generator, "export": export}
+
+
+def missing_functional_lu_alias(reader, sha, api):
+    if reader.library != "pytorch" or api not in {
+            "torch.lu_unpack", "torch.btriunpack"}:
+        return False
+    name = api.split(".", 1)[1]
+    path = reader.module_file(sha, "torch.functional")
+    tree = reader.parse(sha, path) if path else None
+    exports = _literal(tree, "__all__") if tree else None
+    if not isinstance(exports, (list, tuple, set)) or name in exports:
+        return False
+    if reader.resolve_name(sha, "torch.functional", name).status != "absent":
+        return False
+    if SCHEMA in reader.paths(sha) and any(
+            re.match(r"^\s*-\s*func:\s*" + re.escape(name) + r"(?:\.|\()", line)
+            for line in reader.source_text(sha, SCHEMA).splitlines()):
+        return False
+    return True
 
 
 def lookup_torch_linalg_signature(reader, sha, resolved):

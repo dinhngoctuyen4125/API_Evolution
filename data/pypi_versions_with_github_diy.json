@@ -1800,6 +1800,13 @@
   },
   {
     "library": "pytorch",
+    "version": "0.4.1",
+    "tag": "v0.4.1",
+    "commit_sha": "a24163a95edb193ff7b06e98cd69bf7cfd4c0d2f",
+    "source_url": "https://github.com/pytorch/pytorch/tree/a24163a95edb193ff7b06e98cd69bf7cfd4c0d2f"
+  },
+  {
+    "library": "pytorch",
     "version": "1.0.0",
     "tag": "v1.0.0",
     "commit_sha": "db5d3131d16f57abd4f13d3f4b885d5f67bf6644",

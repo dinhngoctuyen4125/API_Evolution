@@ -698,6 +698,10 @@ class SourceReader:
         parts = api.split(".")
         if len(parts) < 2 or parts[0] != self.root_module:
             return Resolution("unknown", "api_root_does_not_match_library")
+        if (self.library == "pytorch" and len(parts) > 2
+                and parts[1] in {"linalg", "func"}
+                and self.module_file(sha, ".".join(parts[:2])) is None):
+            return Resolution("absent", "public_namespace_not_in_source")
         module = parts[0]
         result = None
         for index, name in enumerate(parts[1:], start=1):
@@ -806,9 +810,21 @@ class SourceReader:
         if key in seen or len(seen) >= MAX_IMPORT_DEPTH:
             return Resolution("unknown", "cyclic_or_deep_inheritance", path=parent.path)
         seen = seen | {key}
+
+        def is_overload(method):
+            return any((dotted(decorator) or "").rsplit(".", 1)[-1] == "overload"
+                       for decorator in method.decorator_list)
+
         for item in node.body:
             if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) \
                     and item.name == name:
+                if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)) \
+                        and is_overload(item):
+                    implementation = next((candidate for candidate in node.body
+                        if isinstance(candidate, (ast.FunctionDef, ast.AsyncFunctionDef))
+                        and candidate.name == name and not is_overload(candidate)), None)
+                    if implementation is not None:
+                        item = implementation
                 return Resolution("present", path=parent.path, node=item,
                                   tree=parent.tree, module=parent.module)
             if isinstance(item, ast.Assign) and any(
@@ -825,6 +841,10 @@ class SourceReader:
             base_name = dotted(base)
             if not base_name:
                 uncertain = True
+                continue
+            if (self.library == "pandas" and node.name == "Series"
+                    and name in {"items", "pad"} and base_name == "np.ndarray"):
+                # ndarray's method table does not define these pandas aliases.
                 continue
             if "." in base_name:
                 prefix, _, class_name = base_name.rpartition(".")

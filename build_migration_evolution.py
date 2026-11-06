@@ -5,6 +5,7 @@ Live:    python build_migration_evolution.py --library numpy
 """
 
 import argparse
+import ast
 import hashlib
 import json
 import os
@@ -130,6 +131,21 @@ def normalize_change(api, transition, change, evidence):
             "source": None, "replace_to": None, "source_evidence": refs}
 
 
+def docstring_only_assignment_change(change):
+    if change["kind"] != "assignment_expression_changed":
+        return False
+    try:
+        before = ast.parse(change["before"], mode="eval").body
+        after = ast.parse(change["after"], mode="eval").body
+    except (SyntaxError, TypeError, ValueError):
+        return False
+    return all(isinstance(node, ast.Call)
+               and isinstance(node.func, ast.Name)
+               and node.func.id == "_add_docstr"
+               and len(node.args) == 2 and not node.keywords
+               for node in (before, after)) and ast.dump(before.args[0]) == ast.dump(after.args[0])
+
+
 def state_statuses(state):
     statuses = {item["version"]: "present" for item in state["versions"]}
     statuses.update({version: "absent" for version in
@@ -162,6 +178,8 @@ def build_facts(pair, track):
                 continue
             version = transition["to_version"]
             for change in transition["changes"]:
+                if docstring_only_assignment_change(change):
+                    continue
                 kind = change["kind"]
                 if status == "partial" and kind.startswith("parameter_"):
                     continue

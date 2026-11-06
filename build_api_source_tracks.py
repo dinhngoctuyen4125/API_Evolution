@@ -28,6 +28,7 @@ from export_rules.tensorflow_export_rules import (
 )
 from export_rules.torch_binding_rules import (
     lookup_torch_linalg_signature, lookup_torch_python_binding,
+    missing_functional_lu_alias,
 )
 from export_rules.transformers_export_rules import lookup_transformers_export
 from source_evolution_rules import (
@@ -448,6 +449,8 @@ def read_state_uncached(reader, record, api):
         generated = generated_state(reader, record, api)
         if generated:
             return "present", generated, None
+        if missing_functional_lu_alias(reader, sha, api):
+            return "absent", None, "functional_alias_not_exported"
         return resolved.status, None, resolved.reason
 
     node = resolved.node

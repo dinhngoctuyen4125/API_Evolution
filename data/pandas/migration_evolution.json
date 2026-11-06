@@ -1243,6 +1243,32 @@
         ],
         "changes": [
           {
+            "api": "pandas.DataFrame.first",
+            "type": "public_binding_changed",
+            "parameter": null,
+            "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.PandasObject.first\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.PandasContainer.first\"}",
+            "from_version": "0.11.0",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "0.11.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 259,
+                "line_end": 291
+              },
+              {
+                "type": "source",
+                "version": "0.12.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 292,
+                "line_end": 324
+              }
+            ]
+          },
+          {
             "api": "pandas.DataFrame.loc",
             "type": "public_binding_changed",
             "parameter": null,
@@ -1314,6 +1340,39 @@
           }
         ],
         "changes": [
+          {
+            "api": "pandas.DataFrame.first",
+            "type": "public_binding_changed",
+            "parameter": null,
+            "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.PandasContainer.first\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.NDFrame.first\"}",
+            "from_version": "0.12.0",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "0.12.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 292,
+                "line_end": 324
+              },
+              {
+                "type": "source",
+                "version": "0.13.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 2540,
+                "line_end": 2572
+              },
+              {
+                "type": "git_diff",
+                "from_version": "0.12.0",
+                "to_version": "0.13.0",
+                "from_commit_sha": "8c0a34f15f8a87def3f7ad6ebdac052de44669f2",
+                "to_commit_sha": "a5410ed841759badae2c3fe4cc71335c9dd6ad92"
+              }
+            ]
+          },
           {
             "api": "pandas.DataFrame.loc",
             "type": "public_binding_changed",
@@ -2484,7 +2543,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "b8269a9c6194cd86bd9961839c0d98b9e2821797b0f95611481f32c30d0df539"
+    "input_digest": "1f7b42b6688f381ff07105871abe2cbc7191572b502aad8ac7bb4c21b2ef94f8"
   },
   {
     "mapping_id": 6,
@@ -3579,6 +3638,32 @@
         ],
         "changes": [
           {
+            "api": "pandas.DataFrame.last",
+            "type": "public_binding_changed",
+            "parameter": null,
+            "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.PandasObject.last\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.PandasContainer.last\"}",
+            "from_version": "0.11.0",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "0.11.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 293,
+                "line_end": 321
+              },
+              {
+                "type": "source",
+                "version": "0.12.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 326,
+                "line_end": 354
+              }
+            ]
+          },
+          {
             "api": "pandas.DataFrame.loc",
             "type": "public_binding_changed",
             "parameter": null,
@@ -3650,6 +3735,39 @@
           }
         ],
         "changes": [
+          {
+            "api": "pandas.DataFrame.last",
+            "type": "public_binding_changed",
+            "parameter": null,
+            "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.PandasContainer.last\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.NDFrame.last\"}",
+            "from_version": "0.12.0",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "0.12.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 326,
+                "line_end": 354
+              },
+              {
+                "type": "source",
+                "version": "0.13.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 2574,
+                "line_end": 2602
+              },
+              {
+                "type": "git_diff",
+                "from_version": "0.12.0",
+                "to_version": "0.13.0",
+                "from_commit_sha": "8c0a34f15f8a87def3f7ad6ebdac052de44669f2",
+                "to_commit_sha": "a5410ed841759badae2c3fe4cc71335c9dd6ad92"
+              }
+            ]
+          },
           {
             "api": "pandas.DataFrame.loc",
             "type": "public_binding_changed",
@@ -4754,7 +4872,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "2cc42eab1c460c024749b827b204df6ba131cc00c90b0e525ed0314071663b54"
+    "input_digest": "02c548e9c4a33051931ef6cc226e27cbfa554c9aa9c2ace4c035ada161fccc93"
   },
   {
     "mapping_id": 8,
@@ -4852,7 +4970,7 @@
             "type": "public_binding_changed",
             "parameter": null,
             "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/frame.py\", \"target\": \"pandas.core.frame.DataFrame.ffill\"}",
-            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.DataFrame.ffill\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.NDFrame.ffill\"}",
             "from_version": "0.12.0",
             "source": null,
             "replace_to": null,
@@ -5338,7 +5456,7 @@
             "api": "pandas.DataFrame.ffill",
             "type": "public_binding_changed",
             "parameter": null,
-            "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.DataFrame.ffill\"}",
+            "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.NDFrame.ffill\"}",
             "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/frame.py\", \"target\": \"pandas.core.frame.DataFrame.ffill\"}",
             "from_version": "1.2.5",
             "source": null,
@@ -5603,149 +5721,17 @@
           {
             "name": "pandas.DataFrame.pad",
             "status": "active",
-            "signature": "pandas.DataFrame.pad(self: NDFrameT, *, axis: None | Axis=..., inplace: Literal[False]=..., limit: None | int=..., downcast: dict | None=...)",
+            "signature": "pandas.DataFrame.pad(self: NDFrameT, axis: None | Axis=None, inplace: bool_t=False, limit: None | int=None, downcast: dict | None=None)",
             "call_syntax": null
           },
           {
             "name": "pandas.DataFrame.ffill",
             "status": "active",
-            "signature": "pandas.DataFrame.ffill(self, *, axis: None | Axis=..., inplace: Literal[False]=..., limit: None | int=..., downcast: dict | None=...)",
+            "signature": "pandas.DataFrame.ffill(self, axis: None | Axis=None, inplace: bool=False, limit: None | int=None, downcast: dict | None=None)",
             "call_syntax": null
           }
         ],
         "changes": [
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "parameter_kind_changed",
-            "parameter": "axis",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/frame.py",
-                "line_start": 10895,
-                "line_end": 10902
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "default_changed",
-            "parameter": "axis",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/frame.py",
-                "line_start": 10895,
-                "line_end": 10902
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "parameter_kind_changed",
-            "parameter": "downcast",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/frame.py",
-                "line_start": 10895,
-                "line_end": 10902
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "default_changed",
-            "parameter": "downcast",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/frame.py",
-                "line_start": 10895,
-                "line_end": 10902
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
           {
             "api": "pandas.DataFrame.ffill",
             "type": "parameter_annotation_changed",
@@ -5767,173 +5753,8 @@
                 "type": "source",
                 "version": "1.5.0",
                 "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "parameter_kind_changed",
-            "parameter": "inplace",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/frame.py",
-                "line_start": 10895,
-                "line_end": 10902
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "default_changed",
-            "parameter": "inplace",
-            "old_value": "False",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/frame.py",
-                "line_start": 10895,
-                "line_end": 10902
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "parameter_annotation_changed",
-            "parameter": "inplace",
-            "old_value": "bool",
-            "new_value": "Literal[False]",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/frame.py",
-                "line_start": 10895,
-                "line_end": 10902
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "parameter_kind_changed",
-            "parameter": "limit",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/frame.py",
-                "line_start": 10895,
-                "line_end": 10902
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "default_changed",
-            "parameter": "limit",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/frame.py",
-                "line_start": 10895,
-                "line_end": 10902
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
+                "line_start": 11798,
+                "line_end": 11805
               },
               {
                 "type": "git_diff",
@@ -5965,41 +5786,8 @@
                 "type": "source",
                 "version": "1.5.0",
                 "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "return_annotation_changed",
-            "parameter": null,
-            "old_value": "DataFrame | None",
-            "new_value": "DataFrame",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/frame.py",
-                "line_start": 10895,
-                "line_end": 10902
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
+                "line_start": 11798,
+                "line_end": 11805
               },
               {
                 "type": "git_diff",
@@ -6031,196 +5819,8 @@
                 "type": "source",
                 "version": "1.5.0",
                 "path": "pandas/core/frame.py",
-                "line_start": 11764,
-                "line_end": 11772
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.pad",
-            "type": "parameter_kind_changed",
-            "parameter": "axis",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.pad",
-            "type": "default_changed",
-            "parameter": "axis",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.pad",
-            "type": "parameter_kind_changed",
-            "parameter": "downcast",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.pad",
-            "type": "default_changed",
-            "parameter": "downcast",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
+                "line_start": 11798,
+                "line_end": 11805
               },
               {
                 "type": "git_diff",
@@ -6266,243 +5866,8 @@
                 "type": "signature_source",
                 "version": "1.5.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.pad",
-            "type": "parameter_kind_changed",
-            "parameter": "inplace",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.pad",
-            "type": "default_changed",
-            "parameter": "inplace",
-            "old_value": "False",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.pad",
-            "type": "parameter_annotation_changed",
-            "parameter": "inplace",
-            "old_value": "bool_t",
-            "new_value": "Literal[False]",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.pad",
-            "type": "parameter_kind_changed",
-            "parameter": "limit",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.pad",
-            "type": "default_changed",
-            "parameter": "limit",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
+                "line_start": 6977,
+                "line_end": 6983
               },
               {
                 "type": "git_diff",
@@ -6528,7 +5893,7 @@
           {
             "name": "pandas.DataFrame.ffill",
             "status": "active",
-            "signature": "pandas.DataFrame.ffill(self, *, axis: None | Axis=..., inplace: Literal[False]=..., limit: None | int=..., downcast: dict | None=...)",
+            "signature": "pandas.DataFrame.ffill(self, *, axis: None | Axis=None, inplace: bool=False, limit: None | int=None, downcast: dict | None=None)",
             "call_syntax": null
           }
         ],
@@ -6543,6 +5908,138 @@
             "source": "data/api_mapping_versions.json#id=8",
             "replace_to": null,
             "source_evidence": []
+          },
+          {
+            "api": "pandas.DataFrame.ffill",
+            "type": "parameter_kind_changed",
+            "parameter": "axis",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
+            "from_version": "1.5.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.5.3",
+                "path": "pandas/core/frame.py",
+                "line_start": 11776,
+                "line_end": 11783
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "pandas/core/frame.py",
+                "line_start": 11395,
+                "line_end": 11403
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.5.3",
+                "to_version": "2.0.0",
+                "from_commit_sha": "2e218d10984e9919f0296931d92ea851c6a6faf5",
+                "to_commit_sha": "478d340667831908b5b4bf09a2787a11a14560c9"
+              }
+            ]
+          },
+          {
+            "api": "pandas.DataFrame.ffill",
+            "type": "parameter_kind_changed",
+            "parameter": "downcast",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
+            "from_version": "1.5.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.5.3",
+                "path": "pandas/core/frame.py",
+                "line_start": 11776,
+                "line_end": 11783
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "pandas/core/frame.py",
+                "line_start": 11395,
+                "line_end": 11403
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.5.3",
+                "to_version": "2.0.0",
+                "from_commit_sha": "2e218d10984e9919f0296931d92ea851c6a6faf5",
+                "to_commit_sha": "478d340667831908b5b4bf09a2787a11a14560c9"
+              }
+            ]
+          },
+          {
+            "api": "pandas.DataFrame.ffill",
+            "type": "parameter_kind_changed",
+            "parameter": "inplace",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
+            "from_version": "1.5.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.5.3",
+                "path": "pandas/core/frame.py",
+                "line_start": 11776,
+                "line_end": 11783
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "pandas/core/frame.py",
+                "line_start": 11395,
+                "line_end": 11403
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.5.3",
+                "to_version": "2.0.0",
+                "from_commit_sha": "2e218d10984e9919f0296931d92ea851c6a6faf5",
+                "to_commit_sha": "478d340667831908b5b4bf09a2787a11a14560c9"
+              }
+            ]
+          },
+          {
+            "api": "pandas.DataFrame.ffill",
+            "type": "parameter_kind_changed",
+            "parameter": "limit",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
+            "from_version": "1.5.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.5.3",
+                "path": "pandas/core/frame.py",
+                "line_start": 11776,
+                "line_end": 11783
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "pandas/core/frame.py",
+                "line_start": 11395,
+                "line_end": 11403
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.5.3",
+                "to_version": "2.0.0",
+                "from_commit_sha": "2e218d10984e9919f0296931d92ea851c6a6faf5",
+                "to_commit_sha": "478d340667831908b5b4bf09a2787a11a14560c9"
+              }
+            ]
           },
           {
             "api": "pandas.DataFrame.pad",
@@ -6565,8 +6062,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -6605,8 +6102,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -6645,8 +6142,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -6666,10 +6163,10 @@
           },
           {
             "api": "pandas.DataFrame.pad",
-            "type": "default_changed",
+            "type": "parameter_kind_changed",
             "parameter": "axis",
-            "old_value": "...",
-            "new_value": "None",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
             "from_version": "1.5.3",
             "source": null,
             "replace_to": null,
@@ -6685,8 +6182,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -6706,10 +6203,10 @@
           },
           {
             "api": "pandas.DataFrame.pad",
-            "type": "default_changed",
+            "type": "parameter_kind_changed",
             "parameter": "downcast",
-            "old_value": "...",
-            "new_value": "None",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
             "from_version": "1.5.3",
             "source": null,
             "replace_to": null,
@@ -6725,8 +6222,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -6746,10 +6243,10 @@
           },
           {
             "api": "pandas.DataFrame.pad",
-            "type": "default_changed",
+            "type": "parameter_kind_changed",
             "parameter": "inplace",
-            "old_value": "...",
-            "new_value": "False",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
             "from_version": "1.5.3",
             "source": null,
             "replace_to": null,
@@ -6765,8 +6262,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -6786,50 +6283,10 @@
           },
           {
             "api": "pandas.DataFrame.pad",
-            "type": "parameter_annotation_changed",
-            "parameter": "inplace",
-            "old_value": "Literal[False]",
-            "new_value": "bool_t",
-            "from_version": "1.5.3",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.5.3",
-                "path": "pandas/core/generic.py",
-                "line_start": 6991,
-                "line_end": 6991
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.3",
-                "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
-              },
-              {
-                "type": "source",
-                "version": "2.0.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 7059,
-                "line_end": 7085
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.5.3",
-                "to_version": "2.0.0",
-                "from_commit_sha": "2e218d10984e9919f0296931d92ea851c6a6faf5",
-                "to_commit_sha": "478d340667831908b5b4bf09a2787a11a14560c9"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.pad",
-            "type": "default_changed",
+            "type": "parameter_kind_changed",
             "parameter": "limit",
-            "old_value": "...",
-            "new_value": "None",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
             "from_version": "1.5.3",
             "source": null,
             "replace_to": null,
@@ -6845,8 +6302,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -6885,8 +6342,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -6919,11 +6376,44 @@
           {
             "name": "pandas.DataFrame.ffill",
             "status": "active",
-            "signature": "pandas.DataFrame.ffill(self, *, axis: None | Axis=..., inplace: Literal[False]=..., limit: None | int=..., downcast: dict | None | lib.NoDefault=...)",
+            "signature": "pandas.DataFrame.ffill(self, *, axis: None | Axis=None, inplace: bool_t=False, limit: None | int=None, downcast: dict | None | lib.NoDefault=lib.no_default)",
             "call_syntax": null
           }
         ],
         "changes": [
+          {
+            "api": "pandas.DataFrame.ffill",
+            "type": "default_changed",
+            "parameter": "downcast",
+            "old_value": "None",
+            "new_value": "lib.no_default",
+            "from_version": "2.0.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "2.0.3",
+                "path": "pandas/core/frame.py",
+                "line_start": 11395,
+                "line_end": 11403
+              },
+              {
+                "type": "source",
+                "version": "2.1.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 7347,
+                "line_end": 7433
+              },
+              {
+                "type": "git_diff",
+                "from_version": "2.0.3",
+                "to_version": "2.1.0",
+                "from_commit_sha": "0f437949513225922d851e9581723d82120684a6",
+                "to_commit_sha": "ba1cccd19da778f0c3a7d6a885685da16a072870"
+              }
+            ]
+          },
           {
             "api": "pandas.DataFrame.ffill",
             "type": "parameter_annotation_changed",
@@ -6938,15 +6428,48 @@
                 "type": "source",
                 "version": "2.0.3",
                 "path": "pandas/core/frame.py",
-                "line_start": 11363,
-                "line_end": 11371
+                "line_start": 11395,
+                "line_end": 11403
               },
               {
                 "type": "source",
                 "version": "2.1.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 7310,
-                "line_end": 7318
+                "line_start": 7347,
+                "line_end": 7433
+              },
+              {
+                "type": "git_diff",
+                "from_version": "2.0.3",
+                "to_version": "2.1.0",
+                "from_commit_sha": "0f437949513225922d851e9581723d82120684a6",
+                "to_commit_sha": "ba1cccd19da778f0c3a7d6a885685da16a072870"
+              }
+            ]
+          },
+          {
+            "api": "pandas.DataFrame.ffill",
+            "type": "parameter_annotation_changed",
+            "parameter": "inplace",
+            "old_value": "bool",
+            "new_value": "bool_t",
+            "from_version": "2.0.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "2.0.3",
+                "path": "pandas/core/frame.py",
+                "line_start": 11395,
+                "line_end": 11403
+              },
+              {
+                "type": "source",
+                "version": "2.1.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 7347,
+                "line_end": 7433
               },
               {
                 "type": "git_diff",
@@ -6961,8 +6484,8 @@
             "api": "pandas.DataFrame.ffill",
             "type": "return_annotation_changed",
             "parameter": null,
-            "old_value": "DataFrame",
-            "new_value": "Self",
+            "old_value": "DataFrame | None",
+            "new_value": "Self | None",
             "from_version": "2.0.3",
             "source": null,
             "replace_to": null,
@@ -6971,15 +6494,15 @@
                 "type": "source",
                 "version": "2.0.3",
                 "path": "pandas/core/frame.py",
-                "line_start": 11363,
-                "line_end": 11371
+                "line_start": 11395,
+                "line_end": 11403
               },
               {
                 "type": "source",
                 "version": "2.1.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 7310,
-                "line_end": 7318
+                "line_start": 7347,
+                "line_end": 7433
               },
               {
                 "type": "git_diff",
@@ -6995,7 +6518,7 @@
             "type": "public_binding_changed",
             "parameter": null,
             "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/frame.py\", \"target\": \"pandas.core.frame.DataFrame.ffill\"}",
-            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.DataFrame.ffill\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.NDFrame.ffill\"}",
             "from_version": "2.0.3",
             "source": null,
             "replace_to": null,
@@ -7004,15 +6527,15 @@
                 "type": "source",
                 "version": "2.0.3",
                 "path": "pandas/core/frame.py",
-                "line_start": 11363,
-                "line_end": 11371
+                "line_start": 11395,
+                "line_end": 11403
               },
               {
                 "type": "source",
                 "version": "2.1.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 7310,
-                "line_end": 7318
+                "line_start": 7347,
+                "line_end": 7433
               },
               {
                 "type": "git_diff",
@@ -7037,15 +6560,48 @@
                 "type": "source",
                 "version": "2.0.3",
                 "path": "pandas/core/frame.py",
-                "line_start": 11363,
-                "line_end": 11371
+                "line_start": 11395,
+                "line_end": 11403
               },
               {
                 "type": "source",
                 "version": "2.1.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 7310,
-                "line_end": 7318
+                "line_start": 7347,
+                "line_end": 7433
+              },
+              {
+                "type": "git_diff",
+                "from_version": "2.0.3",
+                "to_version": "2.1.0",
+                "from_commit_sha": "0f437949513225922d851e9581723d82120684a6",
+                "to_commit_sha": "ba1cccd19da778f0c3a7d6a885685da16a072870"
+              }
+            ]
+          },
+          {
+            "api": "pandas.DataFrame.ffill",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "2.0.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "2.0.3",
+                "path": "pandas/core/frame.py",
+                "line_start": 11395,
+                "line_end": 11403
+              },
+              {
+                "type": "source",
+                "version": "2.1.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 7347,
+                "line_end": 7433
               },
               {
                 "type": "git_diff",
@@ -7203,7 +6759,7 @@
           {
             "name": "pandas.DataFrame.ffill",
             "status": "active",
-            "signature": "pandas.DataFrame.ffill(self, *, axis: None | Axis=..., inplace: Literal[False]=..., limit: None | int=..., limit_area: Literal['inside', 'outside'] | None=..., downcast: dict | None | lib.NoDefault=...)",
+            "signature": "pandas.DataFrame.ffill(self, *, axis: None | Axis=None, inplace: bool_t=False, limit: None | int=None, limit_area: Literal['inside', 'outside'] | None=None, downcast: dict | None | lib.NoDefault=lib.no_default)",
             "call_syntax": null
           }
         ],
@@ -7213,7 +6769,7 @@
             "type": "parameter_added",
             "parameter": "limit_area",
             "old_value": null,
-            "new_value": "...",
+            "new_value": "None",
             "from_version": "2.1.4",
             "source": null,
             "replace_to": null,
@@ -7222,15 +6778,48 @@
                 "type": "source",
                 "version": "2.1.4",
                 "path": "pandas/core/generic.py",
-                "line_start": 7312,
-                "line_end": 7320
+                "line_start": 7349,
+                "line_end": 7435
               },
               {
                 "type": "source",
                 "version": "2.2.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 7443,
-                "line_end": 7452
+                "line_start": 7483,
+                "line_end": 7600
+              },
+              {
+                "type": "git_diff",
+                "from_version": "2.1.4",
+                "to_version": "2.2.0",
+                "from_commit_sha": "a671b5a8bf5dd13fb19f0e88edc679bc9e15c673",
+                "to_commit_sha": "f538741432edf55c6b9fb5d0d496d2dd1d7c2457"
+              }
+            ]
+          },
+          {
+            "api": "pandas.DataFrame.ffill",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "2.1.4",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "2.1.4",
+                "path": "pandas/core/generic.py",
+                "line_start": 7349,
+                "line_end": 7435
+              },
+              {
+                "type": "source",
+                "version": "2.2.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 7483,
+                "line_end": 7600
               },
               {
                 "type": "git_diff",
@@ -7244,8 +6833,61 @@
         ]
       },
       {
-        "version": "3.0.0",
+        "version": "2.3.3",
         "compared_to_version": "2.2.0",
+        "api_states": [
+          {
+            "name": "pandas.DataFrame.pad",
+            "status": "deprecated",
+            "signature": "pandas.DataFrame.pad(self, *, axis: None | Axis=None, inplace: bool_t=False, limit: None | int=None, downcast: dict | None | lib.NoDefault=lib.no_default)",
+            "call_syntax": null
+          },
+          {
+            "name": "pandas.DataFrame.ffill",
+            "status": "active",
+            "signature": "pandas.DataFrame.ffill(self, *, axis: None | Axis=None, inplace: bool_t=False, limit: None | int=None, limit_area: Literal['inside', 'outside'] | None=None, downcast: dict | None | lib.NoDefault=lib.no_default)",
+            "call_syntax": null
+          }
+        ],
+        "changes": [
+          {
+            "api": "pandas.DataFrame.ffill",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "2.3.2",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "2.3.2",
+                "path": "pandas/core/generic.py",
+                "line_start": 7508,
+                "line_end": 7625
+              },
+              {
+                "type": "source",
+                "version": "2.3.3",
+                "path": "pandas/core/generic.py",
+                "line_start": 7512,
+                "line_end": 7630
+              },
+              {
+                "type": "git_diff",
+                "from_version": "2.3.2",
+                "to_version": "2.3.3",
+                "from_commit_sha": "4665c10899bc413b639194f6fb8665a5c70f7db5",
+                "to_commit_sha": "9c8bc3e55188c8aff37207a74f1dd144980b8874"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "3.0.0",
+        "compared_to_version": "2.3.3",
         "api_states": [
           {
             "name": "pandas.DataFrame.pad",
@@ -7276,7 +6918,7 @@
             "api": "pandas.DataFrame.ffill",
             "type": "parameter_removed",
             "parameter": "downcast",
-            "old_value": "...",
+            "old_value": "lib.no_default",
             "new_value": null,
             "from_version": "2.3.3",
             "source": null,
@@ -7286,74 +6928,8 @@
                 "type": "source",
                 "version": "2.3.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
-              },
-              {
-                "type": "source",
-                "version": "3.0.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 7173,
-                "line_end": 7272
-              },
-              {
-                "type": "git_diff",
-                "from_version": "2.3.3",
-                "to_version": "3.0.0",
-                "from_commit_sha": "9c8bc3e55188c8aff37207a74f1dd144980b8874",
-                "to_commit_sha": "366ccdfcd8ed1e5543bfb6d4ee0c9bc519898670"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "default_changed",
-            "parameter": "axis",
-            "old_value": "...",
-            "new_value": "None",
-            "from_version": "2.3.3",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "2.3.3",
-                "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
-              },
-              {
-                "type": "source",
-                "version": "3.0.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 7173,
-                "line_end": 7272
-              },
-              {
-                "type": "git_diff",
-                "from_version": "2.3.3",
-                "to_version": "3.0.0",
-                "from_commit_sha": "9c8bc3e55188c8aff37207a74f1dd144980b8874",
-                "to_commit_sha": "366ccdfcd8ed1e5543bfb6d4ee0c9bc519898670"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "default_changed",
-            "parameter": "inplace",
-            "old_value": "...",
-            "new_value": "False",
-            "from_version": "2.3.3",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "2.3.3",
-                "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
+                "line_start": 7512,
+                "line_end": 7630
               },
               {
                 "type": "source",
@@ -7375,7 +6951,7 @@
             "api": "pandas.DataFrame.ffill",
             "type": "parameter_annotation_changed",
             "parameter": "inplace",
-            "old_value": "Literal[False]",
+            "old_value": "bool_t",
             "new_value": "bool",
             "from_version": "2.3.3",
             "source": null,
@@ -7385,8 +6961,8 @@
                 "type": "source",
                 "version": "2.3.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
+                "line_start": 7512,
+                "line_end": 7630
               },
               {
                 "type": "source",
@@ -7406,10 +6982,10 @@
           },
           {
             "api": "pandas.DataFrame.ffill",
-            "type": "default_changed",
-            "parameter": "limit",
-            "old_value": "...",
-            "new_value": "None",
+            "type": "return_annotation_changed",
+            "parameter": null,
+            "old_value": "Self | None",
+            "new_value": "Self",
             "from_version": "2.3.3",
             "source": null,
             "replace_to": null,
@@ -7418,41 +6994,8 @@
                 "type": "source",
                 "version": "2.3.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
-              },
-              {
-                "type": "source",
-                "version": "3.0.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 7173,
-                "line_end": 7272
-              },
-              {
-                "type": "git_diff",
-                "from_version": "2.3.3",
-                "to_version": "3.0.0",
-                "from_commit_sha": "9c8bc3e55188c8aff37207a74f1dd144980b8874",
-                "to_commit_sha": "366ccdfcd8ed1e5543bfb6d4ee0c9bc519898670"
-              }
-            ]
-          },
-          {
-            "api": "pandas.DataFrame.ffill",
-            "type": "default_changed",
-            "parameter": "limit_area",
-            "old_value": "...",
-            "new_value": "None",
-            "from_version": "2.3.3",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "2.3.3",
-                "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
+                "line_start": 7512,
+                "line_end": 7630
               },
               {
                 "type": "source",
@@ -7484,8 +7027,8 @@
                 "type": "source",
                 "version": "2.3.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
+                "line_start": 7512,
+                "line_end": 7630
               },
               {
                 "type": "source",
@@ -7507,7 +7050,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "f356f5fa98ad7d3964b26ca6ab2e62f38fc29cdde5b55018564a9f1d8ad93182"
+    "input_digest": "0d053587858b90dfee991b43992de88074674e375d9e131213ba3119feb1c261"
   },
   {
     "mapping_id": 9,
@@ -7707,6 +7250,32 @@
                 "to_commit_sha": "8c0a34f15f8a87def3f7ad6ebdac052de44669f2"
               }
             ]
+          },
+          {
+            "api": "pandas.DataFrame.select",
+            "type": "public_binding_changed",
+            "parameter": null,
+            "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.PandasObject.select\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.PandasContainer.select\"}",
+            "from_version": "0.11.0",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "0.11.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 323,
+                "line_end": 345
+              },
+              {
+                "type": "source",
+                "version": "0.12.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 356,
+                "line_end": 378
+              }
+            ]
           }
         ]
       },
@@ -7770,6 +7339,39 @@
                 "path": "pandas/core/indexing.py",
                 "line_start": 1016,
                 "line_end": 1020
+              },
+              {
+                "type": "git_diff",
+                "from_version": "0.12.0",
+                "to_version": "0.13.0",
+                "from_commit_sha": "8c0a34f15f8a87def3f7ad6ebdac052de44669f2",
+                "to_commit_sha": "a5410ed841759badae2c3fe4cc71335c9dd6ad92"
+              }
+            ]
+          },
+          {
+            "api": "pandas.DataFrame.select",
+            "type": "public_binding_changed",
+            "parameter": null,
+            "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.PandasContainer.select\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.NDFrame.select\"}",
+            "from_version": "0.12.0",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "0.12.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 356,
+                "line_end": 378
+              },
+              {
+                "type": "source",
+                "version": "0.13.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 1125,
+                "line_end": 1149
               },
               {
                 "type": "git_diff",
@@ -8293,7 +7895,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "d55cdea2e5d9ec0bd65df7ca98d377c5def4017a58c2388369c7e6549839615e"
+    "input_digest": "5771ee0fdfc7c92fab9b86615a82916bb9055a65fc362e92a1834d5206972918"
   },
   {
     "mapping_id": 10,
@@ -8554,7 +8156,7 @@
             "type": "public_binding_changed",
             "parameter": null,
             "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/frame.py\", \"target\": \"pandas.core.frame.DataFrame.swapaxes\"}",
-            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.DataFrame.swapaxes\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.NDFrame.swapaxes\"}",
             "from_version": "0.12.0",
             "source": null,
             "replace_to": null,
@@ -10056,7 +9658,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "0eea4cbd1f19a82c9ea0be21ce3ca05e02001df4eb5954c9d601bb526f877568"
+    "input_digest": "257b1520b1e86f4e8845aae24083c72fff7ad1e758ba909355a23ca9f9a07cba"
   },
   {
     "mapping_id": 11,
@@ -10079,7 +9681,7 @@
           },
           {
             "name": "pandas.Series.items",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -10098,7 +9700,7 @@
           },
           {
             "name": "pandas.Series.items",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -10151,7 +9753,7 @@
           },
           {
             "name": "pandas.Series.items",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -10204,7 +9806,7 @@
           },
           {
             "name": "pandas.Series.items",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           }
@@ -10930,7 +10532,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "42ea4661695059b886d69f32e6ebd5b3a5ab32e2f0375461a49fccbd298246c4"
+    "input_digest": "2b5e719c355609d3dcdacb38bde7d675eb5505fb844885f82ce4ec4cfecf2074"
   },
   {
     "mapping_id": 12,
@@ -10947,7 +10549,7 @@
         "api_states": [
           {
             "name": "pandas.Series.pad",
-            "status": "unknown",
+            "status": "absent",
             "signature": null,
             "call_syntax": null
           },
@@ -11049,7 +10651,7 @@
             "type": "public_binding_changed",
             "parameter": null,
             "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/series.py\", \"target\": \"pandas.core.series.Series.ffill\"}",
-            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.Series.ffill\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.NDFrame.ffill\"}",
             "from_version": "0.12.0",
             "source": null,
             "replace_to": null,
@@ -11535,7 +11137,7 @@
             "api": "pandas.Series.ffill",
             "type": "public_binding_changed",
             "parameter": null,
-            "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.Series.ffill\"}",
+            "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.NDFrame.ffill\"}",
             "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/series.py\", \"target\": \"pandas.core.series.Series.ffill\"}",
             "from_version": "1.2.5",
             "source": null,
@@ -11800,149 +11402,17 @@
           {
             "name": "pandas.Series.pad",
             "status": "active",
-            "signature": "pandas.Series.pad(self: NDFrameT, *, axis: None | Axis=..., inplace: Literal[False]=..., limit: None | int=..., downcast: dict | None=...)",
+            "signature": "pandas.Series.pad(self: NDFrameT, axis: None | Axis=None, inplace: bool_t=False, limit: None | int=None, downcast: dict | None=None)",
             "call_syntax": null
           },
           {
             "name": "pandas.Series.ffill",
             "status": "active",
-            "signature": "pandas.Series.ffill(self, *, axis: None | Axis=..., inplace: Literal[False]=..., limit: None | int=..., downcast: dict | None=...)",
+            "signature": "pandas.Series.ffill(self, axis: None | Axis=None, inplace: bool=False, limit: None | int=None, downcast: dict | None=None)",
             "call_syntax": null
           }
         ],
         "changes": [
-          {
-            "api": "pandas.Series.ffill",
-            "type": "parameter_kind_changed",
-            "parameter": "axis",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/series.py",
-                "line_start": 5500,
-                "line_end": 5507
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "default_changed",
-            "parameter": "axis",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/series.py",
-                "line_start": 5500,
-                "line_end": 5507
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "parameter_kind_changed",
-            "parameter": "downcast",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/series.py",
-                "line_start": 5500,
-                "line_end": 5507
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "default_changed",
-            "parameter": "downcast",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/series.py",
-                "line_start": 5500,
-                "line_end": 5507
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
           {
             "api": "pandas.Series.ffill",
             "type": "parameter_annotation_changed",
@@ -11964,173 +11434,8 @@
                 "type": "source",
                 "version": "1.5.0",
                 "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "parameter_kind_changed",
-            "parameter": "inplace",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/series.py",
-                "line_start": 5500,
-                "line_end": 5507
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "default_changed",
-            "parameter": "inplace",
-            "old_value": "False",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/series.py",
-                "line_start": 5500,
-                "line_end": 5507
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "parameter_annotation_changed",
-            "parameter": "inplace",
-            "old_value": "bool",
-            "new_value": "Literal[False]",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/series.py",
-                "line_start": 5500,
-                "line_end": 5507
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "parameter_kind_changed",
-            "parameter": "limit",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/series.py",
-                "line_start": 5500,
-                "line_end": 5507
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "default_changed",
-            "parameter": "limit",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/series.py",
-                "line_start": 5500,
-                "line_end": 5507
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
+                "line_start": 5987,
+                "line_end": 5994
               },
               {
                 "type": "git_diff",
@@ -12162,41 +11467,8 @@
                 "type": "source",
                 "version": "1.5.0",
                 "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "return_annotation_changed",
-            "parameter": null,
-            "old_value": "Series | None",
-            "new_value": "Series",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/series.py",
-                "line_start": 5500,
-                "line_end": 5507
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
+                "line_start": 5987,
+                "line_end": 5994
               },
               {
                 "type": "git_diff",
@@ -12228,196 +11500,8 @@
                 "type": "source",
                 "version": "1.5.0",
                 "path": "pandas/core/series.py",
-                "line_start": 5953,
-                "line_end": 5961
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.pad",
-            "type": "parameter_kind_changed",
-            "parameter": "axis",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.pad",
-            "type": "default_changed",
-            "parameter": "axis",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.pad",
-            "type": "parameter_kind_changed",
-            "parameter": "downcast",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.pad",
-            "type": "default_changed",
-            "parameter": "downcast",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
+                "line_start": 5987,
+                "line_end": 5994
               },
               {
                 "type": "git_diff",
@@ -12463,243 +11547,8 @@
                 "type": "signature_source",
                 "version": "1.5.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.pad",
-            "type": "parameter_kind_changed",
-            "parameter": "inplace",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.pad",
-            "type": "default_changed",
-            "parameter": "inplace",
-            "old_value": "False",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.pad",
-            "type": "parameter_annotation_changed",
-            "parameter": "inplace",
-            "old_value": "bool_t",
-            "new_value": "Literal[False]",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.pad",
-            "type": "parameter_kind_changed",
-            "parameter": "limit",
-            "old_value": "positional_or_keyword",
-            "new_value": "keyword_only",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.4.4",
-                "to_version": "1.5.0",
-                "from_commit_sha": "ca60aab7340d9989d9428e11a51467658190bb6b",
-                "to_commit_sha": "87cfe4e38bafe7300a6003a1d18bd80f3f77c763"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.pad",
-            "type": "default_changed",
-            "parameter": "limit",
-            "old_value": "None",
-            "new_value": "...",
-            "from_version": "1.4.4",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6538,
-                "line_end": 6538
-              },
-              {
-                "type": "signature_source",
-                "version": "1.4.4",
-                "path": "pandas/core/generic.py",
-                "line_start": 6519,
-                "line_end": 6525
-              },
-              {
-                "type": "source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6996,
-                "line_end": 6996
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 6943,
-                "line_end": 6950
+                "line_start": 6977,
+                "line_end": 6983
               },
               {
                 "type": "git_diff",
@@ -12725,7 +11574,7 @@
           {
             "name": "pandas.Series.ffill",
             "status": "active",
-            "signature": "pandas.Series.ffill(self, *, axis: None | Axis=..., inplace: Literal[False]=..., limit: None | int=..., downcast: dict | None=...)",
+            "signature": "pandas.Series.ffill(self, *, axis: None | Axis=None, inplace: bool=False, limit: None | int=None, downcast: dict | None=None)",
             "call_syntax": null
           }
         ],
@@ -12740,6 +11589,138 @@
             "source": "data/api_mapping_versions.json#id=12",
             "replace_to": null,
             "source_evidence": []
+          },
+          {
+            "api": "pandas.Series.ffill",
+            "type": "parameter_kind_changed",
+            "parameter": "axis",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
+            "from_version": "1.5.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.5.3",
+                "path": "pandas/core/series.py",
+                "line_start": 5984,
+                "line_end": 5991
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "pandas/core/series.py",
+                "line_start": 5867,
+                "line_end": 5875
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.5.3",
+                "to_version": "2.0.0",
+                "from_commit_sha": "2e218d10984e9919f0296931d92ea851c6a6faf5",
+                "to_commit_sha": "478d340667831908b5b4bf09a2787a11a14560c9"
+              }
+            ]
+          },
+          {
+            "api": "pandas.Series.ffill",
+            "type": "parameter_kind_changed",
+            "parameter": "downcast",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
+            "from_version": "1.5.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.5.3",
+                "path": "pandas/core/series.py",
+                "line_start": 5984,
+                "line_end": 5991
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "pandas/core/series.py",
+                "line_start": 5867,
+                "line_end": 5875
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.5.3",
+                "to_version": "2.0.0",
+                "from_commit_sha": "2e218d10984e9919f0296931d92ea851c6a6faf5",
+                "to_commit_sha": "478d340667831908b5b4bf09a2787a11a14560c9"
+              }
+            ]
+          },
+          {
+            "api": "pandas.Series.ffill",
+            "type": "parameter_kind_changed",
+            "parameter": "inplace",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
+            "from_version": "1.5.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.5.3",
+                "path": "pandas/core/series.py",
+                "line_start": 5984,
+                "line_end": 5991
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "pandas/core/series.py",
+                "line_start": 5867,
+                "line_end": 5875
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.5.3",
+                "to_version": "2.0.0",
+                "from_commit_sha": "2e218d10984e9919f0296931d92ea851c6a6faf5",
+                "to_commit_sha": "478d340667831908b5b4bf09a2787a11a14560c9"
+              }
+            ]
+          },
+          {
+            "api": "pandas.Series.ffill",
+            "type": "parameter_kind_changed",
+            "parameter": "limit",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
+            "from_version": "1.5.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "1.5.3",
+                "path": "pandas/core/series.py",
+                "line_start": 5984,
+                "line_end": 5991
+              },
+              {
+                "type": "source",
+                "version": "2.0.0",
+                "path": "pandas/core/series.py",
+                "line_start": 5867,
+                "line_end": 5875
+              },
+              {
+                "type": "git_diff",
+                "from_version": "1.5.3",
+                "to_version": "2.0.0",
+                "from_commit_sha": "2e218d10984e9919f0296931d92ea851c6a6faf5",
+                "to_commit_sha": "478d340667831908b5b4bf09a2787a11a14560c9"
+              }
+            ]
           },
           {
             "api": "pandas.Series.pad",
@@ -12762,8 +11743,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -12802,8 +11783,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -12842,8 +11823,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -12863,10 +11844,10 @@
           },
           {
             "api": "pandas.Series.pad",
-            "type": "default_changed",
+            "type": "parameter_kind_changed",
             "parameter": "axis",
-            "old_value": "...",
-            "new_value": "None",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
             "from_version": "1.5.3",
             "source": null,
             "replace_to": null,
@@ -12882,8 +11863,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -12903,10 +11884,10 @@
           },
           {
             "api": "pandas.Series.pad",
-            "type": "default_changed",
+            "type": "parameter_kind_changed",
             "parameter": "downcast",
-            "old_value": "...",
-            "new_value": "None",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
             "from_version": "1.5.3",
             "source": null,
             "replace_to": null,
@@ -12922,8 +11903,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -12943,10 +11924,10 @@
           },
           {
             "api": "pandas.Series.pad",
-            "type": "default_changed",
+            "type": "parameter_kind_changed",
             "parameter": "inplace",
-            "old_value": "...",
-            "new_value": "False",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
             "from_version": "1.5.3",
             "source": null,
             "replace_to": null,
@@ -12962,8 +11943,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -12983,50 +11964,10 @@
           },
           {
             "api": "pandas.Series.pad",
-            "type": "parameter_annotation_changed",
-            "parameter": "inplace",
-            "old_value": "Literal[False]",
-            "new_value": "bool_t",
-            "from_version": "1.5.3",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "1.5.3",
-                "path": "pandas/core/generic.py",
-                "line_start": 6991,
-                "line_end": 6991
-              },
-              {
-                "type": "signature_source",
-                "version": "1.5.3",
-                "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
-              },
-              {
-                "type": "source",
-                "version": "2.0.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 7059,
-                "line_end": 7085
-              },
-              {
-                "type": "git_diff",
-                "from_version": "1.5.3",
-                "to_version": "2.0.0",
-                "from_commit_sha": "2e218d10984e9919f0296931d92ea851c6a6faf5",
-                "to_commit_sha": "478d340667831908b5b4bf09a2787a11a14560c9"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.pad",
-            "type": "default_changed",
+            "type": "parameter_kind_changed",
             "parameter": "limit",
-            "old_value": "...",
-            "new_value": "None",
+            "old_value": "positional_or_keyword",
+            "new_value": "keyword_only",
             "from_version": "1.5.3",
             "source": null,
             "replace_to": null,
@@ -13042,8 +11983,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -13082,8 +12023,8 @@
                 "type": "signature_source",
                 "version": "1.5.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 6938,
-                "line_end": 6945
+                "line_start": 6972,
+                "line_end": 6978
               },
               {
                 "type": "source",
@@ -13116,11 +12057,44 @@
           {
             "name": "pandas.Series.ffill",
             "status": "active",
-            "signature": "pandas.Series.ffill(self, *, axis: None | Axis=..., inplace: Literal[False]=..., limit: None | int=..., downcast: dict | None | lib.NoDefault=...)",
+            "signature": "pandas.Series.ffill(self, *, axis: None | Axis=None, inplace: bool_t=False, limit: None | int=None, downcast: dict | None | lib.NoDefault=lib.no_default)",
             "call_syntax": null
           }
         ],
         "changes": [
+          {
+            "api": "pandas.Series.ffill",
+            "type": "default_changed",
+            "parameter": "downcast",
+            "old_value": "None",
+            "new_value": "lib.no_default",
+            "from_version": "2.0.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "2.0.3",
+                "path": "pandas/core/series.py",
+                "line_start": 5866,
+                "line_end": 5874
+              },
+              {
+                "type": "source",
+                "version": "2.1.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 7347,
+                "line_end": 7433
+              },
+              {
+                "type": "git_diff",
+                "from_version": "2.0.3",
+                "to_version": "2.1.0",
+                "from_commit_sha": "0f437949513225922d851e9581723d82120684a6",
+                "to_commit_sha": "ba1cccd19da778f0c3a7d6a885685da16a072870"
+              }
+            ]
+          },
           {
             "api": "pandas.Series.ffill",
             "type": "parameter_annotation_changed",
@@ -13135,15 +12109,48 @@
                 "type": "source",
                 "version": "2.0.3",
                 "path": "pandas/core/series.py",
-                "line_start": 5834,
-                "line_end": 5842
+                "line_start": 5866,
+                "line_end": 5874
               },
               {
                 "type": "source",
                 "version": "2.1.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 7310,
-                "line_end": 7318
+                "line_start": 7347,
+                "line_end": 7433
+              },
+              {
+                "type": "git_diff",
+                "from_version": "2.0.3",
+                "to_version": "2.1.0",
+                "from_commit_sha": "0f437949513225922d851e9581723d82120684a6",
+                "to_commit_sha": "ba1cccd19da778f0c3a7d6a885685da16a072870"
+              }
+            ]
+          },
+          {
+            "api": "pandas.Series.ffill",
+            "type": "parameter_annotation_changed",
+            "parameter": "inplace",
+            "old_value": "bool",
+            "new_value": "bool_t",
+            "from_version": "2.0.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "2.0.3",
+                "path": "pandas/core/series.py",
+                "line_start": 5866,
+                "line_end": 5874
+              },
+              {
+                "type": "source",
+                "version": "2.1.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 7347,
+                "line_end": 7433
               },
               {
                 "type": "git_diff",
@@ -13158,8 +12165,8 @@
             "api": "pandas.Series.ffill",
             "type": "return_annotation_changed",
             "parameter": null,
-            "old_value": "Series",
-            "new_value": "Self",
+            "old_value": "Series | None",
+            "new_value": "Self | None",
             "from_version": "2.0.3",
             "source": null,
             "replace_to": null,
@@ -13168,15 +12175,15 @@
                 "type": "source",
                 "version": "2.0.3",
                 "path": "pandas/core/series.py",
-                "line_start": 5834,
-                "line_end": 5842
+                "line_start": 5866,
+                "line_end": 5874
               },
               {
                 "type": "source",
                 "version": "2.1.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 7310,
-                "line_end": 7318
+                "line_start": 7347,
+                "line_end": 7433
               },
               {
                 "type": "git_diff",
@@ -13192,7 +12199,7 @@
             "type": "public_binding_changed",
             "parameter": null,
             "old_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/series.py\", \"target\": \"pandas.core.series.Series.ffill\"}",
-            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.Series.ffill\"}",
+            "new_value": "{\"kind\": \"class_member\", \"path\": \"pandas/core/generic.py\", \"target\": \"pandas.core.generic.NDFrame.ffill\"}",
             "from_version": "2.0.3",
             "source": null,
             "replace_to": null,
@@ -13201,15 +12208,15 @@
                 "type": "source",
                 "version": "2.0.3",
                 "path": "pandas/core/series.py",
-                "line_start": 5834,
-                "line_end": 5842
+                "line_start": 5866,
+                "line_end": 5874
               },
               {
                 "type": "source",
                 "version": "2.1.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 7310,
-                "line_end": 7318
+                "line_start": 7347,
+                "line_end": 7433
               },
               {
                 "type": "git_diff",
@@ -13234,15 +12241,48 @@
                 "type": "source",
                 "version": "2.0.3",
                 "path": "pandas/core/series.py",
-                "line_start": 5834,
-                "line_end": 5842
+                "line_start": 5866,
+                "line_end": 5874
               },
               {
                 "type": "source",
                 "version": "2.1.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 7310,
-                "line_end": 7318
+                "line_start": 7347,
+                "line_end": 7433
+              },
+              {
+                "type": "git_diff",
+                "from_version": "2.0.3",
+                "to_version": "2.1.0",
+                "from_commit_sha": "0f437949513225922d851e9581723d82120684a6",
+                "to_commit_sha": "ba1cccd19da778f0c3a7d6a885685da16a072870"
+              }
+            ]
+          },
+          {
+            "api": "pandas.Series.ffill",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "2.0.3",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "2.0.3",
+                "path": "pandas/core/series.py",
+                "line_start": 5866,
+                "line_end": 5874
+              },
+              {
+                "type": "source",
+                "version": "2.1.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 7347,
+                "line_end": 7433
               },
               {
                 "type": "git_diff",
@@ -13400,7 +12440,7 @@
           {
             "name": "pandas.Series.ffill",
             "status": "active",
-            "signature": "pandas.Series.ffill(self, *, axis: None | Axis=..., inplace: Literal[False]=..., limit: None | int=..., limit_area: Literal['inside', 'outside'] | None=..., downcast: dict | None | lib.NoDefault=...)",
+            "signature": "pandas.Series.ffill(self, *, axis: None | Axis=None, inplace: bool_t=False, limit: None | int=None, limit_area: Literal['inside', 'outside'] | None=None, downcast: dict | None | lib.NoDefault=lib.no_default)",
             "call_syntax": null
           }
         ],
@@ -13410,7 +12450,7 @@
             "type": "parameter_added",
             "parameter": "limit_area",
             "old_value": null,
-            "new_value": "...",
+            "new_value": "None",
             "from_version": "2.1.4",
             "source": null,
             "replace_to": null,
@@ -13419,15 +12459,48 @@
                 "type": "source",
                 "version": "2.1.4",
                 "path": "pandas/core/generic.py",
-                "line_start": 7312,
-                "line_end": 7320
+                "line_start": 7349,
+                "line_end": 7435
               },
               {
                 "type": "source",
                 "version": "2.2.0",
                 "path": "pandas/core/generic.py",
-                "line_start": 7443,
-                "line_end": 7452
+                "line_start": 7483,
+                "line_end": 7600
+              },
+              {
+                "type": "git_diff",
+                "from_version": "2.1.4",
+                "to_version": "2.2.0",
+                "from_commit_sha": "a671b5a8bf5dd13fb19f0e88edc679bc9e15c673",
+                "to_commit_sha": "f538741432edf55c6b9fb5d0d496d2dd1d7c2457"
+              }
+            ]
+          },
+          {
+            "api": "pandas.Series.ffill",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "2.1.4",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "2.1.4",
+                "path": "pandas/core/generic.py",
+                "line_start": 7349,
+                "line_end": 7435
+              },
+              {
+                "type": "source",
+                "version": "2.2.0",
+                "path": "pandas/core/generic.py",
+                "line_start": 7483,
+                "line_end": 7600
               },
               {
                 "type": "git_diff",
@@ -13441,8 +12514,61 @@
         ]
       },
       {
-        "version": "3.0.0",
+        "version": "2.3.3",
         "compared_to_version": "2.2.0",
+        "api_states": [
+          {
+            "name": "pandas.Series.pad",
+            "status": "deprecated",
+            "signature": "pandas.Series.pad(self, *, axis: None | Axis=None, inplace: bool_t=False, limit: None | int=None, downcast: dict | None | lib.NoDefault=lib.no_default)",
+            "call_syntax": null
+          },
+          {
+            "name": "pandas.Series.ffill",
+            "status": "active",
+            "signature": "pandas.Series.ffill(self, *, axis: None | Axis=None, inplace: bool_t=False, limit: None | int=None, limit_area: Literal['inside', 'outside'] | None=None, downcast: dict | None | lib.NoDefault=lib.no_default)",
+            "call_syntax": null
+          }
+        ],
+        "changes": [
+          {
+            "api": "pandas.Series.ffill",
+            "type": "implementation_changed",
+            "parameter": null,
+            "old_value": null,
+            "new_value": null,
+            "from_version": "2.3.2",
+            "source": null,
+            "replace_to": null,
+            "source_evidence": [
+              {
+                "type": "source",
+                "version": "2.3.2",
+                "path": "pandas/core/generic.py",
+                "line_start": 7508,
+                "line_end": 7625
+              },
+              {
+                "type": "source",
+                "version": "2.3.3",
+                "path": "pandas/core/generic.py",
+                "line_start": 7512,
+                "line_end": 7630
+              },
+              {
+                "type": "git_diff",
+                "from_version": "2.3.2",
+                "to_version": "2.3.3",
+                "from_commit_sha": "4665c10899bc413b639194f6fb8665a5c70f7db5",
+                "to_commit_sha": "9c8bc3e55188c8aff37207a74f1dd144980b8874"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "3.0.0",
+        "compared_to_version": "2.3.3",
         "api_states": [
           {
             "name": "pandas.Series.pad",
@@ -13473,7 +12599,7 @@
             "api": "pandas.Series.ffill",
             "type": "parameter_removed",
             "parameter": "downcast",
-            "old_value": "...",
+            "old_value": "lib.no_default",
             "new_value": null,
             "from_version": "2.3.3",
             "source": null,
@@ -13483,74 +12609,8 @@
                 "type": "source",
                 "version": "2.3.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
-              },
-              {
-                "type": "source",
-                "version": "3.0.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 7173,
-                "line_end": 7272
-              },
-              {
-                "type": "git_diff",
-                "from_version": "2.3.3",
-                "to_version": "3.0.0",
-                "from_commit_sha": "9c8bc3e55188c8aff37207a74f1dd144980b8874",
-                "to_commit_sha": "366ccdfcd8ed1e5543bfb6d4ee0c9bc519898670"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "default_changed",
-            "parameter": "axis",
-            "old_value": "...",
-            "new_value": "None",
-            "from_version": "2.3.3",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "2.3.3",
-                "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
-              },
-              {
-                "type": "source",
-                "version": "3.0.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 7173,
-                "line_end": 7272
-              },
-              {
-                "type": "git_diff",
-                "from_version": "2.3.3",
-                "to_version": "3.0.0",
-                "from_commit_sha": "9c8bc3e55188c8aff37207a74f1dd144980b8874",
-                "to_commit_sha": "366ccdfcd8ed1e5543bfb6d4ee0c9bc519898670"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "default_changed",
-            "parameter": "inplace",
-            "old_value": "...",
-            "new_value": "False",
-            "from_version": "2.3.3",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "2.3.3",
-                "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
+                "line_start": 7512,
+                "line_end": 7630
               },
               {
                 "type": "source",
@@ -13572,7 +12632,7 @@
             "api": "pandas.Series.ffill",
             "type": "parameter_annotation_changed",
             "parameter": "inplace",
-            "old_value": "Literal[False]",
+            "old_value": "bool_t",
             "new_value": "bool",
             "from_version": "2.3.3",
             "source": null,
@@ -13582,8 +12642,8 @@
                 "type": "source",
                 "version": "2.3.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
+                "line_start": 7512,
+                "line_end": 7630
               },
               {
                 "type": "source",
@@ -13603,10 +12663,10 @@
           },
           {
             "api": "pandas.Series.ffill",
-            "type": "default_changed",
-            "parameter": "limit",
-            "old_value": "...",
-            "new_value": "None",
+            "type": "return_annotation_changed",
+            "parameter": null,
+            "old_value": "Self | None",
+            "new_value": "Self",
             "from_version": "2.3.3",
             "source": null,
             "replace_to": null,
@@ -13615,41 +12675,8 @@
                 "type": "source",
                 "version": "2.3.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
-              },
-              {
-                "type": "source",
-                "version": "3.0.0",
-                "path": "pandas/core/generic.py",
-                "line_start": 7173,
-                "line_end": 7272
-              },
-              {
-                "type": "git_diff",
-                "from_version": "2.3.3",
-                "to_version": "3.0.0",
-                "from_commit_sha": "9c8bc3e55188c8aff37207a74f1dd144980b8874",
-                "to_commit_sha": "366ccdfcd8ed1e5543bfb6d4ee0c9bc519898670"
-              }
-            ]
-          },
-          {
-            "api": "pandas.Series.ffill",
-            "type": "default_changed",
-            "parameter": "limit_area",
-            "old_value": "...",
-            "new_value": "None",
-            "from_version": "2.3.3",
-            "source": null,
-            "replace_to": null,
-            "source_evidence": [
-              {
-                "type": "source",
-                "version": "2.3.3",
-                "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
+                "line_start": 7512,
+                "line_end": 7630
               },
               {
                 "type": "source",
@@ -13681,8 +12708,8 @@
                 "type": "source",
                 "version": "2.3.3",
                 "path": "pandas/core/generic.py",
-                "line_start": 7472,
-                "line_end": 7481
+                "line_start": 7512,
+                "line_end": 7630
               },
               {
                 "type": "source",
@@ -13704,7 +12731,7 @@
       }
     ],
     "model": "gpt-6-luna",
-    "input_digest": "5cb6b566c785c8bb5910f49a3c76a15ceec628b005d5b0c05b409469969989aa"
+    "input_digest": "47435386115c614df1752b4567644682da34abf51764f392f4c3e7bbc00f3b8d"
   },
   {
     "mapping_id": 13,
