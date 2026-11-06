@@ -135,7 +135,8 @@ def scipy_assignment_signature(reader, sha, api, resolved):
 
 def tensorflow_deprecated_signature(reader, sha, api, resolved):
     if reader.library != "tensorflow" or api not in {
-            "tensorflow.arg_max", "tensorflow.arg_min"} \
+            "tensorflow.arg_max", "tensorflow.arg_min",
+            "tensorflow.compat.v1.arg_max", "tensorflow.compat.v1.arg_min"} \
             or not isinstance(resolved.node, ast.Assign):
         return None, []
     value = resolved.node.value

@@ -26,7 +26,8 @@ from export_rules.source_signature_rules import (
     tensorflow_deprecated_signature,
 )
 from export_rules.tensorflow_export_rules import (
-    export_index, export_source_paths, lookup_tensorflow_export,
+    export_index, export_query, export_source_paths, lookup_tensorflow_export,
+    lookup_tensorflow_generated_div, lookup_tensorflow_generated_substr,
     prepare_candidate_paths,
 )
 from export_rules.torch_binding_rules import (
@@ -273,8 +274,10 @@ def find_public_api(reader, record, api):
     if reader.library == "tensorflow":
         tf_binding, reason = lookup_tensorflow_export(
             reader, sha, api, record["version"])
-        if reason in {"tf_export_other_generation", "tf_export_name_absent"} \
-                and resolved.reason == "generated_public_namespace_unresolved":
+        if (reason in {"tf_compat_namespace_not_generated",
+                       "tf_api_golden_name_absent"}
+                or (reason in {"tf_export_other_generation", "tf_export_name_absent"}
+                    and resolved.reason == "generated_public_namespace_unresolved")):
             resolved.status, resolved.reason = "absent", reason
         elif reason:
             resolved.status, resolved.reason = "unknown", reason
@@ -291,6 +294,27 @@ def find_public_api(reader, record, api):
 def generated_state(reader, record, api):
     """Đọc API được sinh từ Cython hoặc Python binding."""
     sha = record["commit_sha"]
+    if reader.library == "tensorflow":
+        generated = (lookup_tensorflow_generated_substr(
+            reader, sha, api, record["version"])
+            or lookup_tensorflow_generated_div(reader, sha, api))
+        if generated:
+            locations = [("public_export", generated["export"])]
+            if generated.get("parameter_source"):
+                locations.append(("parameter_source", generated["parameter_source"]))
+            return ({
+                "version": record["version"], "commit_sha": sha,
+                "source_location": generated["declaration"],
+                "public_binding": {
+                    "kind": "generated_op", "path": generated["export"]["path"],
+                    "target": generated["target"],
+                },
+                "declared_parameters": generated["parameters"],
+                "return_annotation": None, "evidence_refs": [],
+            }, {
+                "body_hash": None, "binding_declaration": True,
+                "binding_locations": locations,
+            })
     generated = (lookup_scipy_generated_export(reader, sha, api)
                  or lookup_scipy_legacy_python_export(reader, sha, api))
     if generated:
@@ -921,7 +945,8 @@ def main(argv=None):
         histories = {}
         if args.library == "tensorflow":
             prepare_candidate_paths(
-                repo, (api.removeprefix("tensorflow.") for api in apis))
+                repo, (export_query(api, versions[0]["version"])[0]
+                       for api in apis))
             observations = {api: [] for api in apis}
             for index, record in enumerate(versions, 1):
                 print(f"tensorflow: tracing {index}/{len(versions)} "

@@ -13,6 +13,192 @@ from source_evolution_rules import Resolution, dotted, module_statements
 _prepared_candidate_paths = {}
 
 
+def export_query(api, version):
+    name = api.removeprefix("tensorflow.")
+    if name.startswith("compat.v1."):
+        return name.removeprefix("compat.v1."), 1
+    return name, 1 if int(version.split(".", 1)[0]) < 2 else 2
+
+
+def compat_v1_generated(reader, sha):
+    paths = reader.paths(sha)
+    build_path = "tensorflow/BUILD"
+    if build_path not in paths:
+        return None
+    build = reader.source_text(sha, build_path)
+    versions = re.findall(r"compat_api_versions\s*=\s*\[([^\]]*)\]", build,
+                          re.S)
+    if any(re.search(r"\b1\b", values) for values in versions):
+        return True
+    generator = "tensorflow/python/tools/api/generator/create_python_api.py"
+    if generator not in paths or "compat_api_versions" not in reader.source_text(
+            sha, generator):
+        return False
+    return None
+
+
+def golden_export_status(reader, sha, api, version):
+    """Read checked-in API golden files when they describe this public namespace."""
+    if api.startswith("tensorflow.compat.v1."):
+        generated = compat_v1_generated(reader, sha)
+        if generated is False:
+            return False
+        if generated is not True:
+            return None
+    name, generation = export_query(api, version)
+    parent, _, member = name.rpartition(".")
+    module = "tensorflow" + (f".{parent}" if parent else "")
+    bases = [f"tensorflow/tools/api/golden/v{generation}"]
+    if generation == 1:
+        bases.append("tensorflow/tools/api/golden")
+    path = next((f"{base}/{module}.pbtxt" for base in bases
+                 if f"{base}/{module}.pbtxt" in reader.paths(sha)), None)
+    if path is None:
+        if not parent:
+            return None
+        parent_module, _, child = module.rpartition(".")
+        parent_path = next((f"{base}/{parent_module}.pbtxt" for base in bases
+                            if f"{base}/{parent_module}.pbtxt" in reader.paths(sha)),
+                           None)
+        if parent_path is None:
+            return None
+        parent_source = reader.source_text(sha, parent_path)
+        if re.search(r'(?m)^  member \{\n    name: "' + re.escape(child) +
+                     r'"\s*$', parent_source) is None:
+            return False
+        return None
+    source = reader.source_text(sha, path)
+    return re.search(r'(?m)^  member(?:_method)? \{\n    name: "' + re.escape(member)
+                     + r'"\s*$', source) is not None
+
+
+def lookup_tensorflow_generated_substr(reader, sha, api, version):
+    """Trace the old generated Substr binding to its C++ OpDef."""
+    if api not in {"tensorflow.substr", "tensorflow.strings.substr"} \
+            or golden_export_status(reader, sha, api, version) is not True:
+        return None
+    op_path = "tensorflow/core/ops/string_ops.cc"
+    import_path = "tensorflow/python/ops/string_ops.py"
+    name, generation = export_query(api, version)
+    parent, _, member = name.rpartition(".")
+    module = "tensorflow" + (f".{parent}" if parent else "")
+    golden_path = f"tensorflow/tools/api/golden/v{generation}/{module}.pbtxt"
+    paths = reader.paths(sha)
+    if golden_path not in paths:
+        golden_path = f"tensorflow/tools/api/golden/{module}.pbtxt"
+    if any(path not in paths for path in (op_path, import_path, golden_path)):
+        return None
+    source = reader.source_text(sha, op_path)
+    op = re.search(r'REGISTER_OP\("Substr"\)((?:\s*\.[A-Za-z]+\([^;]*?\))+)',
+                   source)
+    if op is None:
+        return None
+    inputs = re.findall(r'\.Input\("([A-Za-z_][A-Za-z_0-9]*):', op.group(1))
+    golden = reader.source_text(sha, golden_path)
+    member_match = re.search(r'(?m)^  member_method \{\n    name: "' +
+                             re.escape(member) + r'"\n    argspec: "([^"\n]*)"',
+                             golden)
+    if member_match is None:
+        return None
+    argspec = member_match.group(1).replace("\\'", "'")
+    args = re.search(r"args=(\[[^]]*\])", argspec)
+    defaults = re.search(r"defaults=(\[[^]]*\])", argspec)
+    if args is None or defaults is None:
+        return None
+    try:
+        names = ast.literal_eval(args.group(1))
+        default_values = ast.literal_eval(defaults.group(1))
+    except (ValueError, SyntaxError):
+        return None
+    if names != inputs + ["name"] or default_values != ["None"]:
+        return None
+    imports = reader.source_text(sha, import_path)
+    if "from tensorflow.python.ops.gen_string_ops import *" not in imports:
+        return None
+    line_start = source.count("\n", 0, op.start()) + 1
+    golden_line = golden.count("\n", 0, member_match.start()) + 1
+    return {
+        "declaration": {"path": op_path, "line_start": line_start,
+                        "line_end": line_start + 4},
+        "export": {"path": golden_path, "line_start": golden_line,
+                   "line_end": golden_line + 2},
+        "target": "tensorflow.python.ops.gen_string_ops.substr",
+        "parameters": [{"name": item, "kind": "positional_or_keyword",
+                        "default": "None" if item == "name" else None,
+                        "annotation": None} for item in names],
+    }
+
+
+def lookup_tensorflow_generated_div(reader, sha, api):
+    """Resolve the old tf.div through the generated math op export chain."""
+    if api != "tensorflow.div":
+        return None
+    op_path = "tensorflow/core/ops/math_ops.cc"
+    spec_path = "tensorflow/core/ops/ops.pbtxt"
+    math_path = "tensorflow/python/ops/math_ops.py"
+    standard_path = "tensorflow/python/ops/standard_ops.py"
+    root_path = "tensorflow/python/__init__.py"
+    paths = reader.paths(sha)
+    if any(path not in paths for path in (
+            op_path, spec_path, math_path, standard_path, root_path)):
+        return None
+    op_source = reader.source_text(sha, op_path)
+    op = re.search(r'REGISTER_OP\("Div"\)', op_source)
+    spec = reader.source_text(sha, spec_path)
+    definition = re.search(r'(?m)^op \{\n  name: "Div"\n(.*?)^\}', spec, re.S | re.M)
+    if op is None or definition is None:
+        return None
+    inputs = re.findall(r'(?m)^  input_arg \{\n    name: "([A-Za-z_]+)"',
+                        definition.group(1))
+    if inputs != ["x", "y"]:
+        return None
+    math_source = reader.source_text(sha, math_path)
+    standard_source = reader.source_text(sha, standard_path)
+    root_source = reader.source_text(sha, root_path)
+    chain = (
+        "from tensorflow.python.ops.gen_math_ops import *" in math_source
+        and "from tensorflow.python.ops.math_ops import *" in standard_source
+        and "from tensorflow.python.ops.standard_ops import *" in root_source
+        and "remove_undocumented(__name__, _allowed_symbols" in root_source
+        and "math_ops" in root_source)
+    if not chain:
+        return None
+    line_start = op_source.count("\n", 0, op.start()) + 1
+    spec_line = spec.count("\n", 0, definition.start()) + 1
+    export_line = math_source.splitlines().index(
+        next(line for line in math_source.splitlines()
+             if "from tensorflow.python.ops.gen_math_ops import *" in line)) + 1
+    return {
+        "declaration": {"path": op_path, "line_start": line_start,
+                        "line_end": line_start + 2},
+        "export": {"path": math_path, "line_start": export_line,
+                   "line_end": export_line},
+        "target": "tensorflow.python.ops.gen_math_ops.div",
+        "parameters": [{"name": item, "kind": "positional_or_keyword",
+                        "default": None, "annotation": None} for item in inputs]
+                      + [{"name": "name", "kind": "positional_or_keyword",
+                          "default": "None", "annotation": None}],
+        "parameter_source": {"path": spec_path, "line_start": spec_line,
+                             "line_end": spec_line + 9},
+    }
+
+
+_KERAS_SOURCE_HINTS = {
+    "keras.metrics.AUC": ("tensorflow/python/keras/metrics.py",),
+    "keras.mixed_precision.LossScaleOptimizer": (
+        "tensorflow/python/keras/mixed_precision/loss_scale_optimizer.py",
+        "tensorflow/python/keras/mixed_precision/experimental/loss_scale_optimizer.py",
+    ),
+}
+
+_HISTORICAL_SOURCE_HINTS = {
+    "config.experimental_run_functions_eagerly": (
+        "tensorflow/python/eager/def_function.py",),
+    "config.run_functions_eagerly": (
+        "tensorflow/python/eager/def_function.py",),
+}
+
+
 def prepare_candidate_paths(repo, export_names):
     """Scan the checkout once for all requested name hints.
 
@@ -35,7 +221,7 @@ def prepare_candidate_paths(repo, export_names):
                 source = path.read_text(encoding="utf-8")
             except (OSError, UnicodeError):
                 continue
-            if "tf_export" not in source:
+            if "tf_export" not in source and "keras_export" not in source:
                 continue
             relative = path.relative_to(repo).as_posix()
             for match in quoted.finditer(source):
@@ -80,18 +266,18 @@ def literal_names(value):
 
 
 def export_imports(tree):
-    """Recognize tf_export even when the import uses an alias."""
+    """Recognize tf_export and keras_export even when imported with aliases."""
     functions = set()
     modules = set()
     for statement in tree.body:
         if isinstance(statement, ast.ImportFrom) \
                 and statement.module == "tensorflow.python.util.tf_export":
             functions.update((alias.asname or alias.name) for alias in statement.names
-                             if alias.name == "tf_export")
+                             if alias.name in {"tf_export", "keras_export"})
         elif isinstance(statement, ast.ImportFrom) \
                 and statement.module == "tensorflow.python.util":
             modules.update((alias.asname or alias.name) for alias in statement.names
-                           if alias.name == "tf_export")
+                           if alias.name in {"tf_export", "keras_export"})
         elif isinstance(statement, ast.Import):
             modules.update((alias.asname or alias.name) for alias in statement.names
                            if alias.name == "tensorflow.python.util.tf_export")
@@ -101,7 +287,8 @@ def export_imports(tree):
 def is_export_call(call, functions, modules):
     function = dotted(call.func)
     return function in functions or any(
-        function == f"{module}.tf_export" for module in modules)
+        function in {f"{module}.tf_export", f"{module}.keras_export"}
+        for module in modules)
 
 
 def names_from_call(decorator):
@@ -193,7 +380,8 @@ def export_index(reader, sha):
                 continue
             if not is_export_call(call, functions, modules):
                 function = dotted(call.func) or ""
-                if function == "tf_export" or function.endswith(".tf_export"):
+                if function in {"tf_export", "keras_export"} or function.endswith(
+                        (".tf_export", ".keras_export")):
                     complete = False
                 continue
             export_names = names_from_call(call)
@@ -215,19 +403,27 @@ def lookup_tensorflow_export(reader, sha, api, version):
     """Resolve a generated TensorFlow API to its decorated Python definition."""
     if reader.library != "tensorflow" or not api.startswith("tensorflow."):
         return None, None
-    name = api.removeprefix("tensorflow.")
-    generation = 1 if int(version.split(".", 1)[0]) < 2 else 2
+    name, generation = export_query(api, version)
+    if api.startswith("tensorflow.compat.v1.") \
+            and compat_v1_generated(reader, sha) is False:
+        return None, "tf_compat_namespace_not_generated"
     matches = []
     inactive = False
     unparsed = False
     paths_at_commit = reader.paths(sha)
-    for path in candidate_paths(reader.repo, name):
+    paths = set(candidate_paths(reader.repo, name))
+    paths.update(_KERAS_SOURCE_HINTS.get(name, ()))
+    paths.update(_HISTORICAL_SOURCE_HINTS.get(name, ()))
+    for path in sorted(paths):
         if path not in paths_at_commit:
             continue
         tree = reader.parse(sha, path)
         if tree is None:
             unparsed = True
             continue
+        module = path[:-3].replace("/", ".")
+        if module.endswith(".__init__"):
+            module = module[:-9]
         for node, conditional in module_statements(tree.body):
             if conditional or not isinstance(node, (
                     ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
@@ -239,9 +435,6 @@ def lookup_tensorflow_export(reader, sha, api, version):
             if not active:
                 inactive = True
                 continue
-            module = path[:-3].replace("/", ".")
-            if module.endswith(".__init__"):
-                module = module[:-9]
             matches.append({
                 "resolution": Resolution("present", path=path, node=node,
                                          tree=tree, module=module),
@@ -250,10 +443,48 @@ def lookup_tensorflow_export(reader, sha, api, version):
                 "decorator": {"path": path, "line_start": decorator.lineno,
                               "line_end": decorator.end_lineno},
             })
+        if name in {"arg_max", "arg_min"} and path.endswith("/math_ops.py"):
+            functions, modules = export_imports(tree)
+            assignments = {node.targets[0].id: node for node in tree.body
+                           if isinstance(node, ast.Assign) and len(node.targets) == 1
+                           and isinstance(node.targets[0], ast.Name)}
+            for statement in tree.body:
+                if not isinstance(statement, ast.Expr) or not isinstance(
+                        statement.value, ast.Call):
+                    continue
+                applied = statement.value
+                if not isinstance(applied.func, ast.Call) or not is_export_call(
+                        applied.func, functions, modules):
+                    continue
+                if len(applied.args) != 1:
+                    continue
+                exported = applied.args[0]
+                if isinstance(exported, ast.Call) and dotted(
+                        exported.func) == "dispatch.add_dispatch_support" \
+                        and len(exported.args) == 1:
+                    exported = exported.args[0]
+                if not isinstance(exported, ast.Name) or exported.id != name:
+                    continue
+                export_names = names_from_call(applied.func)
+                if export_names is None or name not in export_names[f"v{generation}"]:
+                    continue
+                assignment = assignments.get(name)
+                if assignment is None or assignment.lineno >= statement.lineno:
+                    continue
+                matches.append({
+                    "resolution": Resolution("present", path=path, node=assignment,
+                                             tree=tree, module=module),
+                    "target": f"{module}.{name}",
+                    "export_names": export_names,
+                    "decorator": {"path": path, "line_start": applied.func.lineno,
+                                  "line_end": applied.func.end_lineno},
+                })
     if len(matches) > 1:
         return None, "ambiguous_tf_export"
     if matches:
         return matches[0], None
+    if golden_export_status(reader, sha, api, version) is False:
+        return None, "tf_api_golden_name_absent"
     if inactive and not unparsed:
         return None, "tf_export_other_generation"
     names, uncertain_names, complete = export_index(reader, sha)
