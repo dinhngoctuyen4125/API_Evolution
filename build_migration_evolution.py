@@ -311,8 +311,17 @@ def validate_selection(selection, events):
     if versions != sorted(set(versions), key=version_key):
         raise ValueError("LLM milestones are not unique and chronologically ordered")
     required = {event["id"] for event in events if event["mandatory"]}
-    if required - found:
-        raise ValueError(f"LLM omitted mandatory events: {sorted(required - found)}")
+    missing = required - found
+    for event in events:
+        if event["id"] not in missing:
+            continue
+        milestone = next((item for item in selection["milestones"]
+                          if item["version"] == event["version"]), None)
+        if milestone is None:
+            milestone = {"version": event["version"], "event_ids": []}
+            selection["milestones"].append(milestone)
+        milestone["event_ids"].append(event["id"])
+    selection["milestones"].sort(key=lambda item: version_key(item["version"]))
     return selection
 
 

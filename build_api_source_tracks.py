@@ -17,7 +17,10 @@ from crawl_source import validate_source
 from enrich_pypi_versions import REPOSITORIES
 from export_rules.dynamic_export_rules import lookup_dynamic_export
 from export_rules.python_export_rules import find_public_binding
-from export_rules.scipy_export_rules import lookup_scipy_generated_export
+from export_rules.scipy_export_rules import (
+    lookup_scipy_generated_export, lookup_scipy_legacy_python_export,
+    missing_scipy_public_api,
+)
 from export_rules.source_signature_rules import (
     pandas_loc_syntax, scipy_assignment_signature,
     tensorflow_deprecated_signature,
@@ -288,7 +291,8 @@ def find_public_api(reader, record, api):
 def generated_state(reader, record, api):
     """Đọc API được sinh từ Cython hoặc Python binding."""
     sha = record["commit_sha"]
-    generated = lookup_scipy_generated_export(reader, sha, api)
+    generated = (lookup_scipy_generated_export(reader, sha, api)
+                 or lookup_scipy_legacy_python_export(reader, sha, api))
     if generated:
         state = {
             "version": record["version"], "commit_sha": sha,
@@ -449,6 +453,8 @@ def read_state_uncached(reader, record, api):
         generated = generated_state(reader, record, api)
         if generated:
             return "present", generated, None
+        if missing_scipy_public_api(reader, sha, api):
+            return "absent", None, "public_export_not_in_source"
         if missing_functional_lu_alias(reader, sha, api):
             return "absent", None, "functional_alias_not_exported"
         return resolved.status, None, resolved.reason
