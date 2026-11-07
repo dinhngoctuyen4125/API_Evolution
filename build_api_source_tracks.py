@@ -35,7 +35,9 @@ from export_rules.torch_binding_rules import (
     lookup_torch_linalg_signature, lookup_torch_python_binding,
     missing_functional_lu_alias,
 )
-from export_rules.transformers_export_rules import lookup_transformers_export
+from export_rules.transformers_export_rules import (
+    lookup_transformers_export, missing_feature_encoder,
+)
 from source_evolution_rules import (
     Resolution, SourceReader, body_hash, docstring_spans, dotted,
     error_message_changes, error_message_profile, expr, git, signature,
@@ -271,6 +273,11 @@ def find_public_api(reader, record, api):
     dynamic = lookup_dynamic_export(reader, sha, api)
     if dynamic:
         return dynamic
+
+    if resolved.status == "unknown":
+        missing = missing_feature_encoder(reader, sha, api)
+        if missing:
+            return missing, None, []
 
     if reader.library == "tensorflow":
         if legacy_public_root_absent(reader, sha, api):

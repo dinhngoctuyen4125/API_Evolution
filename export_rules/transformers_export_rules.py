@@ -68,6 +68,112 @@ def export_declaration(tree, name):
     return None
 
 
+def legacy_structure_entries(tree, name):
+    """Return literal _import_structure entries that export a name."""
+    entries = []
+    for statement, _ in module_statements(tree.body):
+        values = []
+        if isinstance(statement, ast.Assign):
+            for target in statement.targets:
+                if isinstance(target, ast.Name) and target.id == "_import_structure" \
+                        and isinstance(statement.value, ast.Dict):
+                    values.extend(zip(statement.value.keys, statement.value.values))
+                elif isinstance(target, ast.Subscript) \
+                        and dotted(target.value) == "_import_structure":
+                    values.append((target.slice, statement.value))
+        elif isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call):
+            call = statement.value
+            if isinstance(call.func, ast.Attribute) and call.func.attr in {"append", "extend"} \
+                    and isinstance(call.func.value, ast.Subscript) \
+                    and dotted(call.func.value.value) == "_import_structure" \
+                    and len(call.args) == 1:
+                values.append((call.func.value.slice, call.args[0]))
+        for key, value in values:
+            if isinstance(key, ast.Constant) and isinstance(key.value, str) \
+                    and any(isinstance(item, ast.Constant) and item.value == name
+                            for item in ast.walk(value)):
+                entries.append((key.value, statement))
+    return entries
+
+
+def lookup_legacy_export(reader, sha, names, root_path, root_tree):
+    """Use the old literal lazy-import map before generic wildcard resolution."""
+    if root_tree is None or not any(
+            isinstance(item, ast.Assign)
+            and any(isinstance(target, ast.Name) and target.id == "_import_structure"
+                    for target in item.targets)
+            and isinstance(item.value, ast.Dict) for item in root_tree.body):
+        return None
+    public_name = names[1]
+    root_entries = legacy_structure_entries(root_tree, public_name)
+    if not root_entries:
+        if public_name.endswith(("ImageProcessor", "FeatureExtractor")) \
+                and not any(isinstance(node, ast.Constant) and node.value == public_name
+                            for node in ast.walk(root_tree)):
+            return (Resolution("absent", "public_name_not_in_import_structure",
+                               path=root_path), None, [])
+        return None
+
+    # TYPE_CHECKING imports may rebind an alias. Follow the runtime map instead.
+    if len(names) != 2:
+        return None
+    if reader.resolve_api(sha, ".".join(names)).status == "present":
+        return None
+    matches = {}
+    for key, root_node in root_entries:
+        if not key.startswith("models."):
+            continue
+        model_module = f"transformers.{key}"
+        model_path = reader.exact_module_file(sha, model_module)
+        model_tree = reader.parse(sha, model_path) if model_path else None
+        if model_tree is None:
+            continue
+        for source_key, model_node in legacy_structure_entries(model_tree, public_name):
+            source_module = f"{model_module}.{source_key}"
+            resolved = reader.resolve_name(sha, source_module, public_name)
+            if resolved.status == "present" and resolved.reason is None \
+                    and isinstance(resolved.node, (ast.ClassDef, ast.Assign, ast.AnnAssign)):
+                matches[(resolved.path, resolved.node.lineno)] = (
+                    resolved, model_path, root_node, model_node)
+    if len(matches) != 1:
+        return None
+    resolved, model_path, root_node, model_node = next(iter(matches.values()))
+    binding = {"kind": "lazy_export", "path": root_path,
+               "target": f"{resolved.module}.{public_name}"}
+    evidence = [("lazy_import_structure", location(root_path, root_node)),
+                ("lazy_import_structure", location(model_path, model_node))]
+    return resolved, binding, evidence
+
+
+def missing_feature_encoder(reader, sha, api):
+    """Check the model's own class chain for the renamed freeze method."""
+    if reader.library != "transformers" or not api.endswith(".freeze_feature_encoder"):
+        return None
+    parent = reader.resolve_api(sha, api.rsplit(".", 1)[0])
+    if parent.status != "present" or not isinstance(parent.node, ast.ClassDef):
+        return None
+    for _ in range(3):
+        if any(getattr(item, "name", None) == "freeze_feature_encoder"
+               or isinstance(item, ast.Assign) and any(
+                   isinstance(target, ast.Name) and target.id == "freeze_feature_encoder"
+                   for target in item.targets) for item in parent.node.body):
+            return None
+        if parent.node.name in {"PreTrainedModel", "TFPreTrainedModel"} \
+                and parent.path in {"src/transformers/modeling_utils.py",
+                                    "src/transformers/modeling_tf_utils.py"} \
+                and "freeze_feature_encoder" not in reader.source_text(sha, parent.path):
+            return Resolution("absent", "class_member_not_declared", path=parent.path)
+        if len(parent.node.bases) != 1:
+            return None
+        base = dotted(parent.node.bases[0])
+        if not base or "." in base:
+            return None
+        parent = reader.resolve_name(sha, parent.module, base)
+        if parent.status != "present" or not isinstance(parent.node, ast.ClassDef):
+            return None
+    return None
+
+
 def lookup_transformers_export(reader, sha, api):
     """Return (resolution, public binding, evidence), or None for generic fallback."""
     if reader.library != "transformers" or not api.startswith("transformers."):
@@ -88,7 +194,7 @@ def lookup_transformers_export(reader, sha, api):
     root_lazy = lazy_declaration(root_tree)
     models_lazy = lazy_declaration(models_tree)
     if root_lazy is None or models_lazy is None:
-        return None
+        return lookup_legacy_export(reader, sha, names, root_path, root_tree)
     if not any(isinstance(node, ast.Constant) and node.value == "models"
                for node in ast.walk(root_lazy)):
         return None
@@ -136,9 +242,14 @@ def lookup_transformers_export(reader, sha, api):
                 isinstance(node, ast.Constant) and node.value == public_name
                 for tree in (root_tree, models_tree) for node in ast.walk(tree)):
             return None
-        # Source verifies the name is not exported by its candidate model, but
-        # another model might export the same spelling. Preserve uncertainty
-        # without traversing hundreds of unrelated wildcard imports.
+        # A model-specific FeatureExtractor belongs to the matching model
+        # package; its missing literal export proves this public name absent.
+        spelling = re.sub(r"[^a-z0-9]", "", public_name.lower())
+        if any(spelling == path.split("/models/", 1)[1].split("/", 1)[0]
+               .replace("_", "") + "featureextractor"
+               for path in inspected_models):
+            return (Resolution("absent", "lazy_export_not_declared",
+                               path=inspected_models[0]), None, [])
         return (Resolution("unknown", "lazy_export_not_confirmed",
                            path=inspected_models[0]), None, [])
     model_module, model_path, model_lazy, resolved, export_path, export_node = candidates[0]
