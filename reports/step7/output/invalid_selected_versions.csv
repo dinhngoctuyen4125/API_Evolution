@@ -1,0 +1,634 @@
+﻿library,set,index,target_api,api_call,version,category,detail,evidence
+pytorch,O,2705,torch.norm,"torch.norm(grads[0], p=2, dtype=torch.float32)",1.0.0,signature_mismatch,got an unexpected keyword argument 'dtype',"[""torch.norm(input, p='fro', dim=None, keepdim=False, out=None)""]"
+pytorch,O,2875,torch.norm,"torch.norm(self, p, dim, keepdim, dtype=dtype)",1.0.0,signature_mismatch,got an unexpected keyword argument 'dtype',"[""torch.norm(input, p='fro', dim=None, keepdim=False, out=None)""]"
+pytorch,O,3377,torch.norm,"torch.norm(param.grad.data, p=2, dtype=torch.float32)",1.0.0,signature_mismatch,got an unexpected keyword argument 'dtype',"[""torch.norm(input, p='fro', dim=None, keepdim=False, out=None)""]"
+pytorch,U,2139,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None],
+        scale_factor=minscale,
+        mode=mode,
+        align_corners=False if mode == ""bilinear"" else None,
+        recompute_scale_factor=True,
+    )",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2139,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None],
+        scale_factor=minscale,
+        mode=mode,
+        align_corners=False if mode == ""bilinear"" else None,
+        recompute_scale_factor=True,
+    )",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2139,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None],
+        scale_factor=minscale,
+        mode=mode,
+        align_corners=False if mode == ""bilinear"" else None,
+        recompute_scale_factor=True,
+    )",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2139,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None],
+        scale_factor=minscale,
+        mode=mode,
+        align_corners=False if mode == ""bilinear"" else None,
+        recompute_scale_factor=True,
+    )",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2186,torch.nn.functional.interpolate,"F.interpolate(
+                gt_clean,
+                scale_factor=0.25,
+                mode='area',
+                recompute_scale_factor=False)",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2186,torch.nn.functional.interpolate,"F.interpolate(
+                gt_clean,
+                scale_factor=0.25,
+                mode='area',
+                recompute_scale_factor=False)",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2186,torch.nn.functional.interpolate,"F.interpolate(
+                gt_clean,
+                scale_factor=0.25,
+                mode='area',
+                recompute_scale_factor=False)",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2186,torch.nn.functional.interpolate,"F.interpolate(
+                gt_clean,
+                scale_factor=0.25,
+                mode='area',
+                recompute_scale_factor=False)",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2250,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, scale_factor=s, recompute_scale_factor=False, mode=""nearest-exact""
+            )",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2250,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, scale_factor=s, recompute_scale_factor=False, mode=""nearest-exact""
+            )",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2250,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, scale_factor=s, recompute_scale_factor=False, mode=""nearest-exact""
+            )",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2250,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, scale_factor=s, recompute_scale_factor=False, mode=""nearest-exact""
+            )",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2251,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+            )",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2251,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+            )",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2251,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+            )",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2251,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+            )",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2255,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest""
+            )",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2255,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest""
+            )",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2255,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest""
+            )",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2255,torch.nn.functional.interpolate,"F.interpolate(
+                in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest""
+            )",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2364,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+        )",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2364,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2364,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2364,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, ), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2460,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(cur_rgb.unsqueeze(0), scale_factor=pc_scale, mode='bilinear', recompute_scale_factor=False)",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2460,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(cur_rgb.unsqueeze(0), scale_factor=pc_scale, mode='bilinear', recompute_scale_factor=False)",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2460,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(cur_rgb.unsqueeze(0), scale_factor=pc_scale, mode='bilinear', recompute_scale_factor=False)",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2460,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(cur_rgb.unsqueeze(0), scale_factor=pc_scale, mode='bilinear', recompute_scale_factor=False)",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2853,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2853,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2853,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2853,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2854,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2854,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2854,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2854,torch.nn.functional.interpolate,"F.interpolate(
+            in_t, size=(osize, osize, osize), recompute_scale_factor=False, mode=""nearest-exact""
+        )",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2879,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None], scale_factor=scale_factor, mode=""bilinear"", recompute_scale_factor=True,
+        align_corners=False)",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2879,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None], scale_factor=scale_factor, mode=""bilinear"", recompute_scale_factor=True,
+        align_corners=False)",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2879,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None], scale_factor=scale_factor, mode=""bilinear"", recompute_scale_factor=True,
+        align_corners=False)",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2879,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None], scale_factor=scale_factor, mode=""bilinear"", recompute_scale_factor=True,
+        align_corners=False)",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2880,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None], scale_factor=scale_factor, mode=""bilinear"", recompute_scale_factor=True,
+        align_corners=False)",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2880,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None], scale_factor=scale_factor, mode=""bilinear"", recompute_scale_factor=True,
+        align_corners=False)",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2880,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None], scale_factor=scale_factor, mode=""bilinear"", recompute_scale_factor=True,
+        align_corners=False)",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2880,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None], scale_factor=scale_factor, mode=""bilinear"", recompute_scale_factor=True,
+        align_corners=False)",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2893,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+                image[None],
+                size=None,
+                scale_factor=scale_factor,
+                mode=""bilinear"",
+                recompute_scale_factor=True,
+                align_corners=False,
+            )",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2893,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+                image[None],
+                size=None,
+                scale_factor=scale_factor,
+                mode=""bilinear"",
+                recompute_scale_factor=True,
+                align_corners=False,
+            )",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2893,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+                image[None],
+                size=None,
+                scale_factor=scale_factor,
+                mode=""bilinear"",
+                recompute_scale_factor=True,
+                align_corners=False,
+            )",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2893,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+                image[None],
+                size=None,
+                scale_factor=scale_factor,
+                mode=""bilinear"",
+                recompute_scale_factor=True,
+                align_corners=False,
+            )",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2930,torch.nn.functional.interpolate,"F.interpolate(
+        frames,
+        mode=""bilinear"",
+        scale_factor=scale_factor,
+        recompute_scale_factor=False,
+        align_corners=True,
+    )",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2930,torch.nn.functional.interpolate,"F.interpolate(
+        frames,
+        mode=""bilinear"",
+        scale_factor=scale_factor,
+        recompute_scale_factor=False,
+        align_corners=True,
+    )",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2930,torch.nn.functional.interpolate,"F.interpolate(
+        frames,
+        mode=""bilinear"",
+        scale_factor=scale_factor,
+        recompute_scale_factor=False,
+        align_corners=True,
+    )",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,2930,torch.nn.functional.interpolate,"F.interpolate(
+        frames,
+        mode=""bilinear"",
+        scale_factor=scale_factor,
+        recompute_scale_factor=False,
+        align_corners=True,
+    )",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,3023,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None],
+        size=size,
+        scale_factor=scale_factor,
+        mode=""bilinear"",
+        recompute_scale_factor=recompute_scale_factor,
+        align_corners=False)",0.4.1,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,3023,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None],
+        size=size,
+        scale_factor=scale_factor,
+        mode=""bilinear"",
+        recompute_scale_factor=recompute_scale_factor,
+        align_corners=False)",1.1.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,3023,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None],
+        size=size,
+        scale_factor=scale_factor,
+        mode=""bilinear"",
+        recompute_scale_factor=recompute_scale_factor,
+        align_corners=False)",1.2.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+pytorch,U,3023,torch.nn.functional.interpolate,"torch.nn.functional.interpolate(
+        image[None],
+        size=size,
+        scale_factor=scale_factor,
+        mode=""bilinear"",
+        recompute_scale_factor=recompute_scale_factor,
+        align_corners=False)",1.3.0,signature_mismatch,got an unexpected keyword argument 'recompute_scale_factor',"[""torch.nn.functional.interpolate(input, size=None, scale_factor=None, mode='nearest', align_corners=None)""]"
+scikit-learn,O,15,sklearn.mixture.GMM,"GMM(len(clusters), covariance_type='full')",0.9,signature_mismatch,got an unexpected keyword argument 'covariance_type',"[""sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)""]"
+scikit-learn,O,15,sklearn.mixture.GMM,"GMM(len(clusters), covariance_type='full')",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"[""sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)""]"
+scikit-learn,O,35,sklearn.mixture.GMM,"sklearn.mixture.GMM(n_components=self.n_components,
+                                  covariance_type=self.covariance_type,
+                                  random_state=random_state, tol=tol,
+                                  min_covar=min_covar, n_iter=n_iter,
+                                  n_init=n_init, params=params,
+                                  init_params=init_params)",0.11,signature_mismatch,got an unexpected keyword argument 'tol',"[""sklearn.mixture.GMM(n_components=1, covariance_type='diag', random_state=None, thresh=0.01, min_covar=0.001, n_iter=100, n_init=1, params='wmc', init_params='wmc')""]"
+scikit-learn,O,35,sklearn.mixture.GMM,"sklearn.mixture.GMM(n_components=self.n_components,
+                                  covariance_type=self.covariance_type,
+                                  random_state=random_state, tol=tol,
+                                  min_covar=min_covar, n_iter=n_iter,
+                                  n_init=n_init, params=params,
+                                  init_params=init_params)",0.12,signature_mismatch,got an unexpected keyword argument 'tol',"[""sklearn.mixture.GMM(n_components=1, covariance_type='diag', random_state=None, thresh=0.01, min_covar=0.001, n_iter=100, n_init=1, params='wmc', init_params='wmc')""]"
+scikit-learn,O,35,sklearn.mixture.GMM,"sklearn.mixture.GMM(n_components=self.n_components,
+                                  covariance_type=self.covariance_type,
+                                  random_state=random_state, tol=tol,
+                                  min_covar=min_covar, n_iter=n_iter,
+                                  n_init=n_init, params=params,
+                                  init_params=init_params)",0.12.1,signature_mismatch,got an unexpected keyword argument 'tol',"[""sklearn.mixture.GMM(n_components=1, covariance_type='diag', random_state=None, thresh=0.01, min_covar=0.001, n_iter=100, n_init=1, params='wmc', init_params='wmc')""]"
+scikit-learn,O,35,sklearn.mixture.GMM,"sklearn.mixture.GMM(n_components=self.n_components,
+                                  covariance_type=self.covariance_type,
+                                  random_state=random_state, tol=tol,
+                                  min_covar=min_covar, n_iter=n_iter,
+                                  n_init=n_init, params=params,
+                                  init_params=init_params)",0.13,signature_mismatch,got an unexpected keyword argument 'tol',"[""sklearn.mixture.GMM(n_components=1, covariance_type='diag', random_state=None, thresh=0.01, min_covar=0.001, n_iter=100, n_init=1, params='wmc', init_params='wmc')""]"
+scikit-learn,O,35,sklearn.mixture.GMM,"sklearn.mixture.GMM(n_components=self.n_components,
+                                  covariance_type=self.covariance_type,
+                                  random_state=random_state, tol=tol,
+                                  min_covar=min_covar, n_iter=n_iter,
+                                  n_init=n_init, params=params,
+                                  init_params=init_params)",0.14,signature_mismatch,got an unexpected keyword argument 'tol',"[""sklearn.mixture.GMM(n_components=1, covariance_type='diag', random_state=None, thresh=0.01, min_covar=0.001, n_iter=100, n_init=1, params='wmc', init_params='wmc')""]"
+scikit-learn,O,87,sklearn.mixture.GMM,"GMM(n_components=nc, covariance_type=""full"", min_covar=10e-8)",0.9,signature_mismatch,got an unexpected keyword argument 'covariance_type',"[""sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)""]"
+scikit-learn,O,87,sklearn.mixture.GMM,"GMM(n_components=nc, covariance_type=""full"", min_covar=10e-8)",0.10,signature_mismatch,got an unexpected keyword argument 'covariance_type',"[""sklearn.mixture.GMM(n_components=1, cvtype='diag', random_state=None, thresh=0.01, min_covar=0.001)""]"
+scikit-learn,U,935,sklearn.impute.SimpleImputer,"SimpleImputer(missing_values=missing_value, strategy='mean',
+                            add_indicator=True)",0.20.0,signature_mismatch,got an unexpected keyword argument 'add_indicator',"[""sklearn.impute.SimpleImputer(missing_values=np.nan, strategy='mean', fill_value=None, verbose=0, copy=True)""]"
+scikit-learn,U,1071,sklearn.impute.SimpleImputer,"SimpleImputer(strategy='most_frequent', add_indicator=True)",0.20.0,signature_mismatch,got an unexpected keyword argument 'add_indicator',"[""sklearn.impute.SimpleImputer(missing_values=np.nan, strategy='mean', fill_value=None, verbose=0, copy=True)""]"
+scikit-learn,U,1334,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1334,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1334,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1334,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1336,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False,
+                         target_column=target_column)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1336,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False,
+                         target_column=target_column)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1336,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False,
+                         target_column=target_column)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1336,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False,
+                         target_column=target_column)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1337,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True,
+                         target_column=target_column, cache=False)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1337,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True,
+                         target_column=target_column, cache=False)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1337,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True,
+                         target_column=target_column, cache=False)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1337,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True,
+                         target_column=target_column, cache=False)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1338,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1338,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1338,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1338,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1342,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False,
+                        return_X_y=True)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1342,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False,
+                        return_X_y=True)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1342,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False,
+                        return_X_y=True)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1342,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False,
+                        return_X_y=True)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1344,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1344,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1344,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1344,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1346,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1346,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1346,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1346,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1350,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(data_id=data_id, cache=False,
+                                      as_frame=as_frame)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1350,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(data_id=data_id, cache=False,
+                                      as_frame=as_frame)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1350,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(data_id=data_id, cache=False,
+                                      as_frame=as_frame)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1350,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(data_id=data_id, cache=False,
+                                      as_frame=as_frame)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1354,sklearn.datasets.fetch_openml,"fetch_openml(
+        name=data_name, version=data_version, cache=False, as_frame=False
+    )",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1354,sklearn.datasets.fetch_openml,"fetch_openml(
+        name=data_name, version=data_version, cache=False, as_frame=False
+    )",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1354,sklearn.datasets.fetch_openml,"fetch_openml(
+        name=data_name, version=data_version, cache=False, as_frame=False
+    )",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1354,sklearn.datasets.fetch_openml,"fetch_openml(
+        name=data_name, version=data_version, cache=False, as_frame=False
+    )",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1355,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1355,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1355,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1355,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1359,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1359,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1359,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1359,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1363,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False, return_X_y=True)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1363,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False, return_X_y=True)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1363,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False, return_X_y=True)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1363,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, as_frame=True, cache=False, return_X_y=True)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1366,sklearn.datasets.fetch_openml,"fetch_openml(
+        data_id=data_id, as_frame=True, cache=False, target_column=target_column
+    )",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1366,sklearn.datasets.fetch_openml,"fetch_openml(
+        data_id=data_id, as_frame=True, cache=False, target_column=target_column
+    )",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1366,sklearn.datasets.fetch_openml,"fetch_openml(
+        data_id=data_id, as_frame=True, cache=False, target_column=target_column
+    )",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1366,sklearn.datasets.fetch_openml,"fetch_openml(
+        data_id=data_id, as_frame=True, cache=False, target_column=target_column
+    )",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1367,sklearn.datasets.fetch_openml,"fetch_openml(name=data_name, as_frame=False, cache=False)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1367,sklearn.datasets.fetch_openml,"fetch_openml(name=data_name, as_frame=False, cache=False)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1367,sklearn.datasets.fetch_openml,"fetch_openml(name=data_name, as_frame=False, cache=False)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1367,sklearn.datasets.fetch_openml,"fetch_openml(name=data_name, as_frame=False, cache=False)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1368,sklearn.datasets.fetch_openml,"fetch_openml(
+        data_id=data_id,
+        cache=True,
+        data_home=cache_directory,
+        return_X_y=True,
+        as_frame=False,
+    )",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1368,sklearn.datasets.fetch_openml,"fetch_openml(
+        data_id=data_id,
+        cache=True,
+        data_home=cache_directory,
+        return_X_y=True,
+        as_frame=False,
+    )",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1368,sklearn.datasets.fetch_openml,"fetch_openml(
+        data_id=data_id,
+        cache=True,
+        data_home=cache_directory,
+        return_X_y=True,
+        as_frame=False,
+    )",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1368,sklearn.datasets.fetch_openml,"fetch_openml(
+        data_id=data_id,
+        cache=True,
+        data_home=cache_directory,
+        return_X_y=True,
+        as_frame=False,
+    )",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1372,sklearn.datasets.fetch_openml,"fetch_openml(
+            data_id=data_id, target_column=target_col, cache=False, as_frame=False
+        )",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1372,sklearn.datasets.fetch_openml,"fetch_openml(
+            data_id=data_id, target_column=target_col, cache=False, as_frame=False
+        )",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1372,sklearn.datasets.fetch_openml,"fetch_openml(
+            data_id=data_id, target_column=target_col, cache=False, as_frame=False
+        )",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1372,sklearn.datasets.fetch_openml,"fetch_openml(
+            data_id=data_id, target_column=target_col, cache=False, as_frame=False
+        )",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1379,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, cache=False, as_frame=True)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1379,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, cache=False, as_frame=True)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1379,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, cache=False, as_frame=True)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1379,sklearn.datasets.fetch_openml,"fetch_openml(data_id=data_id, cache=False, as_frame=True)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1383,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(data_id=1119, as_frame=True, return_X_y=True)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1383,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(data_id=1119, as_frame=True, return_X_y=True)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1383,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(data_id=1119, as_frame=True, return_X_y=True)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1383,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(data_id=1119, as_frame=True, return_X_y=True)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1393,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        openml_name,
+        return_X_y=True,
+        as_frame=True
+    )",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1393,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        openml_name,
+        return_X_y=True,
+        as_frame=True
+    )",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1393,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        openml_name,
+        return_X_y=True,
+        as_frame=True
+    )",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1393,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        openml_name,
+        return_X_y=True,
+        as_frame=True
+    )",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1398,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        data_id=int(openml_id),
+        return_X_y=True, as_frame=True
+    )",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1398,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        data_id=int(openml_id),
+        return_X_y=True, as_frame=True
+    )",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1398,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        data_id=int(openml_id),
+        return_X_y=True, as_frame=True
+    )",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1398,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        data_id=int(openml_id),
+        return_X_y=True, as_frame=True
+    )",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1400,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        data_id=int(openml_id),
+        return_X_y=True, as_frame=True
+    )",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1400,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        data_id=int(openml_id),
+        return_X_y=True, as_frame=True
+    )",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1400,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        data_id=int(openml_id),
+        return_X_y=True, as_frame=True
+    )",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1400,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+        data_id=int(openml_id),
+        return_X_y=True, as_frame=True
+    )",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1405,sklearn.datasets.fetch_openml,"fetch_openml(""titanic"", version=1, as_frame=True, return_X_y=True)",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1405,sklearn.datasets.fetch_openml,"fetch_openml(""titanic"", version=1, as_frame=True, return_X_y=True)",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1405,sklearn.datasets.fetch_openml,"fetch_openml(""titanic"", version=1, as_frame=True, return_X_y=True)",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1405,sklearn.datasets.fetch_openml,"fetch_openml(""titanic"", version=1, as_frame=True, return_X_y=True)",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1408,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+            data_id=openml_id, return_X_y=True, as_frame=False
+        )",0.20.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1408,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+            data_id=openml_id, return_X_y=True, as_frame=False
+        )",0.20.1,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1408,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+            data_id=openml_id, return_X_y=True, as_frame=False
+        )",0.20.3,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+scikit-learn,U,1408,sklearn.datasets.fetch_openml,"sklearn.datasets.fetch_openml(
+            data_id=openml_id, return_X_y=True, as_frame=False
+        )",0.21.0,signature_mismatch,got an unexpected keyword argument 'as_frame',"[""sklearn.datasets.fetch_openml(name=None, version='active', data_id=None, data_home=None, target_column='default-target', cache=True, return_X_y=False)""]"
+seaborn,O,44,seaborn.tsplot,"sns.tsplot(columns, color=""indianred"")",0.1,signature_mismatch,missing a required argument: 'data',"[""seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)""]"
+seaborn,O,51,seaborn.tsplot,"sns.tsplot(irf_p, color='blue', linestyle='dashed', ax=ax)",0.1,signature_mismatch,missing a required argument: 'data',"[""seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)""]"
+seaborn,O,55,seaborn.tsplot,"sns.tsplot(dfd, 'percentile1', 'subj', condition='condition', value='100-percentile2', err_style=""unit_traces"", estimator=np.median)",0.1,signature_mismatch,multiple values for argument 'err_style',"[""seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)""]"
+seaborn,O,66,seaborn.tsplot,"sns.tsplot(time='col1', value='col2',
+                        unit=""unit"", ci=""sd"",
+                        data=dataframe, err_style=""ci_bars"", interpolate=True)",0.1,signature_mismatch,missing a required argument: 'x',"[""seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)""]"
+seaborn,O,74,seaborn.tsplot,"sns.tsplot(y_hat, time=range(y_hat.shape[1]), ci=[75, 100], color=""#23aaff"")",0.1,signature_mismatch,missing a required argument: 'data',"[""seaborn.tsplot(x, data, err_style='ci_band', ci=68, interpolate=True, estimator=np.mean, n_boot=10000, smooth=False, err_palette=None, ax=None, err_kws=None, **kwargs)""]"
+seaborn,O,236,seaborn.despine,"sns.despine(ax=ax, offset=10)",0.2.0,signature_mismatch,got an unexpected keyword argument 'offset',"[""seaborn.despine(fig=None, ax=None, top=True, right=True, left=False, bottom=False)""]"
+seaborn,O,236,seaborn.despine,"sns.despine(ax=ax, offset=10)",0.3,signature_mismatch,got an unexpected keyword argument 'offset',"[""seaborn.despine(fig=None, ax=None, top=True, right=True, left=False, bottom=False, trim=False)""]"
+seaborn,O,811,seaborn.factorplot,"sns.factorplot(x=""ses"",hue=""gender"",y=""Proportion who chooses\neach career group"",
+                data=sesdata.rename(columns={""value"":""Proportion who chooses\neach career group""}),
+                col=""field"",
+                legend_out=False,
+                order=[""Low"",""Med"",""High""],col_wrap=2)",0.3,signature_mismatch,got an unexpected keyword argument 'order',"[""seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)""]"
+seaborn,O,811,seaborn.factorplot,"sns.factorplot(x=""ses"",hue=""gender"",y=""Proportion who chooses\neach career group"",
+                data=sesdata.rename(columns={""value"":""Proportion who chooses\neach career group""}),
+                col=""field"",
+                legend_out=False,
+                order=[""Low"",""Med"",""High""],col_wrap=2)",0.3.1,signature_mismatch,got an unexpected keyword argument 'order',"[""seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)""]"
+seaborn,O,811,seaborn.factorplot,"sns.factorplot(x=""ses"",hue=""gender"",y=""Proportion who chooses\neach career group"",
+                data=sesdata.rename(columns={""value"":""Proportion who chooses\neach career group""}),
+                col=""field"",
+                legend_out=False,
+                order=[""Low"",""Med"",""High""],col_wrap=2)",0.4.0,signature_mismatch,got an unexpected keyword argument 'order',"[""seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)""]"
+seaborn,O,811,seaborn.factorplot,"sns.factorplot(x=""ses"",hue=""gender"",y=""Proportion who chooses\neach career group"",
+                data=sesdata.rename(columns={""value"":""Proportion who chooses\neach career group""}),
+                col=""field"",
+                legend_out=False,
+                order=[""Low"",""Med"",""High""],col_wrap=2)",0.5.0,signature_mismatch,got an unexpected keyword argument 'order',"[""seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)""]"
+seaborn,O,853,seaborn.factorplot,"sns.factorplot(hue=""Type"",
+                                   y=needed[-6],
+                                   order=['Tasking',
+                                          'BSP'],
+                                   hue_order=[""Tasking"",
+                                              ""BSP""],
+                                   x=""Type"",
+                                   data=__best,
+                                   kind='bar')",0.3,signature_mismatch,got an unexpected keyword argument 'order',"[""seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)""]"
+seaborn,O,853,seaborn.factorplot,"sns.factorplot(hue=""Type"",
+                                   y=needed[-6],
+                                   order=['Tasking',
+                                          'BSP'],
+                                   hue_order=[""Tasking"",
+                                              ""BSP""],
+                                   x=""Type"",
+                                   data=__best,
+                                   kind='bar')",0.3.1,signature_mismatch,got an unexpected keyword argument 'order',"[""seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)""]"
+seaborn,O,853,seaborn.factorplot,"sns.factorplot(hue=""Type"",
+                                   y=needed[-6],
+                                   order=['Tasking',
+                                          'BSP'],
+                                   hue_order=[""Tasking"",
+                                              ""BSP""],
+                                   x=""Type"",
+                                   data=__best,
+                                   kind='bar')",0.4.0,signature_mismatch,got an unexpected keyword argument 'order',"[""seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)""]"
+seaborn,O,853,seaborn.factorplot,"sns.factorplot(hue=""Type"",
+                                   y=needed[-6],
+                                   order=['Tasking',
+                                          'BSP'],
+                                   hue_order=[""Tasking"",
+                                              ""BSP""],
+                                   x=""Type"",
+                                   data=__best,
+                                   kind='bar')",0.5.0,signature_mismatch,got an unexpected keyword argument 'order',"[""seaborn.factorplot(x, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, x_order=None, hue_order=None, col_order=None, row_order=None, kind='auto', markers=None, linestyles=None, dodge=0, join=True, hline=None, size=5, aspect=1, palette=None, legend=True, legend_out=True, dropna=True, sharex=True, sharey=True, margin_titles=False)""]"
+seaborn,U,465,seaborn.lineplot,"sb.lineplot(
+        total_df,
+        x=""Reference Image Number"",
+        y=""PSNR"",
+        hue=""Planning Type"",
+        linewidth=PLOT_LINE_WIDTH,
+        ax=ax1,
+        errorbar=(""sd"", 1),
+        palette=[""C2"", ""C0"", ""C3""],
+    )",0.9.0,signature_mismatch,multiple values for argument 'x',"[""seaborn.lineplot(x=None, y=None, hue=None, size=None, style=None, data=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, units=None, estimator='mean', ci=95, n_boot=1000, sort=True, err_style='band', err_kws=None, legend='brief', ax=None, **kwargs)""]"
+seaborn,U,465,seaborn.lineplot,"sb.lineplot(
+        total_df,
+        x=""Reference Image Number"",
+        y=""PSNR"",
+        hue=""Planning Type"",
+        linewidth=PLOT_LINE_WIDTH,
+        ax=ax1,
+        errorbar=(""sd"", 1),
+        palette=[""C2"", ""C0"", ""C3""],
+    )",0.9.1,signature_mismatch,multiple values for argument 'x',"[""seaborn.lineplot(x=None, y=None, hue=None, size=None, style=None, data=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, units=None, estimator='mean', ci=95, n_boot=1000, seed=None, sort=True, err_style='band', err_kws=None, legend='brief', ax=None, **kwargs)""]"
+seaborn,U,465,seaborn.lineplot,"sb.lineplot(
+        total_df,
+        x=""Reference Image Number"",
+        y=""PSNR"",
+        hue=""Planning Type"",
+        linewidth=PLOT_LINE_WIDTH,
+        ax=ax1,
+        errorbar=(""sd"", 1),
+        palette=[""C2"", ""C0"", ""C3""],
+    )",0.10.0,signature_mismatch,multiple values for argument 'x',"[""seaborn.lineplot(x=None, y=None, hue=None, size=None, style=None, data=None, palette=None, hue_order=None, hue_norm=None, sizes=None, size_order=None, size_norm=None, dashes=True, markers=None, style_order=None, units=None, estimator='mean', ci=95, n_boot=1000, seed=None, sort=True, err_style='band', err_kws=None, legend='brief', ax=None, **kwargs)""]"
+seaborn,U,811,seaborn.catplot,"sns.catplot(aux_df,
+                    row='game',
+                    row_order=utils.COLUMN_ORDER[1:],
+                    hue='model',
+                    sharey=False,
+                    sharex=False,
+                    x='experiment',
+                    y='value',
+                    kind='point',
+                    aspect=2.5)",0.9.0,signature_mismatch,multiple values for argument 'x',"[""seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)""]"
+seaborn,U,811,seaborn.catplot,"sns.catplot(aux_df,
+                    row='game',
+                    row_order=utils.COLUMN_ORDER[1:],
+                    hue='model',
+                    sharey=False,
+                    sharex=False,
+                    x='experiment',
+                    y='value',
+                    kind='point',
+                    aspect=2.5)",0.9.1,signature_mismatch,multiple values for argument 'x',"[""seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, seed=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)""]"
+seaborn,U,813,seaborn.catplot,"sns.catplot(act_df,
+                    row='metric',
+                    hue='model',
+                    sharey=False,
+                    sharex=False,
+                    x='experiment',
+                    order=sorted(act_df.experiment.unique()),
+                    y='value',
+                    kind='point',
+                    aspect=1.5)",0.9.0,signature_mismatch,multiple values for argument 'x',"[""seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)""]"
+seaborn,U,813,seaborn.catplot,"sns.catplot(act_df,
+                    row='metric',
+                    hue='model',
+                    sharey=False,
+                    sharex=False,
+                    x='experiment',
+                    order=sorted(act_df.experiment.unique()),
+                    y='value',
+                    kind='point',
+                    aspect=1.5)",0.9.1,signature_mismatch,multiple values for argument 'x',"[""seaborn.catplot(x=None, y=None, hue=None, data=None, row=None, col=None, col_wrap=None, estimator=np.mean, ci=95, n_boot=1000, units=None, seed=None, order=None, hue_order=None, row_order=None, col_order=None, kind='strip', height=5, aspect=1, orient=None, color=None, palette=None, legend=True, legend_out=True, sharex=True, sharey=True, margin_titles=False, facet_kws=None, **kwargs)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",0.12.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",1.0.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",1.7.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",1.8.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",1.10.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",1.11.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",1.12.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",1.13.1,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",1.15.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",2.0.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",2.1.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",2.8.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",2.9.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",2.12.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",2.14.0,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,666,tensorflow.cast,"tf.cast(tf.math.divide(positives, total_pos_neg))",2.16.1,signature_mismatch,missing a required argument: 'dtype',"[""tensorflow.cast(x, dtype, name=None)""]"
+tensorflow,U,3451,tensorflow.print,tf.print(y),1.9.0,signature_mismatch,missing a required argument: 'data',"[""tensorflow.print(input_, data, message=None, first_n=None, summarize=None, name=None)""]"
+tensorflow,U,4425,tensorflow.global_variables,tf.global_variables('.*/BatchNorm/gamma:0$'),0.12.0,signature_mismatch,too many positional arguments,"[""tensorflow.global_variables()""]"

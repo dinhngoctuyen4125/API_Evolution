@@ -1,0 +1,12 @@
+Build one chronological migration-pair history from the supplied JSON facts:
+two source API histories and an independent deprecated_version. Return only
+the API-schema JSON of selected event IDs grouped into milestones.
+
+- Include all mandatory events; add optional implementation or binding events
+  only when useful.
+- Use each ID once at its recorded version. Sort milestones numerically without
+  changing version strings (1.0 is not 1.0.0).
+- Date deprecation only from deprecated_version. Removal requires a confirmed
+  present-to-absent transition; unresolved releases prove nothing.
+- Ignore docstrings. Invent no release-note URLs or implementation descriptions.
+  Do not infer forwarding from matching signatures alone.

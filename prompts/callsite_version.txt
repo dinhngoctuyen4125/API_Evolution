@@ -1,0 +1,30 @@
+Determine which recorded migration milestones support one Python API call.
+
+The input contains a function, probing-input prefix, extracted api_call,
+alias/reference dictionaries, and migration milestones. The target is the
+deprecated API for file O and replacement API for file U. Analyze api_call;
+use the full function only for context. An expected replacement name does not
+prove the function calls it.
+
+Evaluate each candidate milestone independently; the target must be active or
+deprecated. If signatures is nonempty, accept a call matching any listed
+signature. Bind positional arguments by position and
+keywords by name; defaults may be omitted. A bound instance method supplies
+self or cls, while a class call must supply it explicitly. Missing required
+arguments, unexpected keywords, excess positional arguments, or duplicate
+arguments make the milestone incompatible.
+
+If signatures is empty, use call_syntax. For kind=indexer, require a listed
+bracket form: obj.loc[key] or, only if listed, obj.loc(axis=axis)[key]. The
+key may contain slices, tuples, or other Python expressions. For kind=ufunc,
+require the number of positional inputs in required_inputs; do not assume
+undocumented keyword names or optional arguments. Exclude a milestone without
+a matching signature or call_syntax. Do not infer signatures from code or
+other versions, or exclude calls solely because runtime values or types are
+unknown. Return every matching milestone.
+
+candidate_versions includes only confirmed active or deprecated milestones;
+unknown availability is excluded. Use only these versions. Do not invent
+intermediate releases, the installed version, or facts absent from the input.
+Return an empty array only if none match. Respond with the schema's JSON
+object: {"versions": ["..."]}.
