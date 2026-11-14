@@ -13,7 +13,7 @@ from enrich_pypi_versions import REPOSITORIES
 
 ROOT_DIR = Path(__file__).resolve().parent
 INPUT_PATH = ROOT_DIR / "data" / "pypi_versions_with_github_diy.json"
-CACHE_DIR = ROOT_DIR / "cache"
+CACHE_DIR = ROOT_DIR / "cache" / "step3,4"
 FULL_SHA = re.compile(r"[0-9a-fA-F]{40}\Z")
 
 

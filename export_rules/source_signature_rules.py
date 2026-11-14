@@ -27,7 +27,7 @@ def _numpy_records(first_minor, last_minor):
 @lru_cache(maxsize=1)
 def numpy_trapz_declaration():
     """Require one source signature throughout the NumPy releases SciPy may use."""
-    reader = SourceReader(ROOT / "cache" / "numpy" / "source", "numpy")
+    reader = SourceReader(ROOT / "cache" / "step3,4" / "numpy" / "source", "numpy")
     shared, examples = None, []
     for record in _numpy_records(13, 26):
         try:
@@ -50,7 +50,7 @@ def numpy_trapz_declaration():
 @lru_cache(maxsize=1)
 def numpy_deprecate_wrapper():
     """Read the literal def newfunc(*args, **kwds), not the wrapped target."""
-    repo = ROOT / "cache" / "numpy" / "source"
+    repo = ROOT / "cache" / "step3,4" / "numpy" / "source"
     shared, examples = None, []
     for record in _numpy_records(8, 18):
         path = "numpy/lib/utils.py"

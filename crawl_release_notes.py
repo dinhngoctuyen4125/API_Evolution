@@ -17,7 +17,7 @@ ROOT_DIR = Path(__file__).resolve().parent
 DATA_DIR = ROOT_DIR / "data"
 INPUT_PATH = DATA_DIR / "pypi_versions_with_github_diy.json"
 DEFAULT_OUTPUT_PATH = DATA_DIR / "release_notes.json"
-CACHE_DIR = ROOT_DIR / "cache"
+CACHE_DIR = ROOT_DIR / "cache" / "step3,4"
 LIBRARIES = [
     "numpy", "pandas", "pytorch", "scipy", "scikit-learn", "seaborn",
     "tensorflow", "transformers",

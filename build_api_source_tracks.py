@@ -1042,7 +1042,7 @@ def main(argv=None):
                         help="Add signatures to existing source tracks and migration timelines")
     args = parser.parse_args(argv)
     if args.enrich_existing:
-        repo = ROOT / "cache" / args.library / "source"
+        repo = ROOT / "cache" / "step3,4" / args.library / "source"
         reader = TrackedSourceReader(repo, args.library)
         track_path = ROOT / "data" / args.library / "api_source_tracks.json"
         track = json.loads(track_path.read_text(encoding="utf-8"))
@@ -1075,7 +1075,7 @@ def main(argv=None):
     try:
         pairs, versions = load_inputs(args.library, args.mapping_id)
         versions = select_range(versions, args.from_version, args.to_version)
-        repo = ROOT / "cache" / args.library / "source"
+        repo = ROOT / "cache" / "step3,4" / args.library / "source"
         if not repo.is_dir():
             raise RuntimeError(f"Source repository missing: {repo}")
         validation = validate_releases(repo, args.library, versions)

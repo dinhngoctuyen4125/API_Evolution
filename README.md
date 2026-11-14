@@ -13,6 +13,7 @@ API_Evolution/
 ├── build_callsite_versions.py                   # Bước 7: gán mốc version cho mẫu gọi API O/U
 ├── audit_step7.py                               # Bước 8: rà soát version đã gán
 ├── build_step7_modified.py                      # Bước 8: tạo bộ mẫu đã sửa
+├── github_crawler.py                            # Bước 9: crawl mẫu gọi API từ GitHub
 ├── source_evolution_rules.py                    # Quy tắc phân giải public API và AST
 ├── export_rules/                                # Quy tắc export chung và theo thư viện
 │   ├── __init__.py
@@ -42,11 +43,14 @@ API_Evolution/
 │       ├── U_with_versions.json                 # Kết quả bước 7 (tập U)
 │       ├── O_modified.json                      # Kết quả bước 8 (tập O)
 │       ├── U_modified.json                      # Kết quả bước 8 (tập U)
+│       ├── O_crawled.json                       # Kết quả bước 9 (tập O)
+│       ├── U_crawled.json                       # Kết quả bước 9 (tập U)
 │       └── *.progress.jsonl                     # Tiến độ bước 7 khi chạy
 ├── reports/step7/                               # Báo cáo rà soát bước 8
-├── cache/{library}/                             # Dữ liệu tải về, không đưa vào Git
+├── cache/step3,4/{library}/                     # Dữ liệu tải ở bước 3 và 4
 │   ├── docs/{version}/release_notes.html
 │   └── source/                                  # Một Git repository cho mỗi thư viện
+├── cache/step9/                                 # Repository GitHub tải ở bước 9
 ├── .gitattributes
 ├── .gitignore
 ├── README.md
@@ -99,7 +103,7 @@ python enrich_pypi_versions.py
 
 ## Bước 3 — Lấy release notes
 
-**Mô tả:** đọc bản chỉnh tay ở bước 2, tìm trang tài liệu hoặc trang GitHub theo từng version và lưu toàn bộ HTML vào `cache/`.
+**Mô tả:** đọc bản chỉnh tay ở bước 2, tìm trang tài liệu hoặc trang GitHub theo từng version.
 
 **Chạy toàn bộ:**
 
@@ -124,11 +128,11 @@ python crawl_release_notes.py --library pandas --library pytorch --library scipy
 **Output:** `data/release_notes.json` giữ các trường đầu vào và thêm:
 
 - `release_url` là URL trên web
-- `release_path` là đường dẫn tương đối tới HTML trên máy.
+- `release_path` là đường dẫn tương đối từ thư mục dự án, dạng `cache/step3,4/{library}/docs/{version}/release_notes.html`.
 
 ## Bước 4 — Tải source code
 
-**Mô tả:** mỗi thư viện tải source code tại Github, lưu tại `cache/{library}/source`; lần đầu lấy commit của nhánh mặc định. Dùng `--version` để chuyển sang commit SHA của version trong `data/pypi_versions_with_github_diy.json`.
+**Mô tả:** mỗi thư viện tải source code tại Github, lần đầu lấy commit của nhánh mặc định. Dùng `--version` để chuyển sang commit SHA của version trong `data/pypi_versions_with_github_diy.json`.
 
 **Chạy toàn bộ:**
 
@@ -146,7 +150,7 @@ python crawl_source.py --library numpy
 python crawl_source.py --library numpy --version 1.4.1
 ```
 
-**Output:** `cache/{library}/source`, một Git repository cho mỗi thư viện.
+**Output:** `cache/step3,4/{library}/source`, một Git repository cho mỗi thư viện.
 
 ## Bước 5 — Dựng đường tiến hóa source cho từng API
 
@@ -277,3 +281,24 @@ python build_step7_modified.py
 ```
 
 **Output:** các CSV trong `reports/step7/output/` và `data/{library}/O_modified.json`, `U_modified.json`.
+
+## Bước 9 — Crawl thêm mẫu từ GitHub
+
+**Mô tả:** tìm hàm dùng API trong cặp migration, đối chiếu dependency, trạng thái API và chữ ký theo mốc version; tái sử dụng hàm khi hợp lệ ở nhiều mốc.
+
+**Nhập GITHUB_TOKEN:**
+
+```powershell
+$env:GITHUB_TOKEN = "<GitHub token>"
+```
+
+**Chạy:**
+
+```powershell
+python github_crawler.py --library numpy --mapping-id 2 --max-repos 20 --target-samples 10
+```
+
+Bỏ `--mapping-id 2` để chạy mọi cặp của thư viện. **Output:** `data/{library}/O_crawled.json` và `U_crawled.json` (chỉ mẫu mới, không có trường `reference`).
+Các repository được tải vào `cache/step9/`.
+Crawler tìm tối đa 100 file cho mỗi tên API (50 file/trang), rồi bổ sung tối đa 30 file cho mỗi truy vấn dependency. Nó xác minh AST, version và chữ ký tại commit liên quan; cache source/dependency để tránh phân tích lặp. `--max-repos 20` xử lý tối đa 20 repo **chưa xử lý**, không tính repo được bỏ qua. `--max-files`, `--max-commits`, `--max-repo-seconds` giới hạn tài nguyên; `--full-repo-scan` quét toàn bộ file Python.
+Repo và trạng thái đã xử lý lưu tại `cache/step9/`; kết quả tìm kiếm được cache 24 giờ. Chạy lại cùng lệnh để tiếp tục repo mới, không xóa cache hay `O_crawled.json`/`U_crawled.json`. Dùng `--refresh-search` để tìm GitHub lại ngay, `--rescan` để xét lại repo đã xử lý, hoặc `--repo-offset N` để bỏ qua N repo đầu trong thứ tự xếp hạng. Terminal phân biệt `eligible_occurrences`, `unique_eligible`, mẫu mới và lý do loại.
