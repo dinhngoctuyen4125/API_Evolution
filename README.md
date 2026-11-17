@@ -14,6 +14,7 @@ API_Evolution/
 ├── audit_step7.py                               # Bước 8: rà soát version đã gán
 ├── build_step7_modified.py                      # Bước 8: tạo bộ mẫu đã sửa
 ├── github_crawler.py                            # Bước 9: crawl mẫu gọi API từ GitHub
+├── build_crawled_versions.py                    # Bước 10: ghép mẫu crawl và gán thêm mốc
 ├── source_evolution_rules.py                    # Quy tắc phân giải public API và AST
 ├── export_rules/                                # Quy tắc export chung và theo thư viện
 │   ├── __init__.py
@@ -25,7 +26,7 @@ API_Evolution/
 │   └── transformers_export_rules.py
 ├── prompts/
 │   ├── migration_evolution.txt                  # Prompt bước 6
-│   └── callsite_version.txt                     # Prompt bước 7
+│   └── callsite_version.txt                     # Prompt bước 7 và bước 10
 ├── data/
 │   ├── icsme_data/
 │   │   ├── O.json                               # Mẫu gọi API cũ
@@ -43,8 +44,13 @@ API_Evolution/
 │       ├── U_with_versions.json                 # Kết quả bước 7 (tập U)
 │       ├── O_modified.json                      # Kết quả bước 8 (tập O)
 │       ├── U_modified.json                      # Kết quả bước 8 (tập U)
-│       ├── O_crawled.json                       # Kết quả bước 9 (tập O)
-│       ├── U_crawled.json                       # Kết quả bước 9 (tập U)
+│       ├── O_crawled_dependency.json            # Kết quả bước 9 (tập O, mốc từ dependency)
+│       ├── U_crawled_dependency.json            # Kết quả bước 9 (tập U, mốc từ dependency)
+│       ├── O_crawled_not_dependency.json        # Kết quả bước 9 (tập O, chưa có mốc)
+│       ├── U_crawled_not_dependency.json        # Kết quả bước 9 (tập U, chưa có mốc)
+│       ├── O_crawled.json                       # Kết quả bước 10 (tập O)
+│       ├── U_crawled.json                       # Kết quả bước 10 (tập U)
+│       ├── *.cache.jsonl                        # Cache câu trả lời model bước 10
 │       └── *.progress.jsonl                     # Tiến độ bước 7 khi chạy
 ├── reports/step7/                               # Báo cáo rà soát bước 8
 ├── cache/step3,4/{library}/                     # Dữ liệu tải ở bước 3 và 4
@@ -158,12 +164,17 @@ python crawl_source.py --library numpy --version 1.4.1
 
 **Chiến lược tìm kiếm:**
 
-- Xác thực commit/tag của release; dùng lại kết quả nếu danh sách đường dẫn và các file liên quan không đổi.
-- Thử quy tắc export riêng của Transformers, rồi phân giải định nghĩa, import, alias, wildcard import và thành viên class bằng AST.
-- Nếu tìm thấy API, xác định public binding. Nếu chưa, thử dynamic/lazy export rồi decorator export của TensorFlow.
-- Nếu vẫn chưa xác nhận được, kiểm tra ufunc sinh mã của SciPy hoặc Python binding của PyTorch.
-- Lấy chữ ký `def` đã khai báo; với alias hoặc hàm sao chép, lần theo hàm nguồn. Wrapper giữ chữ ký `def` của chính nó.
-- Với accessor `DataFrame.loc` và ufunc `special.betainc`, ghi cú pháp được source xác nhận vào `call_syntax`; `signatures` chứa các chữ ký xác định được, hoặc `[]` nếu không có.
+1. Xác thực commit/tag của release; dùng lại kết quả nếu danh sách đường dẫn và các file liên quan không đổi.
+
+2. Thử quy tắc export riêng của Transformers, rồi phân giải định nghĩa, import, alias, wildcard import và thành viên class bằng AST.
+
+3. Nếu tìm thấy API, xác định public binding. Nếu chưa, thử dynamic/lazy export rồi decorator export của TensorFlow.
+
+4. Nếu vẫn chưa xác nhận được, kiểm tra ufunc sinh mã của SciPy hoặc Python binding của PyTorch.
+
+5. Lấy chữ ký `def` đã khai báo; với alias hoặc hàm sao chép, lần theo hàm nguồn. Wrapper giữ chữ ký `def` của chính nó.
+
+6. Với accessor `DataFrame.loc` và ufunc `special.betainc`, ghi cú pháp được source xác nhận vào `call_syntax`; `signatures` chứa các chữ ký xác định được, hoặc `[]` nếu không có.
 
 **Chạy riêng:**
 
@@ -178,20 +189,20 @@ python build_api_source_tracks.py --library seaborn
 ```text
 []
 └── mapping_id, library
-    └── api_states[]                        # lịch sử API cũ và API thay thế
+    └── api_states[]                             # lịch sử API cũ và API thay thế
         ├── role, api
-        ├── versions[]                      # các release xác nhận có API
+        ├── versions[]                           # các release xác nhận có API
         │   ├── version, commit_sha
-        │   ├── source_location             # path, line_start, line_end
-        │   ├── public_binding              # kind, path, target
+        │   ├── source_location                  # path, line_start, line_end
+        │   ├── public_binding                   # kind, path, target
         │   ├── signatures[], return_annotation
-        │   ├── call_syntax                # cú pháp accessor/ufunc (nếu có)
+        │   ├── call_syntax                      # cú pháp accessor/ufunc (nếu có)
         │   └── evidence_refs[]
-        ├── transitions[]                   # so sánh hai release liền kề
+        ├── transitions[]                        # so sánh hai release liền kề
         │   ├── from_version, to_version, status, evidence_refs[]
-        │   └── changes[]                   # kind, scope, parameter/method, before, after, evidence_refs[]
-        ├── coverage                        # version/khoảng có, vắng, chưa rõ
-        └── evidence[]                      # source, binding, Git diff, so sánh AST theo ID
+        │   └── changes[]                        # kind, scope, parameter/method, before, after, evidence_refs[]
+        ├── coverage                             # version/khoảng có, vắng, chưa rõ
+        └── evidence[]                           # source, binding, Git diff, so sánh AST theo ID
 ```
 
 ## Bước 6 — Tổng hợp đường tiến hóa của cặp migration
@@ -218,22 +229,22 @@ python build_migration_evolution.py --library numpy --provider $provider --resum
 **Schema dự kiến:**
 
 ```text
-[]                                           # Một phần tử cho mỗi cặp migration
-└── mapping_id, library                      # ID cặp, tên thư viện
-    ├── seed                                 # deprecated_api, replacement_api
-    ├── deprecated_version: string|null      # Version có thông báo deprecated từ bước trước, nếu có
-    ├── milestones[]                         # Các mốc hợp nhất theo thứ tự version
+[]                                               # Một phần tử cho mỗi cặp migration
+└── mapping_id, library                          # ID cặp, tên thư viện
+    ├── seed                                     # deprecated_api, replacement_api
+    ├── deprecated_version: string|null          # Version có thông báo deprecated từ bước trước, nếu có
+    ├── milestones[]                             # Các mốc hợp nhất theo thứ tự version
     │   ├── version: string
-    │   ├── compared_to_version: string|null # Mốc trước đó; null ở mốc đầu tiên
-    │   ├── api_states[]                     # Trạng thái của cả hai API tại mốc này
+    │   ├── compared_to_version: string|null     # Mốc trước đó; null ở mốc đầu tiên
+    │   ├── api_states[]                         # Trạng thái của cả hai API tại mốc này
     │   │   ├── name, status
     │   │   ├── signatures: string[]
     │   │   └── call_syntax: object|null
-    │   └── changes[]                        # Các thay đổi được chọn cho mốc này
+    │   └── changes[]                            # Các thay đổi được chọn cho mốc này
     │       ├── api, type, parameter
     │       ├── old_value, new_value, from_version
     │       └── source, replace_to, source_evidence[]
-    └── model, input_digest                   # Model đã dùng, mã băm của input
+    └── model, input_digest                      # Model đã dùng, mã băm của input
 ```
 
 - `status`: `active`, `deprecated`, `removed`, `absent` hoặc `unknown`.
@@ -286,6 +297,64 @@ python build_step7_modified.py
 
 **Mô tả:** tìm hàm dùng API trong cặp migration, đối chiếu dependency, trạng thái API và chữ ký theo mốc version; tái sử dụng hàm khi hợp lệ ở nhiều mốc.
 
+**Mục tiêu theo ô:** mỗi cặp có các ô (tập O/U × mốc). Mục tiêu của cặp là số mẫu lớn nhất trong các ô của `O_modified.json`/`U_modified.json`; mỗi ô cần thêm `mục tiêu − số mẫu hiện có`. Ô mà API có trạng thái khác `active`/`deprecated` (ví dụ `removed`) không được crawl. Mốc của một lời gọi chỉ do dependency quyết định: mọi ràng buộc version áp dụng cho file phải cùng nằm trong một khoảng `[v1, v2)` thì lời gọi được gán mốc `v1`.
+
+**Pipeline:**
+
+1. **Chọn API cần crawl.** Crawler tính số mẫu thiếu ở từng ô (API × mốc) và chỉ tìm những API còn ô thiếu. Ví dụ ô U của cumprod đã đủ, nên lần chạy numpy chỉ tìm `cumproduct`.
+
+2. **Tìm theo tên ngắn kèm gốc import.** Tên ngắn là phần cuối đầy đủ, như `cumproduct` hay `map`, không phải một phần như `.prod`. Có năm nguồn:
+   - **GitHub code search:** `cumproduct numpy`, chia 4 khoảng kích thước file, mỗi khoảng tối đa 1000 file. Nếu một khoảng chạm trần 1000, API đó được tìm thêm với từ khóa khác, mỗi truy vấn tối đa 1000 file: tên class của API (`map DataFrame pandas`) và từ khóa riêng của thư viện (`LIBRARY_QUERY_TERMS`, pandas: `read_csv`, `lambda`).
+   - **Sourcegraph:** `lang:python file:has.content(numpy) /\bcumproduct\(/ count:all`, lấy hết kết quả, tối đa 20000 file mỗi API (`SOURCEGRAPH_FILES`, tách riêng khỏi `--max-files`). Gốc import nằm trong `file:has.content()` để chỉ dùng làm bộ lọc file; nếu viết như một từ riêng thì mỗi lần xuất hiện đều bị tính vào giới hạn kết quả. Method của class dùng `\.` thay cho `\b` (`/\.map\(/`), để không bắt nhầm hàm cùng tên như `map()` có sẵn. API dạng indexer (`call_syntax` kind `indexer`, như `DataFrame.loc`) nhận cả `[` lẫn `(` sau tên (`/\.loc[\[(]/`), vì được gọi bằng `df.loc[key]` hoặc `df.loc(axis=...)[key]`.
+   - **Commit search:** `cumproduct cumprod`, `cumproduct numpy`, `cumproduct deprecated`, `cumproduct FutureWarning` và `replace cumproduct`, tìm trong commit message. Mỗi repo xét tối đa 3 commit.
+   - **Dependency search:** file `requirements.txt` hoặc `pyproject.toml` có tên thư viện, chỉ lấy 30 file.
+   - **Dependency theo ô thiếu:** với mỗi bản major.minor (lấy từ PyPI) nằm trong một ô còn thiếu, tìm `"pandas==2.2" filename:requirements.txt`, tối đa 100 file mỗi truy vấn. Repo có dependency ở HEAD rơi vào ô thiếu của API nào thì được tìm lời gọi API đó bằng code search gộp nhiều `repo:` trong một truy vấn (tối đa 256 ký tự, tối đa 60 truy vấn, các ô lần lượt chia lượt, repo nhỏ trước). Lời gọi tìm được đi qua bước lọc sơ bộ như code search.
+
+3. **Lọc sơ bộ bằng AST và import/alias,** trước khi tải repo:
+   - Với file từ code search, crawler tải nội dung file hiện tại rồi chạy AST, có phân giải alias, `from x import *`, re-export một cấp và kiểu DataFrame. Bản vendor bị bỏ.
+   - Với commit, crawler phân tích AST file tại commit cha (cho dòng bị xóa) và tại commit (cho dòng thêm).
+   - Với repo có lời gọi, crawler tải thêm `requirements.txt` và `pyproject.toml` ở gốc repo. Phiên bản đọc ở đây là phiên bản **hiện tại**, chỉ dùng để xếp hạng.
+
+4. **Xếp hạng.** Thứ tự ưu tiên:
+   - có lời gọi và dependency ở HEAD rơi đúng ô đang thiếu của API được gọi;
+   - có lời gọi, chưa biết phiên bản ở HEAD;
+   - có lời gọi, nhưng ô thiếu của API đó đều cũ hơn mốc ở HEAD (chỉ lịch sử commit mới lấp được);
+   - có file và có dependency;
+   - chỉ có file, hoặc chỉ có dependency. Trong nhóm chỉ có dependency, repo có dependency rơi vào ô thiếu đứng trước; repo đã được tìm lời gọi bằng `repo:` mà không thấy đứng sau;
+   - có lời gọi nhưng ô thiếu của API đó đều mới hơn mốc ở HEAD (repo không thể lấp).
+
+   Đồng thời, repo benchmark bị loại và fork trùng commit bị gộp.
+
+5. **Tải repo** bằng partial clone (không tải blob trước). Repo đã xử lý mà HEAD không đổi thì bỏ qua.
+
+6. **Chọn file và commit liên quan.**
+   - File nguồn: lấy theo đường dẫn tìm được ở bước 2.
+   - File dependency: chỉ lấy những file nằm cùng thư mục hoặc thư mục cha của file nguồn, kể cả file đã có trong lịch sử, cộng các file workflow CI.
+   - Commit: tối đa 500, gồm commit thay đổi dòng có tên API, commit thay đổi file dependency, và HEAD.
+
+7. **Xác định phiên bản tại từng commit.**
+   - Crawler đọc lại file nguồn và chạy AST để lấy lời gọi thật.
+   - Sau đó đọc dependency **tại chính commit đó**. Nguồn ràng buộc phiên bản: khai báo trực tiếp (kể cả `!=`), marker Python/nền tảng, file include `-r`, và pin của thư viện khác tra qua PyPI khi khai báo trực tiếp không đủ.
+   - Mọi ràng buộc được gộp thành một khoảng. Khoảng đó phải nằm gọn trong đúng một mốc `[v1, v2)`; trải qua nhiều mốc hoặc mâu thuẫn thì bị loại.
+
+8. **Kiểm tra API với dữ liệu chuẩn** (`migration_evolution.json`):
+   - Ở mốc vừa tìm được, API phải ở trạng thái `active` hoặc `deprecated`.
+   - Lời gọi phải khớp chữ ký của mốc đó. Crawler thử bind các tham số của lời gọi vào chữ ký trong tài liệu.
+
+9. **Gộp trùng rồi lưu.**
+   - Mã giống nhau (bỏ qua định dạng và chú thích) ở nhiều repo hoặc commit được gộp thành một mẫu.
+   - Mẫu gần trùng hoặc rơi vào ô đã đủ bị bỏ.
+   - Mẫu hợp lệ ghi vào `O_crawled_dependency.json` và `U_crawled_dependency.json` kèm mốc phiên bản. Repo được ghi vào sổ đã xử lý.
+   - Crawler dừng khi mọi ô đã đủ.
+
+10. **Lưu riêng lời gọi chưa có mốc** vào `O_crawled_not_dependency.json` và `U_crawled_not_dependency.json`, với `versions` rỗng (gán mốc ở bước sau).
+    - Lời gọi được giữ khi dependency không xác định được mốc: không có file dependency (`no_manifest`), không ghi phiên bản (`no_version_spec`), ràng buộc mâu thuẫn (`version_conflict`), hoặc trải qua nhiều mốc (`version_not_single_interval`).
+    - Lời gọi bị loại vì `api_unavailable` hay `signature_mismatch` (dependency đã cho mốc và lời gọi sai ở mốc đó), `both_apis`, vendor hay benchmark thì không giữ.
+    - Lời gọi phải khớp chữ ký API ở ít nhất một mốc mà API có trạng thái `active`/`deprecated`.
+    - Chỉ giữ cho API còn ô thiếu. Mỗi API giữ tối đa bằng tổng số mẫu còn thiếu trong các ô của API đó. Giới hạn chỉ chặn việc thêm mới; mẫu đã lưu không bị xóa vì giới hạn.
+    - Lọc trùng với dữ liệu bước 8, với mẫu có dependency và giữa chúng với nhau. Cùng hàm, cùng file, cùng lời gọi nhưng khác commit thì chỉ giữ một mẫu.
+    - Mẫu này không tính vào ô và không làm crawler dừng sớm. Khi lời gọi đó có bằng chứng dependency (cùng mã, hoặc cùng hàm và lời gọi ở commit khác), mẫu được chuyển sang file `_dependency`.
+
 **Nhập GITHUB_TOKEN:**
 
 ```powershell
@@ -295,10 +364,34 @@ $env:GITHUB_TOKEN = "<GitHub token>"
 **Chạy:**
 
 ```powershell
-python github_crawler.py --library numpy --mapping-id 2 --max-repos 20 --target-samples 10
+python github_crawler.py --library numpy --mapping-id 2 --max-repos 20
 ```
 
-Bỏ `--mapping-id 2` để chạy mọi cặp của thư viện. **Output:** `data/{library}/O_crawled.json` và `U_crawled.json` (chỉ mẫu mới, không có trường `reference`).
+Bỏ `--mapping-id 2` để chạy mọi cặp của thư viện. **Output:** `data/{library}/O_crawled_dependency.json` và `U_crawled_dependency.json` (chỉ mẫu mới, không có trường `reference`), cùng `O_crawled_not_dependency.json` và `U_crawled_not_dependency.json` (`versions` rỗng).
 Các repository được tải vào `cache/step9/`.
-Crawler tìm tối đa 100 file cho mỗi tên API (50 file/trang), rồi bổ sung tối đa 30 file cho mỗi truy vấn dependency. Nó xác minh AST, version và chữ ký tại commit liên quan; cache source/dependency để tránh phân tích lặp. `--max-repos 20` xử lý tối đa 20 repo **chưa xử lý**, không tính repo được bỏ qua. `--max-files`, `--max-commits`, `--max-repo-seconds` giới hạn tài nguyên; `--full-repo-scan` quét toàn bộ file Python.
-Repo và trạng thái đã xử lý lưu tại `cache/step9/`; kết quả tìm kiếm được cache 24 giờ. Chạy lại cùng lệnh để tiếp tục repo mới, không xóa cache hay `O_crawled.json`/`U_crawled.json`. Dùng `--refresh-search` để tìm GitHub lại ngay, `--rescan` để xét lại repo đã xử lý, hoặc `--repo-offset N` để bỏ qua N repo đầu trong thứ tự xếp hạng. Terminal phân biệt `eligible_occurrences`, `unique_eligible`, mẫu mới và lý do loại.
+Crawler chỉ tìm API còn ô thiếu mẫu.
+
+## Bước 10 — Ghép mẫu crawl và gán thêm mốc
+
+**Mô tả:** ghép `O|U_crawled_dependency.json` và `O|U_crawled_not_dependency.json` thành `O|U_crawled.json`. Model OpenAI xem lời gọi còn khớp chữ ký ở những mốc nào khác trên đường tiến hóa, dùng cùng prompt với bước 7 (`prompts/callsite_version.txt`).
+
+**Quy tắc ghép:**
+
+- Mẫu có dependency: `versions` = mốc từ dependency ∪ mốc model trả về. Mốc từ dependency luôn được giữ, kể cả khi model không chọn; log đếm các trường hợp này (`model_missed_dependency_version`).
+- Mẫu không có dependency: `versions` = mốc model trả về. Model trả về rỗng thì mẫu không được ghi vào output.
+- Mẫu không có dependency trùng mã với mẫu có dependency thì bỏ.
+- Không giới hạn theo mục tiêu ô: output ghi mọi mốc tương thích.
+
+**Cache:** `data/{library}/O|U_crawled.cache.jsonl`, theo nội dung mẫu (hàm, probing input, lời gọi, alias, API đích và timeline của API đó), không theo vị trí mẫu. Mỗi câu trả lời được ghi ngay khi có. Khi thêm mẫu mới vào hai file đầu vào rồi chạy lại, chỉ mẫu mới gọi model; mẫu đã gán lấy từ cache. Đổi model hoặc prompt không làm gán lại; dùng `--refresh` để hỏi lại mọi mẫu. Output được dựng lại từ đầu vào và cache ở mỗi lần chạy.
+
+**Chạy:**
+
+```powershell
+python build_crawled_versions.py --library pandas --dry-run
+python build_crawled_versions.py --library pandas
+python build_crawled_versions.py --library numpy --file O --workers 4
+```
+
+Cần `OPENAI_API_KEY` trong `.env` khi có mẫu chưa nằm trong cache.
+
+**Output:** `data/{library}/O_crawled.json` và `U_crawled.json`.
