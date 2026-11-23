@@ -10,6 +10,7 @@
 !expected_step_*_new.json
 !/data/**/api_source_tracks.json
 !/data/**/migration_evolution.json
+!/data/**/migration_evolution_modified.json
 
 /cache/
 /.env
