@@ -13,6 +13,7 @@ API_Evolution/
 ├── build_callsite_versions.py                   # Bước 7: gán mốc version cho mẫu gọi API O/U
 ├── audit_step7.py                               # Bước 8: rà soát version đã gán
 ├── build_step7_modified.py                      # Bước 8: tạo bộ mẫu đã sửa
+├── apply_change_severity.py                     # Bước 9: gán mức độ thay đổi cho sự kiện
 ├── source_evolution_rules.py                    # Quy tắc phân giải public API và AST
 ├── export_rules/                                # Quy tắc export chung và theo thư viện
 │   ├── __init__.py
@@ -38,6 +39,7 @@ API_Evolution/
 │   └── {library}/
 │       ├── api_source_tracks.json               # Kết quả bước 5
 │       ├── migration_evolution.json             # Kết quả bước 6
+│       ├── migration_evolution_modified.json    # Kết quả bước 9
 │       ├── O_with_versions.json                 # Kết quả bước 7 (tập O)
 │       ├── U_with_versions.json                 # Kết quả bước 7 (tập U)
 │       ├── O_modified.json                      # Kết quả bước 8 (tập O)
@@ -277,3 +279,29 @@ python build_step7_modified.py
 ```
 
 **Output:** các CSV trong `reports/step7/output/` và `data/{library}/O_modified.json`, `U_modified.json`.
+
+## Bước 9 — Gán mức độ thay đổi cho sự kiện
+
+**Mô tả:** `apply_change_severity.py` đọc `data/{library}/migration_evolution.json` và thêm `change_severity` vào mỗi sự kiện trong `milestones[].changes[]`. Không gọi LLM; mức độ suy ra từ `type`, `old_value` và `new_value` của sự kiện. File gốc không bị sửa.
+
+**Chạy:**
+
+```powershell
+python apply_change_severity.py                # cả 8 thư viện
+python apply_change_severity.py numpy pandas   # một số thư viện
+```
+
+**Output:** `data/{library}/migration_evolution_modified.json`, cùng cấu trúc với file gốc; `change_severity` nằm ngay sau `type`. Script in bảng số sự kiện theo mức cho từng thư viện.
+
+**Ba mức**, xếp theo phần nào của API thay đổi:
+
+| Mức | Ý nghĩa | Điều kiện |
+|---|---|---|
+| `major` | Tập tên hoặc đường dẫn truy cập API thay đổi | `deprecated`, `removed`, `introduced`, `declared_method_added`, `declared_method_removed`; `declared_methods_changed` khi tập tên method khác nhau; `public_binding_changed` khi tập `export_names` khác nhau |
+| `moderate` | Tên và đường dẫn giữ nguyên, chữ ký gọi đổi | `parameter_added`, `parameter_removed`, `parameter_rename`, `parameter_order_changed`, `parameter_kind_changed`, `call_syntax_changed`; `default_changed` khi một bên là `null`; annotation đổi kiểu thật; `declared_method_implementation_changed` khi danh sách tham số hoặc kiểu đổi |
+| `low` | Tên, đường dẫn và cấu trúc tham số giữ nguyên | `default_changed` khi cả hai giá trị đều có; `implementation_changed`, `source_path_changed`, `error_message_changed`, `class_bases_changed`, `definition_kind_changed`, `assignment_*`; annotation chỉ đổi cú pháp hoặc chỉ thêm/bỏ |
+
+- `default_changed`: `null` nghĩa là tham số không có default, nên đổi giữa `null` và giá trị là đổi giữa bắt buộc và tùy chọn.
+- Annotation chỉ tính là đổi kiểu khi cả hai phía có giá trị và khác nhau sau khi chuẩn hóa; `Optional[X]`, `Union[X, Y]`, `X | Y`, `List`/`list` được coi là như nhau.
+- Mọi sự kiện đều thuộc đúng một mức. Script dừng và báo lỗi nếu gặp `type` chưa có quy tắc, nên khi bước 6 sinh loại sự kiện mới cần bổ sung quy tắc trước.
+- Mức độ chỉ phản ánh sự kiện đã có trong `changes[]`; nếu bước 6 thiếu sự kiện thì nhãn không bù được.
